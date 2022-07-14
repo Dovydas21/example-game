@@ -5,8 +5,7 @@ using UnityEngine;
 public class Floater : MonoBehaviour
 {
     public Rigidbody rb;
-    public float floatingRange = 3f;
-    public float floatHeight = 3f;
+    public float force;
 
     void Start()
     {
@@ -15,6 +14,9 @@ public class Floater : MonoBehaviour
 
     void FixedUpdate()
     {
-        rb.AddForce(new Vector3(0f, Mathf.Sin(Time.time) - .5f, 0f), ForceMode.Force);
+        if (rb.velocity.magnitude > 0) //Make This a small number
+        {
+            rb.AddForce(Vector3.up * force, ForceMode.Impulse);
+        }
     }
 }

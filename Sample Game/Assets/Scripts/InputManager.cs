@@ -7,6 +7,7 @@ public class InputManager : MonoBehaviour
 {
     private PlayerInput playerInput;
     private PlayerInput.OnFootActions onFoot;
+    private Shoot shoot;
     private Vector2 movementInput;
     private PlayerMotor motor;
     private PlayerLook look;
@@ -21,6 +22,7 @@ public class InputManager : MonoBehaviour
          * Jump has 3 states, depending on functionality 
         **/
         onFoot.Jump.performed += ctx => motor.Jump();
+        onFoot.Mouse.performed += ctx => shoot.Fire();
         
         look = GetComponent<PlayerLook>();
     }
