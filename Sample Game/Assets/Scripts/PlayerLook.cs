@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,6 +10,12 @@ public class PlayerLook : MonoBehaviour
     
     private float xSensitivity = 30f;
     private float ySensitivity = 30f;
+
+    public void Start()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
 
     public void ProcessLook(Vector2 input)
     {

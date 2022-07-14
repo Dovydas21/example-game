@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -12,8 +12,7 @@ public class InputManager : MonoBehaviour
     private PlayerLook look;
     // Start is called before the first frame update
     void Awake()
-    {   
-        Cursor.visible = false;
+    {
         playerInput = new PlayerInput();
         onFoot = playerInput.OnFoot;
         motor = GetComponent<PlayerMotor>();
@@ -27,7 +26,7 @@ public class InputManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         motor.ProcessMove(onFoot.Movement.ReadValue<Vector2>());
     }
