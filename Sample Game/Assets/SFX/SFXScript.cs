@@ -9,7 +9,6 @@ public class SFXScript : MonoBehaviour
 
     public void PlayGrunt()
     {
-        Debug.Log(jumpSoundEffect);
         jumpSoundEffect.Play();
     }
 }

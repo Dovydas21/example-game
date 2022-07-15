@@ -17,14 +17,15 @@ public class InputManager : MonoBehaviour
         playerInput = new PlayerInput();
         onFoot = playerInput.OnFoot;
         motor = GetComponent<PlayerMotor>();
+        look = GetComponent<PlayerLook>();
+        shoot = GetComponent<Shoot>();
         /** Events
          * Anytime output jump is performed, a callback context (ctx) is used to call the "motor.Jump" function
          * Jump has 3 states, depending on functionality 
         **/
         onFoot.Jump.performed += ctx => motor.Jump();
-        onFoot.Mouse.performed += ctx => shoot.Fire();
-        
-        look = GetComponent<PlayerLook>();
+        onFoot.Fire.performed += ctx => shoot.Fire();
+
     }
 
     // Update is called once per frame

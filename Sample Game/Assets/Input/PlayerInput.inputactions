@@ -33,9 +33,9 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Mouse",
+                    "name": "Fire",
                     "type": "Button",
-                    "id": "f5055149-76b9-4964-912a-3699e1c3eae5",
+                    "id": "17313b02-9be1-4e36-92c0-34921e85e843",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -122,12 +122,12 @@
                 },
                 {
                     "name": "",
-                    "id": "354cd84e-af3b-4027-9883-32249b365806",
+                    "id": "7806e39a-a9a4-4a65-8473-52f7daa4cb6a",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Mouse",
+                    "action": "Fire",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
