@@ -18,7 +18,7 @@ public class Shoot : MonoBehaviour
     public void Fire()
     {
         RaycastHit HitInfo;
-        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out HitInfo, 100.0f))
+        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out HitInfo, Mathf.Infinity))
         {
             Transform objectHit = HitInfo.transform;
             Debug.DrawLine(cam.transform.position, HitInfo.point, Color.red, 2, false);
