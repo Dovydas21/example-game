@@ -25,7 +25,7 @@ public class InputManager : MonoBehaviour
         **/
         onFoot.Jump.performed += ctx => motor.Jump();
         onFoot.Fire.performed += ctx => shoot.Fire();
-
+        onFoot.Aim.performed += ctx => shoot.Aim();
     }
 
     // Update is called once per frame

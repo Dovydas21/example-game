@@ -8,8 +8,8 @@ public class PlayerLook : MonoBehaviour
     public Camera cam;
     private float xRotation = 0f;
     
-    private float xSensitivity = 30f;
-    private float ySensitivity = 30f;
+    private float xSensitivity = 100f;
+    private float ySensitivity = 100f;
 
     public void Start()
     {
