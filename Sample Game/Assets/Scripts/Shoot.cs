@@ -11,16 +11,17 @@ public class Shoot : MonoBehaviour
     private RaycastHit Hitinfo;
 
     Transform gun;
+    GameObject gunObject;
     private SFXScript sfx;
     private bool canShoot;
-    public bool fullAuto;
     WaitForSeconds rapidFireWait;
     [SerializeField] private float fireRate = 0.5f;
-    private float _nextRate =-1f;
+    private float _nextRate = -1f;
     bool aiming = false;
+    GunInfo gunInfo;
+
     Vector3 gunPosition;
     Vector3 gunRotation;
-
     Vector3 aimPosition;
     Vector3 aimRotation;
 
@@ -29,6 +30,8 @@ public class Shoot : MonoBehaviour
         playerInput = new PlayerInput();
         onFoot = playerInput.OnFoot;
         gun = cam.GetComponent<Transform>().GetChild(0);
+        gunInfo = gun.GetComponentInChildren<GunInfo>();
+
         sfx = GetComponent<SFXScript>();
         rapidFireWait = new WaitForSeconds(1f);
 
@@ -43,14 +46,17 @@ public class Shoot : MonoBehaviour
         //Debug.Log("Fire Tigger Held? :" + test);
 
         RaycastHit HitInfo;
-        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out HitInfo, Mathf.Infinity))
+        gunInfo.PlayShootAnimation();
+        sfx.PlayShot();
+        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out HitInfo, gunInfo.range))
         {
             Transform objectHit = HitInfo.transform;
-            sfx.PlayShot();
             Debug.DrawLine(cam.transform.position, HitInfo.point, Color.red, 2, false);
-            if (HitInfo.rigidbody != null) objectHit.GetComponent<Rigidbody>().AddForceAtPosition(cam.transform.forward * 1000, HitInfo.point, ForceMode.Impulse);
+            if (HitInfo.rigidbody != null)
+                objectHit.GetComponent<Rigidbody>().AddForceAtPosition(cam.transform.forward * gunInfo.power, HitInfo.point, ForceMode.Impulse);
         }
-       
+
+
     }
 
     public IEnumerator FullAuto()
@@ -58,7 +64,7 @@ public class Shoot : MonoBehaviour
         if (CanShoot())
         {
             Fire();
-            if (fullAuto)
+            if (gunInfo.fullAuto)
             {
                 while (CanShoot())
                 {
@@ -67,14 +73,14 @@ public class Shoot : MonoBehaviour
                 }
             }
         }
-  
+
     }
 
     bool CanShoot()
     {
         if (Time.time > _nextRate)
         {
-            _nextRate = fireRate + Time.time;
+            _nextRate = gunInfo.fireRate + Time.time;
             return true;
         }
         else
@@ -88,18 +94,16 @@ public class Shoot : MonoBehaviour
         if (!aiming)
         {
             aiming = true;
-            cam.fieldOfView = 60f;
-            // Hard coded position of the gun when aiming down sights.
-
-            gun.localPosition = aimPosition;
-            gun.localEulerAngles = aimRotation;
+            cam.fieldOfView = gunInfo.aimedInFOV;
+            gun.localPosition = gunInfo.aimedInPosition;
+            gun.localEulerAngles = gunInfo.aimedInAngle;
         }
         else
         {
             aiming = false;
             cam.fieldOfView = 90f;
-            gun.localPosition = gunPosition;
-            gun.localEulerAngles = gunRotation;
+            gun.localPosition = gunInfo.defaultGunPosition;
+            gun.localEulerAngles = gunInfo.defaultGunAngles;
         }
     }
 }
