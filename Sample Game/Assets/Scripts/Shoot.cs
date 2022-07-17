@@ -9,6 +9,7 @@ public class Shoot : MonoBehaviour
     private PlayerInput playerInput;
     private PlayerInput.OnFootActions onFoot;
     private RaycastHit Hitinfo;
+
     Transform gun;
     private SFXScript sfx;
     private bool canShoot;
@@ -16,6 +17,12 @@ public class Shoot : MonoBehaviour
     WaitForSeconds rapidFireWait;
     [SerializeField] private float fireRate = 0.5f;
     private float _nextRate =-1f;
+    bool aiming = false;
+    Vector3 gunPosition;
+    Vector3 gunRotation;
+
+    Vector3 aimPosition;
+    Vector3 aimRotation;
 
     public void Start()
     {
@@ -24,6 +31,12 @@ public class Shoot : MonoBehaviour
         gun = cam.GetComponent<Transform>().GetChild(0);
         sfx = GetComponent<SFXScript>();
         rapidFireWait = new WaitForSeconds(1f);
+
+        gunPosition = gun.localPosition;
+        gunRotation = gun.localEulerAngles;
+
+        aimPosition = new Vector3(0f, -0.58f, 0.85f);
+        aimRotation = new Vector3(0f, 180f, 0f);
     }
     public void Fire()
     {
@@ -72,13 +85,21 @@ public class Shoot : MonoBehaviour
 
     public void Aim()
     {
-        // Hard coded position of the gun when aiming down sights.
-        gun.localPosition = new Vector3(0f, -0.58f, 0.85f);
-        gun.localEulerAngles = new Vector3(0f, 180f, 0f);
-    }
+        if (!aiming)
+        {
+            aiming = true;
+            cam.fieldOfView = 60f;
+            // Hard coded position of the gun when aiming down sights.
 
-    void FixedUpdate()
-    {
-
+            gun.localPosition = aimPosition;
+            gun.localEulerAngles = aimRotation;
+        }
+        else
+        {
+            aiming = false;
+            cam.fieldOfView = 90f;
+            gun.localPosition = gunPosition;
+            gun.localEulerAngles = gunRotation;
+        }
     }
 }
