@@ -23,7 +23,6 @@ public class GunInfo : MonoBehaviour
     public void PlayShootAnimation()
     {
         gunAnimation.SetTrigger("Fire");
-        // gunAnimation.SetBool("Fired", false);
     }
 
 }
