@@ -19,5 +19,6 @@ public class SFXScript : MonoBehaviour
         bool shotSound = shotSoundEffect.isPlaying;
         if (shotSound != true) shotSoundEffect.Play();
         return shotSound != true;
+        
     }
 }

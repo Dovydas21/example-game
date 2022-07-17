@@ -11,6 +11,12 @@ public class InputManager : MonoBehaviour
     private Vector2 movementInput;
     private PlayerMotor motor;
     private PlayerLook look;
+    private bool buttonPressed;
+
+    // Coroutines allow actions to be preformed across several frames, can pause and start execution quickly,
+    // important for snappy shoot
+    // ing 
+    Coroutine fireCoroutine;
     // Start is called before the first frame update
     void Awake()
     {
@@ -21,10 +27,12 @@ public class InputManager : MonoBehaviour
         shoot = GetComponent<Shoot>();
         /** Events
          * Anytime output jump is performed, a callback context (ctx) is used to call the "motor.Jump" function
+         * callback context gives context on event, can send context to function (lookup lambda expressions)
          * Jump has 3 states, depending on functionality 
         **/
         onFoot.Jump.performed += ctx => motor.Jump();
-        onFoot.Fire.performed += ctx => shoot.Fire();
+        onFoot.Fire.started += _ => StartFiring();
+        onFoot.Fire.canceled += _ => StopFiring();
         onFoot.Aim.performed += ctx => shoot.Aim();
     }
 
@@ -32,6 +40,18 @@ public class InputManager : MonoBehaviour
     void Update()
     {
         motor.ProcessMove(onFoot.Movement.ReadValue<Vector2>());
+    }
+    void StartFiring()
+    {
+        fireCoroutine = StartCoroutine(shoot.FullAuto());
+    }
+
+    void StopFiring()
+    {
+        if (fireCoroutine != null)
+        {
+            StopCoroutine(fireCoroutine);
+        }
     }
 
     private void LateUpdate()
