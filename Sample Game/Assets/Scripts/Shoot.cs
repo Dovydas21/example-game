@@ -27,6 +27,12 @@ public class Shoot : MonoBehaviour
 
     public void Start()
     {
+        Refresh();
+    }
+
+
+    public void Refresh()
+    {
         playerInput = new PlayerInput();
         onFoot = playerInput.OnFoot;
         gun = cam.GetComponent<Transform>().GetChild(0);
@@ -41,13 +47,17 @@ public class Shoot : MonoBehaviour
         aimPosition = new Vector3(0f, -0.58f, 0.85f);
         aimRotation = new Vector3(0f, 180f, 0f);
     }
+
     public void Fire()
     {
         //Debug.Log("Fire Tigger Held? :" + test);
 
         RaycastHit HitInfo;
         gunInfo.PlayShootAnimation();
-        sfx.PlayShot();
+        gunInfo.PlayCockingAnimation();
+        gunInfo.PlayShootSound();
+        gunInfo.PlayMuzzleFlash();
+        // sfx.PlayShot();
         if (Physics.Raycast(cam.transform.position, cam.transform.forward, out HitInfo, gunInfo.range))
         {
             Transform objectHit = HitInfo.transform;
@@ -76,7 +86,7 @@ public class Shoot : MonoBehaviour
 
     }
 
-    bool CanShoot()
+    public bool CanShoot()
     {
         if (Time.time > _nextRate)
         {
