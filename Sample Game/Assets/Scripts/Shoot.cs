@@ -53,6 +53,7 @@ public class Shoot : MonoBehaviour
         //Debug.Log("Fire Tigger Held? :" + test);
 
         RaycastHit HitInfo;
+
         gunInfo.PlayShootAnimation();
         gunInfo.PlayCockingAnimation();
         gunInfo.PlayShootSound();

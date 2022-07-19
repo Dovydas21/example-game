@@ -48,23 +48,31 @@ public class GunInfo : MonoBehaviour
 
     public void PlayCockingAnimation()
     {
-        cockingAnimation.SetTrigger("Fire");
+        if(cockingAnimation != null)
+            cockingAnimation.SetTrigger("Fire");
     }
 
     public void PlayShootAnimation()
     {
-        shootingAnimation.SetTrigger("Fire");
+        if (shootingAnimation != null)
+            shootingAnimation.SetTrigger("Fire");
     }
 
     public bool PlayShootSound() // Plays the sound effect that is set up on the 
     {
-        bool shotSound = shotSoundEffect.isPlaying;
-        if (shotSound != true) shotSoundEffect.Play();
-        return shotSound != true;
+        if (shotSoundEffect != null)
+        {
+            bool shotSound = shotSoundEffect.isPlaying;
+            if (shotSound != true)
+                shotSoundEffect.Play();
+            return shotSound != true;
+        }
+        else return false;
     }
 
     public void PlayMuzzleFlash()
     {
-        muzzleFlash.Play();
+        if(muzzleFlash != null)
+            muzzleFlash.Play();
     }
 }
