@@ -20,7 +20,10 @@ public class PickupObject : MonoBehaviour
             gameObject.transform.SetParent(gunHolder.transform);
             gameObject.transform.position = gunHolder.transform.position;
             gameObject.transform.rotation = gunHolder.transform.rotation;
-            Destroy(gameObject.GetComponent<Rigidbody>());
+            // Destroy(gameObject.GetComponent<Rigidbody>()); // Disable the rigidbody on the object.
+
+            gameObject.GetComponent<Rigidbody>().useGravity = false; // Disable the gravity on the rigidbody on the object.
+            triggerCollider.enabled = false; // Disable the trigger on the object.
         }
     }
 }

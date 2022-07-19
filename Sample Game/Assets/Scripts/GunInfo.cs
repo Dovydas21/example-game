@@ -23,6 +23,7 @@ public class GunInfo : MonoBehaviour
     public Animator shootingAnimation;                          // The animaTOR that has the animation the gun should play when the gun is fired.
     public Animator cockingAnimation;                           // The animaTOR that has the animation the gun should play when the gun is being cocked.
     public AudioSource shotSoundEffect;                         // The audio source of the sound effect that should play when the gun is fired.
+    public AudioSource cockingSoundEffect;                      // The audio source of the sound effect that should play when the gun is cocked.
     public ParticleSystem muzzleFlash;                          // The particle effect that should serve as the muzzle flash when the gun is fired.
     public BoxCollider pickupTrigger;                           // The box collider that triggers the player to pick up the gun if it is on the ground.
     public Shoot shootScript;
@@ -41,7 +42,11 @@ public class GunInfo : MonoBehaviour
             gameObject.transform.SetParent(gunHolder.transform);
             gameObject.transform.position = gunHolder.transform.position;
             gameObject.transform.rotation = gunHolder.transform.rotation;
-            Destroy(gameObject.GetComponent<Rigidbody>());
+
+
+            Destroy(gameObject.GetComponent<Rigidbody>());              // Disable the rigidbody on the object.
+            gameObject.GetComponent<BoxCollider>().enabled = false;     // Disable the box collider that was used to trigger the pickup.
+
             shootScript.Refresh(); // Refresh the shoot script to give it information about the gun just picked up.
         }
     }
@@ -52,22 +57,33 @@ public class GunInfo : MonoBehaviour
             cockingAnimation.SetTrigger("Fire");
     }
 
+    IEnumerator PlayAndWaitForSound(AudioSource soundSource)
+    {
+        soundSource.Play();
+        while (soundSource.isPlaying) //Wait Until Sound has finished playing
+            yield return null;
+        yield return true;
+    }
+
     public void PlayShootAnimation()
     {
         if (shootingAnimation != null)
             shootingAnimation.SetTrigger("Fire");
     }
 
-    public bool PlayShootSound() // Plays the sound effect that is set up on the 
+    public void PlayCockingSound()
+    {
+        if (cockingSoundEffect != null)
+            cockingSoundEffect.Play();
+    }
+
+    public void PlayShootSound() // Plays the sound effect that is set up on the 
     {
         if (shotSoundEffect != null)
         {
-            bool shotSound = shotSoundEffect.isPlaying;
-            if (shotSound != true)
-                shotSoundEffect.Play();
-            return shotSound != true;
+            StartCoroutine(PlayAndWaitForSound(shotSoundEffect));
+            if (hasToBeCocked) PlayCockingSound();
         }
-        else return false;
     }
 
     public void PlayMuzzleFlash()

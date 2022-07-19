@@ -54,10 +54,14 @@ public class Shoot : MonoBehaviour
 
         RaycastHit HitInfo;
 
-        gunInfo.PlayShootAnimation();
-        gunInfo.PlayCockingAnimation();
-        gunInfo.PlayShootSound();
         gunInfo.PlayMuzzleFlash();
+
+        gunInfo.PlayShootAnimation();
+        gunInfo.PlayShootSound();
+
+        gunInfo.PlayCockingAnimation();
+        // gunInfo.PlayCockingSound();
+
         // sfx.PlayShot();
         if (Physics.Raycast(cam.transform.position, cam.transform.forward, out HitInfo, gunInfo.range))
         {
