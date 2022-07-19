@@ -27,28 +27,53 @@ public class GunInfo : MonoBehaviour
     public ParticleSystem muzzleFlash;                          // The particle effect that should serve as the muzzle flash when the gun is fired.
     public BoxCollider pickupTrigger;                           // The box collider that triggers the player to pick up the gun if it is on the ground.
     public Shoot shootScript;
+    GameObject playerObj;
+
+    
+    Rigidbody rb;
+    float gunMass, gunDrag;
+    bool gunGravity;
 
     private void Start()
     {
         gunHolder = GameObject.FindGameObjectWithTag("GunHolder");
-        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        playerObj = GameObject.FindGameObjectWithTag("Player");
         shootScript = playerObj.GetComponent<Shoot>();
+        rb = gameObject.GetComponent<Rigidbody>();
+
+        // Remember properties about the rigidbody of the object.
+        gunMass = rb.mass;
+        gunDrag = rb.drag;
+        gunGravity = rb.useGravity;
     }
 
     private void OnTriggerEnter(Collider pickupTrigger)
     {
-        if (pickupTrigger.tag == "Player") // Trigger a pick-up if you are the player.
+        if (pickupTrigger.tag == "Player" && gunHolder.transform.childCount == 0) // Trigger a pick-up if you are the player and you are not already holding something.
         {
-            gameObject.transform.SetParent(gunHolder.transform);
+            gameObject.transform.parent = gunHolder.transform;
             gameObject.transform.position = gunHolder.transform.position;
             gameObject.transform.rotation = gunHolder.transform.rotation;
-
+            playerObj.GetComponent<InputManager>().gunInfo = this;
 
             Destroy(gameObject.GetComponent<Rigidbody>());              // Disable the rigidbody on the object.
             gameObject.GetComponent<BoxCollider>().enabled = false;     // Disable the box collider that was used to trigger the pickup.
 
             shootScript.Refresh(); // Refresh the shoot script to give it information about the gun just picked up.
         }
+    }
+
+    public void Drop()
+    {
+        gameObject.transform.parent = null;
+
+        // Set the Rigidbody values back to what they were before we destroyed it.
+        rb = gameObject.AddComponent<Rigidbody>();
+        rb.mass = gunMass;
+        rb.drag = gunDrag;
+        rb.useGravity = gunGravity;
+
+        gameObject.GetComponent<BoxCollider>().enabled = true;
     }
 
     public void PlayCockingAnimation()

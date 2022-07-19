@@ -8,6 +8,7 @@ public class InputManager : MonoBehaviour
     private PlayerInput playerInput;
     private PlayerInput.OnFootActions onFoot;
     private Shoot shoot;
+    public GunInfo gunInfo;
     private Vector2 movementInput;
     private PlayerMotor motor;
     private PlayerLook look;
@@ -34,6 +35,7 @@ public class InputManager : MonoBehaviour
         onFoot.Fire.started += _ => StartFiring();
         onFoot.Fire.canceled += _ => StopFiring();
         onFoot.Aim.performed += ctx => shoot.Aim();
+        onFoot.Dropobject.performed += ctx => gunInfo.Drop();
     }
 
     // Update is called once per frame

@@ -71,6 +71,15 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Drop object"",
+                    ""type"": ""Button"",
+                    ""id"": ""80b596ce-d9b3-4633-989c-3ef344850fdb"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -172,6 +181,17 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""action"": ""Aim"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""89bc7b2d-a29f-4640-ab89-dac813538c01"",
+                    ""path"": ""<Keyboard>/g"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Drop object"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -185,6 +205,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         m_OnFoot_Look = m_OnFoot.FindAction("Look", throwIfNotFound: true);
         m_OnFoot_Fire = m_OnFoot.FindAction("Fire", throwIfNotFound: true);
         m_OnFoot_Aim = m_OnFoot.FindAction("Aim", throwIfNotFound: true);
+        m_OnFoot_Dropobject = m_OnFoot.FindAction("Drop object", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -249,6 +270,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     private readonly InputAction m_OnFoot_Look;
     private readonly InputAction m_OnFoot_Fire;
     private readonly InputAction m_OnFoot_Aim;
+    private readonly InputAction m_OnFoot_Dropobject;
     public struct OnFootActions
     {
         private @PlayerInput m_Wrapper;
@@ -258,6 +280,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         public InputAction @Look => m_Wrapper.m_OnFoot_Look;
         public InputAction @Fire => m_Wrapper.m_OnFoot_Fire;
         public InputAction @Aim => m_Wrapper.m_OnFoot_Aim;
+        public InputAction @Dropobject => m_Wrapper.m_OnFoot_Dropobject;
         public InputActionMap Get() { return m_Wrapper.m_OnFoot; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -282,6 +305,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @Aim.started -= m_Wrapper.m_OnFootActionsCallbackInterface.OnAim;
                 @Aim.performed -= m_Wrapper.m_OnFootActionsCallbackInterface.OnAim;
                 @Aim.canceled -= m_Wrapper.m_OnFootActionsCallbackInterface.OnAim;
+                @Dropobject.started -= m_Wrapper.m_OnFootActionsCallbackInterface.OnDropobject;
+                @Dropobject.performed -= m_Wrapper.m_OnFootActionsCallbackInterface.OnDropobject;
+                @Dropobject.canceled -= m_Wrapper.m_OnFootActionsCallbackInterface.OnDropobject;
             }
             m_Wrapper.m_OnFootActionsCallbackInterface = instance;
             if (instance != null)
@@ -301,6 +327,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @Aim.started += instance.OnAim;
                 @Aim.performed += instance.OnAim;
                 @Aim.canceled += instance.OnAim;
+                @Dropobject.started += instance.OnDropobject;
+                @Dropobject.performed += instance.OnDropobject;
+                @Dropobject.canceled += instance.OnDropobject;
             }
         }
     }
@@ -312,5 +341,6 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         void OnLook(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
+        void OnDropobject(InputAction.CallbackContext context);
     }
 }
