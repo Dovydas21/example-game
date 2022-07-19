@@ -11,7 +11,7 @@ public class Shoot : MonoBehaviour
     private RaycastHit Hitinfo;
 
     Transform gun;
-    GameObject gunObject;
+    public GameObject gunObject;
     private SFXScript sfx;
     private bool canShoot;
     WaitForSeconds rapidFireWait;
@@ -35,8 +35,12 @@ public class Shoot : MonoBehaviour
     {
         playerInput = new PlayerInput();
         onFoot = playerInput.OnFoot;
+
         gun = cam.GetComponent<Transform>().GetChild(0);
-        gunInfo = gun.GetComponentInChildren<GunInfo>();
+        if (gun == null)
+            gunInfo = null;
+        else
+            gunInfo = gun.GetComponentInChildren<GunInfo>();
 
         sfx = GetComponent<SFXScript>();
         rapidFireWait = new WaitForSeconds(1f);
@@ -72,6 +76,11 @@ public class Shoot : MonoBehaviour
         }
 
 
+    }
+
+    public void Drop()
+    {
+        StartCoroutine(gunInfo.Drop());
     }
 
     public IEnumerator FullAuto()

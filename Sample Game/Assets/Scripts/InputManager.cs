@@ -35,7 +35,7 @@ public class InputManager : MonoBehaviour
         onFoot.Fire.started += _ => StartFiring();
         onFoot.Fire.canceled += _ => StopFiring();
         onFoot.Aim.performed += ctx => shoot.Aim();
-        onFoot.Dropobject.performed += ctx => gunInfo.Drop();
+        onFoot.Dropobject.performed += ctx => shoot.Drop();
     }
 
     // Update is called once per frame

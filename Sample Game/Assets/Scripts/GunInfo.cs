@@ -63,8 +63,9 @@ public class GunInfo : MonoBehaviour
         }
     }
 
-    public void Drop()
+    public IEnumerator Drop()
     {
+        shootScript.Refresh(); // Refresh the shoot script to give it information about the gun just picked up.
         gameObject.transform.parent = null;
 
         // Set the Rigidbody values back to what they were before we destroyed it.
@@ -73,7 +74,11 @@ public class GunInfo : MonoBehaviour
         rb.drag = gunDrag;
         rb.useGravity = gunGravity;
 
-        gameObject.GetComponent<BoxCollider>().enabled = true;
+        rb.AddForce(Vector3.forward * 10f, ForceMode.Force);
+
+        yield return new WaitForSeconds(1f); // Wait for 1 second before re-enabling the pickup-trigger.
+
+        gameObject.GetComponent<BoxCollider>().enabled = true; // Re-enable the pickup trigger.
     }
 
     public void PlayCockingAnimation()
@@ -86,7 +91,8 @@ public class GunInfo : MonoBehaviour
     {
         soundSource.Play();
         while (soundSource.isPlaying) //Wait Until Sound has finished playing
-            yield return null;
+            yield return new WaitForSeconds(.1f);
+
         yield return true;
     }
 
