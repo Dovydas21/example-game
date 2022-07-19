@@ -18,6 +18,7 @@ public class Shoot : MonoBehaviour
     [SerializeField] private float fireRate = 0.5f;
     private float _nextRate = -1f;
     bool aiming = false;
+    bool playerHoldingGun = false;
     GunInfo gunInfo;
 
     Vector3 gunPosition;
@@ -36,14 +37,22 @@ public class Shoot : MonoBehaviour
         playerInput = new PlayerInput();
         onFoot = playerInput.OnFoot;
 
-        gun = cam.GetComponent<Transform>().GetChild(0);
-        if (gun == null)
+        gun = GameObject.FindGameObjectWithTag("GunHolder").transform;
+
+        if (gun.childCount == 0) // Check that you have the 
+        {
             gunInfo = null;
+            gameObject.GetComponent<InputManager>().gunInfo = null; // Set the gunInfo component to be null in input manager as well.
+            playerHoldingGun = false;
+        }
         else
+        {
+            playerHoldingGun = true;
             gunInfo = gun.GetComponentInChildren<GunInfo>();
+        }
 
         sfx = GetComponent<SFXScript>();
-        rapidFireWait = new WaitForSeconds(1f);
+        rapidFireWait = new WaitForSeconds(gunInfo.fireRate);
 
         gunPosition = gun.localPosition;
         gunRotation = gun.localEulerAngles;
@@ -54,28 +63,25 @@ public class Shoot : MonoBehaviour
 
     public void Fire()
     {
-        //Debug.Log("Fire Tigger Held? :" + test);
-
-        RaycastHit HitInfo;
-
-        gunInfo.PlayMuzzleFlash();
-
-        gunInfo.PlayShootAnimation();
-        gunInfo.PlayShootSound();
-
-        gunInfo.PlayCockingAnimation();
-        // gunInfo.PlayCockingSound();
-
-        // sfx.PlayShot();
-        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out HitInfo, gunInfo.range))
+        if (playerHoldingGun)
         {
-            Transform objectHit = HitInfo.transform;
-            Debug.DrawLine(cam.transform.position, HitInfo.point, Color.red, 2, false);
-            if (HitInfo.rigidbody != null)
-                objectHit.GetComponent<Rigidbody>().AddForceAtPosition(cam.transform.forward * gunInfo.power, HitInfo.point, ForceMode.Impulse);
+            print("Shot fired");
+            RaycastHit HitInfo;
+
+            gunInfo.PlayMuzzleFlash();
+            gunInfo.PlayShootAnimation();
+            gunInfo.PlayShootSound();
+            gunInfo.PlayCockingAnimation();
+
+            // sfx.PlayShot();
+            if (Physics.Raycast(cam.transform.position, cam.transform.forward, out HitInfo, gunInfo.range))
+            {
+                Transform objectHit = HitInfo.transform;
+                Debug.DrawLine(cam.transform.position, HitInfo.point, Color.red, 2, false);
+                if (HitInfo.rigidbody != null)
+                    objectHit.GetComponent<Rigidbody>().AddForceAtPosition(cam.transform.forward * gunInfo.power, HitInfo.point, ForceMode.Impulse);
+            }
         }
-
-
     }
 
     public void Drop()
@@ -105,12 +111,8 @@ public class Shoot : MonoBehaviour
         if (Time.time > _nextRate)
         {
             _nextRate = gunInfo.fireRate + Time.time;
-            return true;
         }
-        else
-        {
-            return false;
-        }
+        return true;
     }
 
     public void Aim()

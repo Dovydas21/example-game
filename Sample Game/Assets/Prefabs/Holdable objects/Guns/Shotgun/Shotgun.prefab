@@ -866,11 +866,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6864ce1ca7bf74aca96cea660b5e58f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fullAuto: 0
+  fullAuto: 1
   hasToBeCocked: 1
   power: 10000
   range: 500
-  fireRate: 0.5
+  fireRate: 0.1
   aimedInFOV: 30
   gunHolder: {fileID: 0}
   aimedInPosition: {x: -0.06, y: -0.32, z: 0.19}

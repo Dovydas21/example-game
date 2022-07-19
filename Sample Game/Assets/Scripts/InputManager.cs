@@ -45,11 +45,13 @@ public class InputManager : MonoBehaviour
     }
     void StartFiring()
     {
+        print("Started firing");
         fireCoroutine = StartCoroutine(shoot.FullAuto());
     }
 
     void StopFiring()
     {
+        print("Stopped firing");
         if (fireCoroutine != null)
         {
             StopCoroutine(fireCoroutine);

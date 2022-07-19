@@ -65,7 +65,6 @@ public class GunInfo : MonoBehaviour
 
     public IEnumerator Drop()
     {
-        shootScript.Refresh(); // Refresh the shoot script to give it information about the gun just picked up.
         gameObject.transform.parent = null;
 
         // Set the Rigidbody values back to what they were before we destroyed it.
@@ -75,9 +74,9 @@ public class GunInfo : MonoBehaviour
         rb.useGravity = gunGravity;
 
         rb.AddForce(Vector3.forward * 10f, ForceMode.Force);
+        shootScript.Refresh(); // Refresh the shoot script to give it information about the gun just picked up.
 
         yield return new WaitForSeconds(1f); // Wait for 1 second before re-enabling the pickup-trigger.
-
         gameObject.GetComponent<BoxCollider>().enabled = true; // Re-enable the pickup trigger.
     }
 
