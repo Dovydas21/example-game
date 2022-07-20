@@ -80,6 +80,15 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Reload"",
+                    ""type"": ""Button"",
+                    ""id"": ""7608b78b-b2fd-40d7-ba15-fef7f855e786"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -192,6 +201,17 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""action"": ""Drop object"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""32212825-e577-4856-8aa0-551f74b8547f"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Reload"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -206,6 +226,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         m_OnFoot_Fire = m_OnFoot.FindAction("Fire", throwIfNotFound: true);
         m_OnFoot_Aim = m_OnFoot.FindAction("Aim", throwIfNotFound: true);
         m_OnFoot_Dropobject = m_OnFoot.FindAction("Drop object", throwIfNotFound: true);
+        m_OnFoot_Reload = m_OnFoot.FindAction("Reload", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -271,6 +292,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     private readonly InputAction m_OnFoot_Fire;
     private readonly InputAction m_OnFoot_Aim;
     private readonly InputAction m_OnFoot_Dropobject;
+    private readonly InputAction m_OnFoot_Reload;
     public struct OnFootActions
     {
         private @PlayerInput m_Wrapper;
@@ -281,6 +303,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         public InputAction @Fire => m_Wrapper.m_OnFoot_Fire;
         public InputAction @Aim => m_Wrapper.m_OnFoot_Aim;
         public InputAction @Dropobject => m_Wrapper.m_OnFoot_Dropobject;
+        public InputAction @Reload => m_Wrapper.m_OnFoot_Reload;
         public InputActionMap Get() { return m_Wrapper.m_OnFoot; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -308,6 +331,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @Dropobject.started -= m_Wrapper.m_OnFootActionsCallbackInterface.OnDropobject;
                 @Dropobject.performed -= m_Wrapper.m_OnFootActionsCallbackInterface.OnDropobject;
                 @Dropobject.canceled -= m_Wrapper.m_OnFootActionsCallbackInterface.OnDropobject;
+                @Reload.started -= m_Wrapper.m_OnFootActionsCallbackInterface.OnReload;
+                @Reload.performed -= m_Wrapper.m_OnFootActionsCallbackInterface.OnReload;
+                @Reload.canceled -= m_Wrapper.m_OnFootActionsCallbackInterface.OnReload;
             }
             m_Wrapper.m_OnFootActionsCallbackInterface = instance;
             if (instance != null)
@@ -330,6 +356,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @Dropobject.started += instance.OnDropobject;
                 @Dropobject.performed += instance.OnDropobject;
                 @Dropobject.canceled += instance.OnDropobject;
+                @Reload.started += instance.OnReload;
+                @Reload.performed += instance.OnReload;
+                @Reload.canceled += instance.OnReload;
             }
         }
     }
@@ -342,5 +371,6 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         void OnFire(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
         void OnDropobject(InputAction.CallbackContext context);
+        void OnReload(InputAction.CallbackContext context);
     }
 }

@@ -10,6 +10,7 @@ public class Shoot : MonoBehaviour
     private PlayerInput.OnFootActions onFoot;
     private RaycastHit Hitinfo;
 
+    Transform gunHolder;
     Transform gun;
     public GameObject gunObject;
     private SFXScript sfx;
@@ -21,13 +22,13 @@ public class Shoot : MonoBehaviour
     bool playerHoldingGun = false;
     GunInfo gunInfo;
 
-    Vector3 gunPosition;
-    Vector3 gunRotation;
-    Vector3 aimPosition;
-    Vector3 aimRotation;
+    Vector3 defaultGunHolderPos;
+    Vector3 defaultGunHolderRot;
 
     public void Start()
     {
+        defaultGunHolderPos = gunHolder.position;
+        defaultGunHolderRot = gunHolder.eulerAngles;
         Refresh();
     }
 
@@ -37,9 +38,9 @@ public class Shoot : MonoBehaviour
         playerInput = new PlayerInput();
         onFoot = playerInput.OnFoot;
 
-        gun = GameObject.FindGameObjectWithTag("GunHolder").transform;
+        gunHolder = GameObject.FindGameObjectWithTag("GunHolder").transform;
 
-        if (gun.childCount == 0) // Check that you have the 
+        if (gunHolder.childCount == 0) // Check that you have the 
         {
             gunInfo = null;
             gameObject.GetComponent<InputManager>().gunInfo = null; // Set the gunInfo component to be null in input manager as well.
@@ -47,18 +48,13 @@ public class Shoot : MonoBehaviour
         }
         else
         {
+            gun = gunHolder.GetChild(0);
             playerHoldingGun = true;
-            gunInfo = gun.GetComponentInChildren<GunInfo>();
+            gunInfo = gunHolder.GetComponentInChildren<GunInfo>();
+            rapidFireWait = new WaitForSeconds(gunInfo.fireRate);
         }
 
         sfx = GetComponent<SFXScript>();
-        rapidFireWait = new WaitForSeconds(gunInfo.fireRate);
-
-        gunPosition = gun.localPosition;
-        gunRotation = gun.localEulerAngles;
-
-        aimPosition = new Vector3(0f, -0.58f, 0.85f);
-        aimRotation = new Vector3(0f, 180f, 0f);
     }
 
     public void Fire()
@@ -72,6 +68,8 @@ public class Shoot : MonoBehaviour
             gunInfo.PlayShootAnimation();
             gunInfo.PlayShootSound();
             gunInfo.PlayCockingAnimation();
+
+            gunInfo.UpdateAmmoInGun(gunInfo.ammoInGun - 1); // Reduce the current ammo count by 1.
 
             // sfx.PlayShot();
             if (Physics.Raycast(cam.transform.position, cam.transform.forward, out HitInfo, gunInfo.range))
@@ -108,11 +106,17 @@ public class Shoot : MonoBehaviour
 
     public bool CanShoot()
     {
-        if (Time.time > _nextRate)
-        {
-            _nextRate = gunInfo.fireRate + Time.time;
-        }
-        return true;
+        if (gunInfo.ammoInGun > 0)
+            return true;
+        else return false;
+
+        // print("Time.time = " + Time.time + " " + "_nextRate = " + _nextRate);
+        //if (Time.time > _nextRate && gunInfo.ammoInGun > 0)
+        //{
+        //    _nextRate = gunInfo.fireRate + Time.time;
+        //    return true;
+        //}
+        //return true;
     }
 
     public void Aim()
@@ -120,16 +124,28 @@ public class Shoot : MonoBehaviour
         if (!aiming)
         {
             aiming = true;
-            cam.fieldOfView = gunInfo.aimedInFOV;
-            gun.localPosition = gunInfo.aimedInPosition;
-            gun.localEulerAngles = gunInfo.aimedInAngle;
+            gun.GetComponent<Camera>().enabled = true;
+            //cam.fieldOfView = gunInfo.aimedInFOV;
+
+            //gun.localPosition = gunInfo.aimedInPosition;
+            //gun.localEulerAngles = gunInfo.aimedInAngle;
         }
         else
         {
             aiming = false;
-            cam.fieldOfView = 90f;
-            gun.localPosition = gunInfo.defaultGunPosition;
-            gun.localEulerAngles = gunInfo.defaultGunAngles;
+            Camera.main.enabled = true;
+
+            //cam.fieldOfView = 90f;
+
+            //gun.localPosition = defaultGunHolderPos;
+            //gun.localEulerAngles = defaultGunHolderRot;
         }
     }
+
+
+    public void Reload()
+    {
+        gunInfo.UpdateAmmoInGun(gunInfo.magCapacity);
+    }
+
 }
