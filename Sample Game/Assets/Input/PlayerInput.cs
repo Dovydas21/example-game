@@ -53,6 +53,42 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Fire"",
+                    ""type"": ""Button"",
+                    ""id"": ""17313b02-9be1-4e36-92c0-34921e85e843"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Aim"",
+                    ""type"": ""Button"",
+                    ""id"": ""f34ffc91-d386-480b-8cbb-73c206171a8b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Drop object"",
+                    ""type"": ""Button"",
+                    ""id"": ""80b596ce-d9b3-4633-989c-3ef344850fdb"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Reload"",
+                    ""type"": ""Button"",
+                    ""id"": ""7608b78b-b2fd-40d7-ba15-fef7f855e786"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -132,6 +168,50 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""action"": ""Look"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7806e39a-a9a4-4a65-8473-52f7daa4cb6a"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Fire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c1943e63-b088-44de-b76a-145179331670"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""89bc7b2d-a29f-4640-ab89-dac813538c01"",
+                    ""path"": ""<Keyboard>/g"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Drop object"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""32212825-e577-4856-8aa0-551f74b8547f"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Reload"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -143,6 +223,10 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         m_OnFoot_Movement = m_OnFoot.FindAction("Movement", throwIfNotFound: true);
         m_OnFoot_Jump = m_OnFoot.FindAction("Jump", throwIfNotFound: true);
         m_OnFoot_Look = m_OnFoot.FindAction("Look", throwIfNotFound: true);
+        m_OnFoot_Fire = m_OnFoot.FindAction("Fire", throwIfNotFound: true);
+        m_OnFoot_Aim = m_OnFoot.FindAction("Aim", throwIfNotFound: true);
+        m_OnFoot_Dropobject = m_OnFoot.FindAction("Drop object", throwIfNotFound: true);
+        m_OnFoot_Reload = m_OnFoot.FindAction("Reload", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -205,6 +289,10 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     private readonly InputAction m_OnFoot_Movement;
     private readonly InputAction m_OnFoot_Jump;
     private readonly InputAction m_OnFoot_Look;
+    private readonly InputAction m_OnFoot_Fire;
+    private readonly InputAction m_OnFoot_Aim;
+    private readonly InputAction m_OnFoot_Dropobject;
+    private readonly InputAction m_OnFoot_Reload;
     public struct OnFootActions
     {
         private @PlayerInput m_Wrapper;
@@ -212,6 +300,10 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         public InputAction @Movement => m_Wrapper.m_OnFoot_Movement;
         public InputAction @Jump => m_Wrapper.m_OnFoot_Jump;
         public InputAction @Look => m_Wrapper.m_OnFoot_Look;
+        public InputAction @Fire => m_Wrapper.m_OnFoot_Fire;
+        public InputAction @Aim => m_Wrapper.m_OnFoot_Aim;
+        public InputAction @Dropobject => m_Wrapper.m_OnFoot_Dropobject;
+        public InputAction @Reload => m_Wrapper.m_OnFoot_Reload;
         public InputActionMap Get() { return m_Wrapper.m_OnFoot; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -230,6 +322,18 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @Look.started -= m_Wrapper.m_OnFootActionsCallbackInterface.OnLook;
                 @Look.performed -= m_Wrapper.m_OnFootActionsCallbackInterface.OnLook;
                 @Look.canceled -= m_Wrapper.m_OnFootActionsCallbackInterface.OnLook;
+                @Fire.started -= m_Wrapper.m_OnFootActionsCallbackInterface.OnFire;
+                @Fire.performed -= m_Wrapper.m_OnFootActionsCallbackInterface.OnFire;
+                @Fire.canceled -= m_Wrapper.m_OnFootActionsCallbackInterface.OnFire;
+                @Aim.started -= m_Wrapper.m_OnFootActionsCallbackInterface.OnAim;
+                @Aim.performed -= m_Wrapper.m_OnFootActionsCallbackInterface.OnAim;
+                @Aim.canceled -= m_Wrapper.m_OnFootActionsCallbackInterface.OnAim;
+                @Dropobject.started -= m_Wrapper.m_OnFootActionsCallbackInterface.OnDropobject;
+                @Dropobject.performed -= m_Wrapper.m_OnFootActionsCallbackInterface.OnDropobject;
+                @Dropobject.canceled -= m_Wrapper.m_OnFootActionsCallbackInterface.OnDropobject;
+                @Reload.started -= m_Wrapper.m_OnFootActionsCallbackInterface.OnReload;
+                @Reload.performed -= m_Wrapper.m_OnFootActionsCallbackInterface.OnReload;
+                @Reload.canceled -= m_Wrapper.m_OnFootActionsCallbackInterface.OnReload;
             }
             m_Wrapper.m_OnFootActionsCallbackInterface = instance;
             if (instance != null)
@@ -243,6 +347,18 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @Look.started += instance.OnLook;
                 @Look.performed += instance.OnLook;
                 @Look.canceled += instance.OnLook;
+                @Fire.started += instance.OnFire;
+                @Fire.performed += instance.OnFire;
+                @Fire.canceled += instance.OnFire;
+                @Aim.started += instance.OnAim;
+                @Aim.performed += instance.OnAim;
+                @Aim.canceled += instance.OnAim;
+                @Dropobject.started += instance.OnDropobject;
+                @Dropobject.performed += instance.OnDropobject;
+                @Dropobject.canceled += instance.OnDropobject;
+                @Reload.started += instance.OnReload;
+                @Reload.performed += instance.OnReload;
+                @Reload.canceled += instance.OnReload;
             }
         }
     }
@@ -252,5 +368,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         void OnMovement(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
+        void OnFire(InputAction.CallbackContext context);
+        void OnAim(InputAction.CallbackContext context);
+        void OnDropobject(InputAction.CallbackContext context);
+        void OnReload(InputAction.CallbackContext context);
     }
 }

@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -35,15 +35,15 @@ public class PlayerMotor : MonoBehaviour
         if (IsGrounded && playerVelcocity.y < 0)
             playerVelcocity.y = -2f;
         controller.Move(playerVelcocity * Time.deltaTime);
-        Debug.Log(playerVelcocity.y);
 
     }
 
     public void Jump()
     {
-        if(IsGrounded)
+        if (IsGrounded)
         {
             sfx.PlayGrunt();
+            Debug.Log("Jumped");
             playerVelcocity.y = Mathf.Sqrt(jumpHeight * -3.0f * gravity);
         }
     }
