@@ -125,8 +125,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4521471700996469184}
-  m_LocalRotation: {x: 0.015339445, y: -0.015718736, z: 0.7073181, w: 0.7065542}
-  m_LocalPosition: {x: -17.76202, y: 1.5226902, z: -1.3580197}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -134,7 +134,7 @@ Transform:
   - {fileID: 3155306109094370491}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4521471700996469189
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -147,22 +147,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6864ce1ca7bf74aca96cea660b5e58f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fullAuto: 0
+  fullAuto: 1
   hasToBeCocked: 0
   power: 500
   range: 10
-  fireRate: 0.6
-  aimedInFOV: 0
+  fireRate: 0.01
+  magCapacity: 1000
+  ammoInGun: 5
   gunHolder: {fileID: 0}
+  aimedInFOV: 0
   aimedInPosition: {x: 0, y: 0, z: 0}
   aimedInAngle: {x: 0, y: 0, z: 0}
   defaultGunPosition: {x: 0, y: 0, z: 0}
-  defaultGunAngles: {x: 0, y: 0, z: 0}
+  defaultGunAngles: {x: 0, y: 180, z: 0}
   shootingAnimation: {fileID: 0}
   cockingAnimation: {fileID: 0}
+  muzzleFlash: {fileID: 0}
   shotSoundEffect: {fileID: 4521471700996469188}
   cockingSoundEffect: {fileID: 0}
-  muzzleFlash: {fileID: 0}
   pickupTrigger: {fileID: 1940165886399079715}
   shootScript: {fileID: 0}
 --- !u!54 &3638371248303582520

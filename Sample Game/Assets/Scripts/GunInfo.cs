@@ -69,6 +69,9 @@ public class GunInfo : MonoBehaviour
             gameObject.transform.parent = gunHolder.transform;
             gameObject.transform.position = gunHolder.transform.position;
             gameObject.transform.rotation = gunHolder.transform.rotation;
+            gameObject.transform.localEulerAngles = defaultGunAngles;
+            gameObject.transform.localPosition = defaultGunPosition;
+
             playerObj.GetComponent<InputManager>().gunInfo = this;
 
             Destroy(gameObject.GetComponent<Rigidbody>());              // Disable the rigidbody on the object.

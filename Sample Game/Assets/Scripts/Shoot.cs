@@ -27,8 +27,6 @@ public class Shoot : MonoBehaviour
 
     public void Start()
     {
-        defaultGunHolderPos = gunHolder.position;
-        defaultGunHolderRot = gunHolder.eulerAngles;
         Refresh();
     }
 
@@ -121,25 +119,12 @@ public class Shoot : MonoBehaviour
 
     public void Aim()
     {
-        if (!aiming)
-        {
-            aiming = true;
-            gun.GetComponent<Camera>().enabled = true;
-            //cam.fieldOfView = gunInfo.aimedInFOV;
+        if (!aiming) aiming = true;
+        else aiming = false;
 
-            //gun.localPosition = gunInfo.aimedInPosition;
-            //gun.localEulerAngles = gunInfo.aimedInAngle;
-        }
-        else
-        {
-            aiming = false;
-            Camera.main.enabled = true;
-
-            //cam.fieldOfView = 90f;
-
-            //gun.localPosition = defaultGunHolderPos;
-            //gun.localEulerAngles = defaultGunHolderRot;
-        }
+        Camera sightCam = gun.GetComponentInChildren<Camera>();
+        sightCam.enabled = aiming;
+        print("sightCam = " + sightCam + " sightCam.enabled = " + sightCam.enabled);
     }
 
 
