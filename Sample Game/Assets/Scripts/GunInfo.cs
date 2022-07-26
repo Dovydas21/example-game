@@ -120,7 +120,7 @@ public class GunInfo : MonoBehaviour
     {
         soundSource.Play();
         while (soundSource.isPlaying) //Wait Until Sound has finished playing
-            yield return new WaitForSeconds(.1f);
+            yield return new WaitForSeconds(.01f);
 
         yield return true;
     }
