@@ -104,6 +104,8 @@ public class Shoot : MonoBehaviour
 
     public bool CanShoot()
     {
+        if (!playerHoldingGun) return false; // Exit if the player is not holding a gun.
+
         if (gunInfo.ammoInGun > 0)
             return true;
         else return false;
@@ -119,12 +121,13 @@ public class Shoot : MonoBehaviour
 
     public void Aim()
     {
-        if (!aiming) aiming = true;
-        else aiming = false;
+        if (!aiming) // If the player is not aiming in then set aiming to true.
+            aiming = true;
+        else 
+            aiming = false;
 
-        Camera sightCam = gun.GetComponentInChildren<Camera>();
-        sightCam.enabled = aiming;
-        print("sightCam = " + sightCam + " sightCam.enabled = " + sightCam.enabled);
+        if(playerHoldingGun) // Check that the player is actually holding a gun.
+            gunInfo.ToggleAim(aiming); // Go and toggle aiming down sights.
     }
 
 

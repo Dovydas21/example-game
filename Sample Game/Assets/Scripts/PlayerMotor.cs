@@ -8,8 +8,11 @@ public class PlayerMotor : MonoBehaviour
     private Vector3 playerVelcocity;
     private bool IsGrounded;
     public float speed = 5f;
+    public float runSpeed = 10f;
     public float gravity = -9.8f;
     public float jumpHeight = 1f;
+
+    float originalSpeed;
 
     private SFXScript sfx;
     // Start is called before the first frame update
@@ -23,6 +26,19 @@ public class PlayerMotor : MonoBehaviour
     void Update()
     {
         IsGrounded = controller.isGrounded;
+    }
+
+    public void StartRunning()
+    {
+        print("Player has started running...");
+        originalSpeed = speed;
+        speed = runSpeed;
+    }
+
+    public void StopRunning()
+    {
+        print("Player has stopped running...");
+        speed = originalSpeed;
     }
 
     public void ProcessMove(Vector2 input)

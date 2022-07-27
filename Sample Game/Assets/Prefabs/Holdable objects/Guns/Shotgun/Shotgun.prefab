@@ -875,11 +875,9 @@ MonoBehaviour:
   magCapacity: 8
   ammoInGun: 0
   gunHolder: {fileID: 0}
-  aimedInFOV: 30
-  aimedInPosition: {x: -0.06, y: -0.32, z: 0.19}
-  aimedInAngle: {x: 0, y: 0, z: 0}
   defaultGunPosition: {x: 0, y: 0, z: 0}
   defaultGunAngles: {x: 0, y: 180, z: 0}
+  sightCamera: {fileID: 302672314082107627}
   shootingAnimation: {fileID: 3798199264529990908}
   cockingAnimation: {fileID: 7775369616313454394}
   muzzleFlash: {fileID: 7874173963188817716}
@@ -1118,7 +1116,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1360102092064896127}
   - component: {fileID: 302672314082107627}
-  - component: {fileID: 2786073324753301131}
   m_Layer: 0
   m_Name: Shotgun sights
   m_TagString: Untagged
@@ -1134,7 +1131,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3311766176886229112}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -0.010286171, y: 1.463, z: 2.243}
+  m_LocalPosition: {x: 0, y: 1.45, z: 1.879}
   m_LocalScale: {x: 3.333333, y: 3.333333, z: 3.333333}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1184,14 +1181,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &2786073324753301131
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3311766176886229112}
-  m_Enabled: 1
 --- !u!1 &6293949924026531378
 GameObject:
   m_ObjectHideFlags: 0
