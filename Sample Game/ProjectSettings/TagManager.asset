@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - GunHolder
+  - Gun Magazine
   layers:
   - Default
   - TransparentFX

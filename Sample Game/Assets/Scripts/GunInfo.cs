@@ -109,10 +109,12 @@ public class GunInfo : MonoBehaviour
     {
         GameObject.Find("AmmoCounter").GetComponent<Text>().text = "";
     }
+
     public void UpdateAmmoInGun(int value)
     {
         ammoInGun = value;
         GameObject.Find("AmmoCounter").GetComponent<Text>().text = ammoInGun.ToString();
+        // if(value == ammoInGun) 
     }
 
     public void ToggleAim(bool aiming)
