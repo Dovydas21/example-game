@@ -118,7 +118,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 1
-  controlID: 20
+  controlID: 18
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -143,7 +143,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 21
+  controlID: 19
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -168,7 +168,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 200}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 22
+  controlID: 20
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -193,7 +193,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 23
+  controlID: 21
 --- !u!114 &9
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -295,8 +295,8 @@ MonoBehaviour:
     y: 0
     width: 349.5
     height: 998
-  m_MinSize: {x: 275, y: 50}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 276, y: 71}
+  m_MaxSize: {x: 4001, y: 4021}
   m_ActualView: {fileID: 20}
   m_Panes:
   - {fileID: 20}
@@ -346,7 +346,7 @@ MonoBehaviour:
   m_UseMipMap: 0
   m_VSyncEnabled: 0
   m_Gizmos: 0
-  m_Stats: 0
+  m_Stats: 1
   m_SelectedSizes: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
   m_ZoomArea:
     m_HRangeLocked: 0
@@ -678,9 +678,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: -9.4226055, y: 1.2975322, z: -36.0248}
+    m_Target: {x: -22.269014, y: 5.314198, z: 4.532298}
     speed: 2
-    m_Value: {x: -9.4226055, y: 1.2975322, z: -36.0248}
+    m_Value: {x: -22.269014, y: 5.314198, z: 4.532298}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -727,20 +727,20 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.020983702, y: -0.9778493, z: 0.12088479, w: 0.1697696}
+    m_Target: {x: -0.041887235, y: 0.9328779, z: -0.11531618, w: -0.3387123}
     speed: 2
-    m_Value: {x: 0.020983025, y: -0.97781783, z: 0.1208809, w: 0.16976413}
+    m_Value: {x: -0.042059332, y: 0.93235034, z: -0.115250945, w: -0.34010452}
   m_Size:
-    m_Target: 1.7414304
+    m_Target: 35.42387
     speed: 2
-    m_Value: 1.7692968
+    m_Value: 35.42387
   m_Ortho:
     m_Target: 1
     speed: 2
     m_Value: 1
   m_CameraSettings:
-    m_Speed: 0.59170437
-    m_SpeedNormalized: 0.29549995
+    m_Speed: 0.59070486
+    m_SpeedNormalized: 0.29499996
     m_SpeedMin: 0.001
     m_SpeedMax: 2
     m_EasingEnabled: 1
@@ -897,23 +897,23 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Models/Map/Decoration
+    - Assets/Prefabs/Map objects/Houses
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Models/Map/Decoration
+  - Assets/Prefabs/Map objects/Houses
   m_LastFoldersGridSize: -1
   m_LastProjectPath: /Users/bradleygallavin/Documents/Projects/Unity/BRADEZDOV/Halloween
     shooty game/Sample Game
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 105}
-    m_SelectedIDs: 20680000
-    m_LastClickedID: 26656
-    m_ExpandedIDs: 00000000d4670000d6670000d86700000e680000106800002268000000ca9a3b
+    scrollPos: {x: 0, y: 208.0008}
+    m_SelectedIDs: 1a720000
+    m_LastClickedID: 29210
+    m_ExpandedIDs: 00000000ca710000cc710000ce710000d0710000d2710000d4710000d6710000d87100001272000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -941,7 +941,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000d4670000d6670000d8670000
+    m_ExpandedIDs: 00000000ca710000cc710000ce710000d0710000d2710000d4710000d6710000d8710000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -969,7 +969,7 @@ MonoBehaviour:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
     m_HadKeyboardFocusLastEvent: 1
-    m_ExpandedInstanceIDs: c6230000ee5c000000000000c6600000d4610000
+    m_ExpandedInstanceIDs: c6230000ee5c000000000000c6600000d4610000dc660000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -985,7 +985,7 @@ MonoBehaviour:
       m_IsRenaming: 0
       m_OriginalEventType: 11
       m_IsRenamingFilename: 1
-      m_ClientGUIView: {fileID: 0}
+      m_ClientGUIView: {fileID: 11}
     m_CreateAssetUtility:
       m_EndAction: {fileID: 0}
       m_InstanceID: 0
@@ -1055,7 +1055,7 @@ MonoBehaviour:
     m_SaveData: []
   m_LockTracker:
     m_IsLocked: 0
-  m_LastSelectedObjectID: 182732
+  m_LastSelectedObjectID: 25746
 --- !u!114 &20
 MonoBehaviour:
   m_ObjectHideFlags: 52
