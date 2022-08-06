@@ -25,9 +25,9 @@ public class GunInfo : MonoBehaviour
 
     [Header("Gun positions")]
     public GameObject gunHolder;                                // Gameobject attached to the camera that holds the gun.
-    public float aimedInFOV;                                    // The FOV of the camera when aiming in with this gun.
-    public Vector3 aimedInPosition, aimedInAngle;               // The local position & rotation of the gun inside of gunHolder when aimed in.
     public Vector3 defaultGunPosition, defaultGunAngles;        // The local position & rotation of the gun inside of gunHolder when NOT aimed in.
+    public Camera sightCamera;                                  // The camera that looks down the sight of the gun.
+    bool playerAimedDownSights = false;                         // Keeps track of whether the player is currently aiming down their sights.
 
     [Header("Gun animations")]
     public Animator shootingAnimation;                          // The animaTOR that has the animation the gun should play when the gun is fired.
@@ -43,7 +43,9 @@ public class GunInfo : MonoBehaviour
     public Shoot shootScript;
     GameObject playerObj;
 
-    
+
+
+
     Rigidbody rb;
     float gunMass, gunDrag;
     bool gunGravity;
@@ -69,6 +71,9 @@ public class GunInfo : MonoBehaviour
             gameObject.transform.parent = gunHolder.transform;
             gameObject.transform.position = gunHolder.transform.position;
             gameObject.transform.rotation = gunHolder.transform.rotation;
+            gameObject.transform.localEulerAngles = defaultGunAngles;
+            gameObject.transform.localPosition = defaultGunPosition;
+
             playerObj.GetComponent<InputManager>().gunInfo = this;
 
             Destroy(gameObject.GetComponent<Rigidbody>());              // Disable the rigidbody on the object.
@@ -81,35 +86,46 @@ public class GunInfo : MonoBehaviour
 
     public IEnumerator Drop()
     {
-        gameObject.transform.parent = null;
+        if (!playerAimedDownSights)
+        {
+            gameObject.transform.parent = null;
 
-        // Set the Rigidbody values back to what they were before we destroyed it.
-        rb = gameObject.AddComponent<Rigidbody>();
-        rb.mass = gunMass;
-        rb.drag = gunDrag;
-        rb.useGravity = gunGravity;
+            // Set the Rigidbody values back to what they were before we destroyed it.
+            rb = gameObject.AddComponent<Rigidbody>();
+            rb.mass = gunMass;
+            rb.drag = gunDrag;
+            rb.useGravity = gunGravity;
 
-        rb.AddForce(Vector3.forward * 10f, ForceMode.Force);
-        ResetAmmoCounter(); // Hide the ammo counter.
-        shootScript.Refresh(); // Refresh the shoot script to give it information about the gun just picked up.
+            rb.AddForce(Vector3.forward * 10f, ForceMode.Force);
+            ResetAmmoCounter(); // Hide the ammo counter.
+            shootScript.Refresh(); // Refresh the shoot script to give it information about the gun just picked up / dropped.
 
-        yield return new WaitForSeconds(1f); // Wait for 1 second before re-enabling the pickup-trigger.
-        gameObject.GetComponent<BoxCollider>().enabled = true; // Re-enable the pickup trigger.
+            yield return new WaitForSeconds(1f); // Wait for 1 second before re-enabling the pickup-trigger.
+            gameObject.GetComponent<BoxCollider>().enabled = true; // Re-enable the pickup trigger.
+        }
     }
 
     public void ResetAmmoCounter()
     {
         GameObject.Find("AmmoCounter").GetComponent<Text>().text = "";
     }
+
     public void UpdateAmmoInGun(int value)
     {
         ammoInGun = value;
         GameObject.Find("AmmoCounter").GetComponent<Text>().text = ammoInGun.ToString();
+        // if(value == ammoInGun) 
+    }
+
+    public void ToggleAim(bool aiming)
+    {
+        sightCamera.enabled = aiming;
+        playerAimedDownSights = aiming;
     }
 
     public void PlayCockingAnimation()
     {
-        if(cockingAnimation != null)
+        if (cockingAnimation != null)
             cockingAnimation.SetTrigger("Fire");
     }
 
@@ -117,7 +133,7 @@ public class GunInfo : MonoBehaviour
     {
         soundSource.Play();
         while (soundSource.isPlaying) //Wait Until Sound has finished playing
-            yield return new WaitForSeconds(.1f);
+            yield return new WaitForSeconds(.01f);
 
         yield return true;
     }
@@ -145,7 +161,7 @@ public class GunInfo : MonoBehaviour
 
     public void PlayMuzzleFlash()
     {
-        if(muzzleFlash != null)
+        if (muzzleFlash != null)
             muzzleFlash.Play();
     }
 }

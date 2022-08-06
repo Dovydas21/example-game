@@ -34,7 +34,10 @@ public class InputManager : MonoBehaviour
         onFoot.Jump.performed += ctx => motor.Jump();
         onFoot.Fire.started += _ => StartFiring();
         onFoot.Fire.canceled += _ => StopFiring();
-        onFoot.Aim.performed += ctx => shoot.Aim();
+        onFoot.Aim.started += ctx => shoot.Aim();
+        onFoot.Aim.canceled += ctx => shoot.Aim();
+        onFoot.Run.started += ctx => motor.StartRunning();
+        onFoot.Run.canceled += ctx => motor.StopRunning();
         onFoot.Reload.performed += ctx => shoot.Reload();
         onFoot.Dropobject.performed += ctx => shoot.Drop();
     }

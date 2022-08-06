@@ -27,8 +27,6 @@ public class Shoot : MonoBehaviour
 
     public void Start()
     {
-        defaultGunHolderPos = gunHolder.position;
-        defaultGunHolderRot = gunHolder.eulerAngles;
         Refresh();
     }
 
@@ -106,6 +104,8 @@ public class Shoot : MonoBehaviour
 
     public bool CanShoot()
     {
+        if (!playerHoldingGun) return false; // Exit if the player is not holding a gun.
+
         if (gunInfo.ammoInGun > 0)
             return true;
         else return false;
@@ -121,25 +121,13 @@ public class Shoot : MonoBehaviour
 
     public void Aim()
     {
-        if (!aiming)
-        {
+        if (!aiming) // If the player is not aiming in then set aiming to true.
             aiming = true;
-            gun.GetComponent<Camera>().enabled = true;
-            //cam.fieldOfView = gunInfo.aimedInFOV;
-
-            //gun.localPosition = gunInfo.aimedInPosition;
-            //gun.localEulerAngles = gunInfo.aimedInAngle;
-        }
-        else
-        {
+        else 
             aiming = false;
-            Camera.main.enabled = true;
 
-            //cam.fieldOfView = 90f;
-
-            //gun.localPosition = defaultGunHolderPos;
-            //gun.localEulerAngles = defaultGunHolderRot;
-        }
+        if(playerHoldingGun) // Check that the player is actually holding a gun.
+            gunInfo.ToggleAim(aiming); // Go and toggle aiming down sights.
     }
 
 
