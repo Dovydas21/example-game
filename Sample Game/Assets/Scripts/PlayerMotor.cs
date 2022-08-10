@@ -12,7 +12,7 @@ public class PlayerMotor : MonoBehaviour
     public float gravity = -9.8f;
     public float jumpHeight = 1f;
 
-    float originalSpeed;
+    public float baseSpeed;
 
     private SFXScript sfx;
     // Start is called before the first frame update
@@ -31,14 +31,14 @@ public class PlayerMotor : MonoBehaviour
     public void StartRunning()
     {
         print("Player has started running...");
-        originalSpeed = speed;
+        baseSpeed = speed;
         speed = runSpeed;
     }
 
     public void StopRunning()
     {
         print("Player has stopped running...");
-        speed = originalSpeed;
+        speed = baseSpeed;
     }
 
     public void ProcessMove(Vector2 input)
