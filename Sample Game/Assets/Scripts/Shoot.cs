@@ -75,7 +75,14 @@ public class Shoot : MonoBehaviour
                 Transform objectHit = HitInfo.transform;
                 Debug.DrawLine(cam.transform.position, HitInfo.point, Color.red, 2, false);
                 if (HitInfo.rigidbody != null)
+                {
                     objectHit.GetComponent<Rigidbody>().AddForceAtPosition(cam.transform.forward * gunInfo.power, HitInfo.point, ForceMode.Impulse);
+                }
+                if (objectHit.GetComponent<EnemyController>() != null)
+                {
+                    print("Enemy hit!");
+                    objectHit.GetComponent<EnemyController>().TakeDamage(gunInfo.damage);
+                }
             }
         }
     }
@@ -123,10 +130,10 @@ public class Shoot : MonoBehaviour
     {
         if (!aiming) // If the player is not aiming in then set aiming to true.
             aiming = true;
-        else 
+        else
             aiming = false;
 
-        if(playerHoldingGun) // Check that the player is actually holding a gun.
+        if (playerHoldingGun) // Check that the player is actually holding a gun.
             gunInfo.ToggleAim(aiming); // Go and toggle aiming down sights.
     }
 

@@ -873,6 +873,7 @@ MonoBehaviour:
   range: 500
   fireRate: 0.2
   magCapacity: 8
+  damage: 24
   ammoInGun: 0
   gunHolder: {fileID: 0}
   defaultGunPosition: {x: 0, y: 0, z: 0}

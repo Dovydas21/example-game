@@ -22,17 +22,18 @@ public class Powerup : MonoBehaviour
     {
         if (pickupTrigger.tag == "Player" && !pickedUp)
         {
-            gameObject.transform.localScale = new Vector3(0f, 0f, 0f); // Set current object's scale to (0, 0, 0) to hide it. We cannot destroy it until the coroutine is finished.
             pickedUp = true;
             GameObject player = pickupTrigger.gameObject;
             motor = player.GetComponent<PlayerMotor>();
-            if(motor != null)
-                StartCoroutine(ApplyPowerup());
+
+            if(motor != null) StartCoroutine(ApplyPowerup());
         }
     }
 
     IEnumerator ApplyPowerup()
     {
+        gameObject.transform.localScale = new Vector3(0f, 0f, 0f); // Set current object's scale to (0, 0, 0) to hide it. We cannot destroy it until the coroutine is finished.
+
         if (type == PowerupTypes.SpeedUpgrade)
         {
             motor.baseSpeed += 10f;

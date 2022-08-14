@@ -20,7 +20,8 @@ public class GunInfo : MonoBehaviour
     public float power;                                         // The force multiplier applied when the gun lands a hit on a RigidBody.
     public float range;                                         // The range of the raycast shot when the gun is fired.
     public float fireRate;                                      // The fire rate of the gun. .1 is fast 10 is slow.
-    public int magCapacity;                                   // The gun's capacity of rounds that it can fire before reloading.
+    public int magCapacity;                                     // The gun's capacity of rounds that it can fire before reloading.
+    public int damage;                                          // Damage the gun does when it hits enemies.
     public int ammoInGun;
 
     [Header("Gun positions")]
