@@ -81,7 +81,9 @@ public class Shoot : MonoBehaviour
                 if (objectHit.GetComponent<EnemyController>() != null)
                 {
                     print("Enemy hit!");
-                    objectHit.GetComponent<EnemyController>().TakeDamage(gunInfo.damage);
+                    EnemyController enemyController = objectHit.GetComponent<EnemyController>();
+                    enemyController.TakeDamage(gunInfo.damage);
+                    enemyController.BleedAtPosition(HitInfo.point);
                 }
             }
         }
