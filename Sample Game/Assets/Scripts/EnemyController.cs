@@ -11,8 +11,11 @@ public class EnemyController : MonoBehaviour
     int currentHealth;
 
     public ParticleSystem bloodEffects;
-    public Animator characterAnimation;
-    public Animation deathAnimation;
+    public Animator characterAnimator;
+    public Collider playerCollider;
+
+    bool alive = true;
+
 
 
     Transform target;
@@ -30,9 +33,11 @@ public class EnemyController : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
+        PlayHitAnimation();
+
         if (currentHealth <= 0)
-            Die();
-        StartCoroutine(PlayHitAnimation());
+            StartCoroutine(Die());
+        
     }
 
     public void BleedAtPosition(Vector3 pos)
@@ -40,73 +45,77 @@ public class EnemyController : MonoBehaviour
         hitPositions.Add(pos);
         ParticleSystem ps = Instantiate(bloodEffects, pos, transform.rotation); // Spawn in the particle system to make it look like player is bleeding.
         ps.transform.SetParent(transform);
-        // ps.Play();
     }
 
     public void Chase(bool YN)
     {
-        if (characterAnimation != null)
-            characterAnimation.SetBool("Running", YN);
+        if (characterAnimator != null)
+            characterAnimator.SetBool("Running", YN);
     }
 
     public void Attack(bool YN)
     {
-        if (characterAnimation != null)
-            characterAnimation.SetBool("Attacking", YN);
+        if (characterAnimator != null)
+            characterAnimator.SetBool("Attacking", YN);
     }
 
-    public void Die()
+    IEnumerator Die()
     {
-        if (characterAnimation != null)
+        print("Enemy has died");
+        if (characterAnimator != null && alive)
         {
-            characterAnimation.SetTrigger("Dead");
-            if (deathAnimation != null)
-                StartCoroutine(WaitForAnimation(deathAnimation));
+            alive = false;
+            agent.isStopped = true;
+            Destroy(playerCollider);
+            Destroy(gameObject.GetComponent<Rigidbody>());
+            characterAnimator.SetTrigger("Dead");
+            yield return new WaitForSeconds(characterAnimator.GetCurrentAnimatorStateInfo(0).length);
         }
-        agent.isStopped = true;
     }
+
+
+
 
     IEnumerator PlayHitAnimation()
     {
-        if (characterAnimation != null)
+        if (characterAnimator != null && alive)
         {
-            characterAnimation.SetTrigger("Hit");
+            characterAnimator.SetTrigger("Hit");
             agent.isStopped = true;
-            while (!characterAnimation.GetCurrentAnimatorStateInfo(0).IsName("HitReaction"))
-                yield return new WaitForSeconds(.01f);
+            yield return new WaitForSeconds(characterAnimator.GetCurrentAnimatorStateInfo(0).length);
             agent.isStopped = false;
         }
     }
 
-    private IEnumerator WaitForAnimation(Animation animation)
+    public void PermanentStopEnemy()
     {
-        do
-        {
-            yield return new WaitForSeconds(.1f);
-        } while (animation.isPlaying);
+        print("Stopping enemy permanently");
+        // Triggered by an animation event on the enemy character's death animation.
+        this.enabled = false;
     }
 
     private void Update()
     {
-        float distance = Vector3.Distance(target.position, transform.position);
-
-        
-        if (distance <= lookRadius)
+        if (alive)
         {
-            agent.SetDestination(target.position);
-            Chase(true); // Start the chasing animation.
+            float distance = Vector3.Distance(target.position, transform.position);
 
-            if (distance <= agent.stoppingDistance)
+            if (distance <= lookRadius)
             {
-                FaceTarget();
-                Attack(true);
-                // Attack player.
+                agent.SetDestination(target.position);
+                Chase(true); // Start the chasing animation.
+
+                if (distance <= agent.stoppingDistance)
+                {
+                    FaceTarget();
+                    Attack(true);
+                }
+                else Attack(false);
             }
-            else Attack(false);
-        }
-        else
-        {
-            Chase(false); // Stop the chasing animation.
+            else
+            {
+                Chase(false); // Stop the chasing animation.
+            }
         }
     }
 
@@ -114,9 +123,12 @@ public class EnemyController : MonoBehaviour
 
     void FaceTarget()
     {
-        Vector3 direction = (target.position - transform.position).normalized;
-        Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0f, direction.z));
-        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
+        if (alive)
+        {
+            Vector3 direction = (target.position - transform.position).normalized;
+            Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0f, direction.z));
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
+        }
     }
 
     private void OnDrawGizmosSelected()
@@ -130,3 +142,6 @@ public class EnemyController : MonoBehaviour
         }
     }
 }
+
+
+
