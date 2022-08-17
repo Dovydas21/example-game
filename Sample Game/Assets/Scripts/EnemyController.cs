@@ -8,19 +8,27 @@ public class EnemyController : MonoBehaviour
     [Header("Enemy attributes")]
     public float lookRadius = 10f;
     public int maxHealth;
-    int currentHealth;
+    public enum EnemyType { Grower, Duper };
+    public EnemyType type;
+    public DupeAttributes dupeAttributes;
 
+    [Header("References")]
     public ParticleSystem bloodEffects;
     public Animator characterAnimator;
-    public Collider playerCollider;
 
+    // Locals
     bool alive = true;
-
-
-
+    public float currentHealth;
     Transform target;
     NavMeshAgent agent;
     List<Vector3> hitPositions = new List<Vector3>();
+    List<ParticleSystem> particles = new List<ParticleSystem>();
+
+    private void OnValidate()
+    {
+        if (type == EnemyType.Grower)
+            dupeAttributes = new DupeAttributes();
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -28,27 +36,76 @@ public class EnemyController : MonoBehaviour
         target = GameObject.FindGameObjectWithTag("Player").transform;
         agent = GetComponent<NavMeshAgent>();
         currentHealth = maxHealth;
+        dupeAttributes.duplicated = false;
     }
 
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
-        PlayHitAnimation();
+        StartCoroutine(PlayHitAnimation());
 
         if (currentHealth <= 0)
             StartCoroutine(Die());
-        
+
+        EnemyTypeBehaviour();
+    }
+
+    public void EnemyTypeBehaviour()
+    {
+        Vector3 scale = gameObject.transform.localScale;
+
+        if (type == EnemyType.Grower) // Grower makes the enemy grow each time.
+        {
+            float growFactor = .2f;
+            scale += new Vector3(growFactor, growFactor, growFactor);
+            gameObject.transform.localScale = scale;
+        }
+        else if (type == EnemyType.Duper && !dupeAttributes.duplicated && dupeAttributes.maxDupes > dupeAttributes.dupeCount) // Duper makes the enemy duplicate each time
+        {
+            // Adjust the scale
+            scale *= dupeAttributes.scaleFactor;
+            gameObject.transform.localScale = scale;
+
+            // Set the duplicated flag for this script so we don't dupe it over and over.
+            dupeAttributes.duplicated = true;
+            dupeAttributes.dupeCount++;
+
+            // Duplicate the enemy
+            GameObject dupe = Instantiate(gameObject, transform.position, Quaternion.identity);
+            // Set the attributes like speed, health and the dupe count so we can keep count of how many we have duplicated so far.
+            dupe.GetComponent<EnemyController>().currentHealth *= dupeAttributes.healthFactor;
+            dupe.GetComponent<EnemyController>().dupeAttributes.dupeCount = dupeAttributes.dupeCount;
+            dupe.GetComponent<EnemyController>().dupeAttributes.duplicated = false;
+            dupe.GetComponent<EnemyController>().agent.speed *= dupeAttributes.speedFactor;
+        }
     }
 
     public void BleedAtPosition(Vector3 pos)
     {
         hitPositions.Add(pos);
+        StartCoroutine(PlayHitAnimation());
         ParticleSystem ps = Instantiate(bloodEffects, pos, transform.rotation); // Spawn in the particle system to make it look like player is bleeding.
         ps.transform.SetParent(transform);
+        particles.Add(ps);
+    }
+
+    public void StopBleed()
+    {
+        foreach (var ps in particles)
+        {
+            ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        }
     }
 
     public void Chase(bool YN)
     {
+        agent.isStopped = false;
+
+        if (YN)
+            agent.SetDestination(target.position); // Set the enemy to move towards the player's current position.
+        else
+            agent.isStopped = true;
+
         if (characterAnimator != null)
             characterAnimator.SetBool("Running", YN);
     }
@@ -66,15 +123,13 @@ public class EnemyController : MonoBehaviour
         {
             alive = false;
             agent.isStopped = true;
-            Destroy(playerCollider);
+            StopBleed();
             Destroy(gameObject.GetComponent<Rigidbody>());
             characterAnimator.SetTrigger("Dead");
-            yield return new WaitForSeconds(characterAnimator.GetCurrentAnimatorStateInfo(0).length);
+            yield return new WaitForSeconds(30);
+            Destroy(gameObject);
         }
     }
-
-
-
 
     IEnumerator PlayHitAnimation()
     {
@@ -96,32 +151,41 @@ public class EnemyController : MonoBehaviour
 
     private void Update()
     {
-        if (alive)
+        if (alive) // Enemy must be alive....
         {
-            float distance = Vector3.Distance(target.position, transform.position);
-
-            if (distance <= lookRadius)
+            float distance = Vector3.Distance(target.position, transform.position); // Calculate the distance from the enemy to the player.
+            bool attacking = false;
+            if (distance <= lookRadius) // If the player is within the look radius...
             {
-                agent.SetDestination(target.position);
-                Chase(true); // Start the chasing animation.
+                agent.isStopped = attacking; // Un-stop the enemy, allowing him to move.
 
-                if (distance <= agent.stoppingDistance)
+                if (!attacking)
+                    Chase(true); // Start the chasing animation.
+                else
+                    Chase(false);
+
+                if (distance <= agent.stoppingDistance -1 ) // If the enemy is within attacking range then face the target and 
                 {
+                    attacking = true;
                     FaceTarget();
+                    Chase(false);
                     Attack(true);
                 }
-                else Attack(false);
+                else {
+                    Attack(false);
+                    attacking = false;
+                }
+
             }
             else
             {
+                agent.isStopped = true;
                 Chase(false); // Stop the chasing animation.
             }
         }
     }
 
-
-
-    void FaceTarget()
+    void FaceTarget() // Makes the enemy face towards the player.
     {
         if (alive)
         {
@@ -131,10 +195,12 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    private void OnDrawGizmosSelected()
+    private void OnDrawGizmosSelected() // Debugging gizmos for where the enemy was hit (world space) and where the enemy can see.
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(gameObject.transform.position, lookRadius);
+        Gizmos.DrawWireSphere(gameObject.transform.position, lookRadius); // Sphere where the enemy can see and detect the player.
+
+        Gizmos.DrawSphere(target.position, .7f);
 
         foreach (var pos in hitPositions)
         {
@@ -143,5 +209,13 @@ public class EnemyController : MonoBehaviour
     }
 }
 
-
-
+[System.Serializable]
+public struct DupeAttributes
+{
+    public int maxDupes;
+    public int dupeCount;
+    public bool duplicated;
+    public float scaleFactor;
+    public float speedFactor;
+    public float healthFactor;
+}

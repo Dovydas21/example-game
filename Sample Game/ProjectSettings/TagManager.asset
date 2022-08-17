@@ -6,14 +6,16 @@ TagManager:
   tags:
   - GunHolder
   - Gun Magazine
+  - Particles
+  - Enemy
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Shootable
   - Water
   - UI
-  - 
+  - BoundingBox
   - 
   - 
   - 
