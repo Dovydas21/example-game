@@ -19,6 +19,7 @@ public class EnemyController : MonoBehaviour
     // Locals
     bool alive = true;
     public float currentHealth;
+    bool attacking = false;
     Transform target;
     NavMeshAgent agent;
     List<Vector3> hitPositions = new List<Vector3>();
@@ -103,8 +104,6 @@ public class EnemyController : MonoBehaviour
 
         if (YN)
             agent.SetDestination(target.position); // Set the enemy to move towards the player's current position.
-        else
-            agent.isStopped = true;
 
         if (characterAnimator != null)
             characterAnimator.SetBool("Running", YN);
@@ -113,7 +112,21 @@ public class EnemyController : MonoBehaviour
     public void Attack(bool YN)
     {
         if (characterAnimator != null)
+        {
             characterAnimator.SetBool("Attacking", YN);
+            agent.isStopped = true;
+            print("Stopped player to play the attack animation.");
+            StartCoroutine(WaitForCurrentAnimation());
+            print("Un-stopped player becayse the attack animation has finished.");
+            agent.isStopped = false;
+        }
+    }
+
+    IEnumerator WaitForCurrentAnimation()
+    {
+        print("Waiting for current animation to finish.");
+        yield return new WaitForSeconds(characterAnimator.GetCurrentAnimatorStateInfo(0).length);
+        print("Current animation finished.");
     }
 
     IEnumerator Die()
@@ -149,22 +162,17 @@ public class EnemyController : MonoBehaviour
         this.enabled = false;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (alive) // Enemy must be alive....
         {
             float distance = Vector3.Distance(target.position, transform.position); // Calculate the distance from the enemy to the player.
-            bool attacking = false;
             if (distance <= lookRadius) // If the player is within the look radius...
             {
-                agent.isStopped = attacking; // Un-stop the enemy, allowing him to move.
+                agent.isStopped = false; // Un-stop the enemy, allowing him to move.
+                Chase(true);
 
-                if (!attacking)
-                    Chase(true); // Start the chasing animation.
-                else
-                    Chase(false);
-
-                if (distance <= agent.stoppingDistance -1 ) // If the enemy is within attacking range then face the target and 
+                if (distance - 1 <= agent.stoppingDistance) // If the enemy is within attacking range then face the target and 
                 {
                     attacking = true;
                     FaceTarget();
