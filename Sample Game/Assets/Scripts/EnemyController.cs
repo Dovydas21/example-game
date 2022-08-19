@@ -19,7 +19,6 @@ public class EnemyController : MonoBehaviour
     // Locals
     bool alive = true;
     public float currentHealth;
-    bool attacking = false;
     Transform target;
     NavMeshAgent agent;
     List<Vector3> hitPositions = new List<Vector3>();
@@ -38,17 +37,6 @@ public class EnemyController : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         currentHealth = maxHealth;
         dupeAttributes.duplicated = false;
-    }
-
-    public void TakeDamage(int damage)
-    {
-        currentHealth -= damage;
-        StartCoroutine(PlayHitAnimation());
-
-        if (currentHealth <= 0)
-            StartCoroutine(Die());
-
-        EnemyTypeBehaviour();
     }
 
     public void EnemyTypeBehaviour()
@@ -84,7 +72,6 @@ public class EnemyController : MonoBehaviour
     public void BleedAtPosition(Vector3 pos)
     {
         hitPositions.Add(pos);
-        StartCoroutine(PlayHitAnimation());
         ParticleSystem ps = Instantiate(bloodEffects, pos, transform.rotation); // Spawn in the particle system to make it look like player is bleeding.
         ps.transform.SetParent(transform);
         particles.Add(ps);
@@ -100,8 +87,6 @@ public class EnemyController : MonoBehaviour
 
     public void Chase(bool YN)
     {
-        agent.isStopped = false;
-
         if (YN)
             agent.SetDestination(target.position); // Set the enemy to move towards the player's current position.
 
@@ -114,12 +99,34 @@ public class EnemyController : MonoBehaviour
         if (characterAnimator != null)
         {
             characterAnimator.SetBool("Attacking", YN);
-            agent.isStopped = true;
+            // StopEnemy(true);
             print("Stopped player to play the attack animation.");
             StartCoroutine(WaitForCurrentAnimation());
             print("Un-stopped player becayse the attack animation has finished.");
+            // StopEnemy(false);
+        }
+    }
+
+    public void PlayHitAnimation()
+    {
+        if (characterAnimator != null && alive)
+        {
+            characterAnimator.SetTrigger("Hit");
+            agent.isStopped = true;
+            StartCoroutine(WaitForCurrentAnimation());
             agent.isStopped = false;
         }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        currentHealth -= damage;
+        PlayHitAnimation();
+
+        if (currentHealth <= 0)
+            StartCoroutine(Die());
+
+        EnemyTypeBehaviour();
     }
 
     IEnumerator WaitForCurrentAnimation()
@@ -144,17 +151,6 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    IEnumerator PlayHitAnimation()
-    {
-        if (characterAnimator != null && alive)
-        {
-            characterAnimator.SetTrigger("Hit");
-            agent.isStopped = true;
-            yield return new WaitForSeconds(characterAnimator.GetCurrentAnimatorStateInfo(0).length);
-            agent.isStopped = false;
-        }
-    }
-
     public void PermanentStopEnemy()
     {
         print("Stopping enemy permanently");
@@ -162,34 +158,38 @@ public class EnemyController : MonoBehaviour
         this.enabled = false;
     }
 
+    public void StopEnemy(bool stop)
+    {
+        agent.isStopped = stop;
+        agent.enabled = !stop;
+    }
+
     private void FixedUpdate()
     {
         if (alive) // Enemy must be alive....
         {
             float distance = Vector3.Distance(target.position, transform.position); // Calculate the distance from the enemy to the player.
-            if (distance <= lookRadius) // If the player is within the look radius...
+            if (distance - 1 <= lookRadius) // If the player is within the look radius (minus 1 because there's sime jitter)...
             {
-                agent.isStopped = false; // Un-stop the enemy, allowing him to move.
-                Chase(true);
+                FaceTarget();   // Face the player.
+                Chase(true);    // Chase the player
+
+                if (agent.remainingDistance + .5f <= agent.stoppingDistance) // Check if the distance that the enemy still has to run is less than or equal to the stopping distance and stop them if it is.
+                    StopEnemy(true);
+                else
+                    StopEnemy(false);
 
                 if (distance - 1 <= agent.stoppingDistance) // If the enemy is within attacking range then face the target and 
                 {
-                    attacking = true;
-                    FaceTarget();
-                    Chase(false);
-                    Attack(true);
+                    Chase(false);   // Stop chasing the player.
+                    Attack(true);   // Attach the player.
                 }
-                else {
-                    Attack(false);
-                    attacking = false;
+                else
+                {
+                    Attack(false);  // Stop attacking the player.
                 }
-
             }
-            else
-            {
-                agent.isStopped = true;
-                Chase(false); // Stop the chasing animation.
-            }
+            else Chase(false); // Stop the chasing animation.
         }
     }
 
@@ -205,15 +205,19 @@ public class EnemyController : MonoBehaviour
 
     private void OnDrawGizmosSelected() // Debugging gizmos for where the enemy was hit (world space) and where the enemy can see.
     {
+        // Red
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(gameObject.transform.position, lookRadius); // Sphere where the enemy can see and detect the player.
-
         Gizmos.DrawSphere(target.position, .7f);
-
         foreach (var pos in hitPositions)
         {
             Gizmos.DrawSphere(pos, .05f);
         }
+
+        // Green
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(target.transform.position, agent.stoppingDistance); // Sphere where the enemy can see and detect the player.
+        Gizmos.DrawWireSphere(gameObject.transform.position, agent.remainingDistance); // Sphere where the enemy can see and detect the player.
     }
 }
 
