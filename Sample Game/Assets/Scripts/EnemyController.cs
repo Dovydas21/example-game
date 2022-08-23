@@ -21,8 +21,12 @@ public class EnemyController : MonoBehaviour
     public float currentHealth;
     Transform target;
     NavMeshAgent agent;
-    List<Vector3> hitPositions = new List<Vector3>();
     List<ParticleSystem> particles = new List<ParticleSystem>();
+
+    // Debugging vars
+    List<Vector3> hitPositions = new List<Vector3>();
+    List<Vector3> agentEnableLocations = new List<Vector3>();
+    List<Vector3> agentDisableLocations = new List<Vector3>();
 
     private void OnValidate()
     {
@@ -37,6 +41,7 @@ public class EnemyController : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         currentHealth = maxHealth;
         dupeAttributes.duplicated = false;
+        agent.ResetPath();
     }
 
     public void EnemyTypeBehaviour()
@@ -151,10 +156,9 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    public void PermanentStopEnemy()
+    public void PermanentStopEnemy() // Triggered by an animation event on the enemy character's death animation.
     {
         print("Stopping enemy permanently");
-        // Triggered by an animation event on the enemy character's death animation.
         this.enabled = false;
     }
 
@@ -162,9 +166,13 @@ public class EnemyController : MonoBehaviour
     {
         agent.isStopped = stop;
         agent.enabled = !stop;
+
+        if (stop)
+            agentDisableLocations.Add(transform.position);
+        else agentEnableLocations.Add(transform.position);
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         if (alive) // Enemy must be alive....
         {
@@ -173,13 +181,14 @@ public class EnemyController : MonoBehaviour
             {
                 FaceTarget();   // Face the player.
                 Chase(true);    // Chase the player
+                print("remaining dist = " + agent.remainingDistance);
 
-                if (agent.remainingDistance + .5f <= agent.stoppingDistance) // Check if the distance that the enemy still has to run is less than or equal to the stopping distance and stop them if it is.
+                if (agent.remainingDistance + .5f <= agent.stoppingDistance && agent.hasPath) // Check if the distance that the enemy still has to run is less than or equal to the stopping distance and stop them if it is.
                     StopEnemy(true);
-                else
+                else if(agent.remainingDistance >= agent.stoppingDistance)
                     StopEnemy(false);
 
-                if (distance - 1 <= agent.stoppingDistance) // If the enemy is within attacking range then face the target and 
+                if (distance - 2 <= agent.stoppingDistance) // If the enemy is within attacking range then face the target and 
                 {
                     Chase(false);   // Stop chasing the player.
                     Attack(true);   // Attach the player.
@@ -207,17 +216,29 @@ public class EnemyController : MonoBehaviour
     {
         // Red
         Gizmos.color = Color.red;
+        Gizmos.DrawSphere(transform.position, .7f); // Enemy
         Gizmos.DrawWireSphere(gameObject.transform.position, lookRadius); // Sphere where the enemy can see and detect the player.
-        Gizmos.DrawSphere(target.position, .7f);
         foreach (var pos in hitPositions)
         {
             Gizmos.DrawSphere(pos, .05f);
         }
 
+        foreach (var pos in agentDisableLocations)
+            Gizmos.DrawSphere(pos, .1f);    
+
         // Green
         Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(target.transform.position, agent.stoppingDistance); // Sphere where the enemy can see and detect the player.
+        Gizmos.DrawSphere(agent.destination, .7f);
         Gizmos.DrawWireSphere(gameObject.transform.position, agent.remainingDistance); // Sphere where the enemy can see and detect the player.
+
+
+        foreach (var pos in agentEnableLocations)
+            Gizmos.DrawSphere(pos, .1f);
+
+        // Blue
+        Gizmos.color = Color.blue;
+        Gizmos.DrawSphere(target.position, .7f);
+        Gizmos.DrawWireSphere(target.transform.position, agent.stoppingDistance); // Sphere where the enemy can see and detect the player.
     }
 }
 
