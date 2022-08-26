@@ -37,8 +37,10 @@ public class EnemyController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gameObject.tag = "Enemy";
         target = GameObject.FindGameObjectWithTag("Player").transform;
         agent = GetComponent<NavMeshAgent>();
+        agent.baseOffset = 0;
         currentHealth = maxHealth;
         dupeAttributes.duplicated = false;
         agent.ResetPath();
@@ -212,6 +214,8 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+
+
     private void OnDrawGizmosSelected() // Debugging gizmos for where the enemy was hit (world space) and where the enemy can see.
     {
         // Red
@@ -223,8 +227,8 @@ public class EnemyController : MonoBehaviour
             Gizmos.DrawSphere(pos, .05f);
         }
 
-        foreach (var pos in agentDisableLocations)
-            Gizmos.DrawSphere(pos, .1f);    
+        // foreach (var pos in agentDisableLocations)
+           // Gizmos.DrawSphere(pos, .1f);    
 
         // Green
         Gizmos.color = Color.green;
@@ -232,8 +236,8 @@ public class EnemyController : MonoBehaviour
         Gizmos.DrawWireSphere(gameObject.transform.position, agent.remainingDistance); // Sphere where the enemy can see and detect the player.
 
 
-        foreach (var pos in agentEnableLocations)
-            Gizmos.DrawSphere(pos, .1f);
+        // foreach (var pos in agentEnableLocations)
+            // Gizmos.DrawSphere(pos, .1f);
 
         // Blue
         Gizmos.color = Color.blue;
