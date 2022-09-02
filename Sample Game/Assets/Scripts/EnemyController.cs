@@ -9,6 +9,7 @@ public class EnemyController : MonoBehaviour
     public float lookRadius = 10f;
     public int maxHealth;
     public int enemyDamage;
+    public int enemyKnockback;
     public enum EnemyType { Grower, Duper };
     public EnemyType type;
     public DupeAttributes dupeAttributes;
