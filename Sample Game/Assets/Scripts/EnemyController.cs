@@ -8,6 +8,7 @@ public class EnemyController : MonoBehaviour
     [Header("Enemy attributes")]
     public float lookRadius = 10f;
     public int maxHealth;
+    public int enemyDamage;
     public enum EnemyType { Grower, Duper };
     public EnemyType type;
     public DupeAttributes dupeAttributes;
@@ -106,11 +107,9 @@ public class EnemyController : MonoBehaviour
         if (characterAnimator != null)
         {
             characterAnimator.SetBool("Attacking", YN);
-            // StopEnemy(true);
-            print("Stopped player to play the attack animation.");
+            // print("Stopped player to play the attack animation.");
             StartCoroutine(WaitForCurrentAnimation());
-            print("Un-stopped player becayse the attack animation has finished.");
-            // StopEnemy(false);
+            // print("Un-stopped player becayse the attack animation has finished.");
         }
     }
 
@@ -138,9 +137,9 @@ public class EnemyController : MonoBehaviour
 
     IEnumerator WaitForCurrentAnimation()
     {
-        print("Waiting for current animation to finish.");
+        // print("Waiting for current animation to finish.");
         yield return new WaitForSeconds(characterAnimator.GetCurrentAnimatorStateInfo(0).length);
-        print("Current animation finished.");
+        // print("Current animation finished.");
     }
 
     IEnumerator Die()
@@ -183,7 +182,7 @@ public class EnemyController : MonoBehaviour
             {
                 FaceTarget();   // Face the player.
                 Chase(true);    // Chase the player
-                print("remaining dist = " + agent.remainingDistance);
+                // print("remaining dist = " + agent.remainingDistance);
 
                 if (agent.remainingDistance + .5f <= agent.stoppingDistance && agent.hasPath) // Check if the distance that the enemy still has to run is less than or equal to the stopping distance and stop them if it is.
                     StopEnemy(true);
