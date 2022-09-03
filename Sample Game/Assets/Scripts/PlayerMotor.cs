@@ -39,7 +39,7 @@ public class PlayerMotor : MonoBehaviour
     {
         print("Player has stopped running...");
         speed = baseSpeed;
-    }
+    } // Test
 
     public void ProcessMove(Vector2 input)
     {
