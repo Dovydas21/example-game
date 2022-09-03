@@ -153,6 +153,7 @@ public class EnemyController : MonoBehaviour
             StopBleed();
             Destroy(gameObject.GetComponent<Rigidbody>());
             characterAnimator.SetTrigger("Dead");
+            gameObject.layer = LayerMask.GetMask("Shootable");
             yield return new WaitForSeconds(30);
             Destroy(gameObject);
         }
