@@ -15,14 +15,14 @@ public class PlayerMotor : MonoBehaviour
     private SFXScript sfx;
     Rigidbody rb;
 
-    [Header("Key mappings")]
+    [Header("Key bindings")]
     public KeyCode moveForwardKey;
     public KeyCode moveBackwardKey;
     public KeyCode moveLeftKey;
     public KeyCode moveRightKey;
-    
 
-    
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -32,19 +32,25 @@ public class PlayerMotor : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        // IsGrounded = controller.isGrounded;
+        GroundCheck();
+
         if (Input.GetKey(moveForwardKey))
-        {
             rb.AddForce(Camera.main.transform.forward * speed, ForceMode.Acceleration);
-            Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-            if (flatVel.magnitude > speed)
-            {
-                Vector3 limitedVel = flatVel.normalized * speed;
-                rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
-            }
+
+        // Speed limitation.
+        Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        if (flatVel.magnitude > speed)
+        {
+            Vector3 limitedVel = flatVel.normalized * speed;
+            rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
         }
+    }
+
+    void GroundCheck()
+    {
+        IsGrounded = Physics.Raycast(transform.position, Vector3.down, 2f);
     }
 
     public void StartRunning()

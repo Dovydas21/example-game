@@ -23,11 +23,23 @@ public class Shoot : MonoBehaviour
     Vector3 defaultGunHolderPos;
     Vector3 defaultGunHolderRot;
 
+    [Header("Key bindings")]
+    public KeyCode FireKey;
+    public KeyCode AimKey;
+
     public void Start()
     {
         Refresh();
     }
 
+    private void Update()
+    {
+        if (Input.GetKey(FireKey))
+            Fire();
+
+        if (Input.GetKeyDown(AimKey) || Input.GetKeyUp(AimKey))
+            Aim();
+    }
 
     public void Refresh()
     {
