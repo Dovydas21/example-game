@@ -8,8 +8,8 @@ public class PlayerLook : MonoBehaviour
     public Camera cam;
     private float xRotation = 0f;
     
-    private float xSensitivity = 100f;
-    private float ySensitivity = 100f;
+    private float xSensitivity = 300f;
+    private float ySensitivity = 300f;
 
     public void Start()
     {
@@ -17,16 +17,19 @@ public class PlayerLook : MonoBehaviour
         Cursor.visible = false;
     }
 
-    public void ProcessLook(Vector2 input)
+    public void Update()
     {
-        float mouseX = input.x;
-        float mouseY = input.y;
+        // Get the mouse input
+        float mouseX = Input.GetAxis("Mouse X") * xSensitivity;
+        float mouseY = Input.GetAxis("Mouse Y") * ySensitivity;
+
         // calculate mouse rotation for looking up and down
-        xRotation -=(mouseY * Time.deltaTime) * ySensitivity;
+        xRotation -=(mouseY * Time.deltaTime);
         xRotation = Mathf.Clamp(xRotation, -80f, 80f);
+
         // apply this to camera transform
         cam.transform.localRotation = Quaternion.Euler(xRotation, 0, 0);
         // Rotate player to look left and right
-        transform.Rotate(Vector3.up * (mouseX * Time.deltaTime) * xSensitivity);
+        transform.Rotate(Vector3.up * (mouseX * Time.deltaTime));
     }
 }

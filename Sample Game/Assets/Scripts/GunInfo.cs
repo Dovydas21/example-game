@@ -75,7 +75,6 @@ public class GunInfo : MonoBehaviour
             gameObject.transform.localEulerAngles = defaultGunAngles;
             gameObject.transform.localPosition = defaultGunPosition;
 
-            playerObj.GetComponent<InputManager>().gunInfo = this;
 
             Destroy(gameObject.GetComponent<Rigidbody>());              // Disable the rigidbody on the object.
             gameObject.GetComponent<BoxCollider>().enabled = false;     // Disable the box collider that was used to trigger the pickup.
