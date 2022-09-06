@@ -9,6 +9,7 @@ public class PlayerMotor : MonoBehaviour
     private bool IsGrounded;
     public float speed = 5f;
     public float runSpeed = 10f;
+    public float jumpForce = 100f;
     public float gravity = -9.8f;
     public float jumpHeight = 1f;
     public float baseSpeed;
@@ -16,11 +17,14 @@ public class PlayerMotor : MonoBehaviour
     Rigidbody rb;
 
     [Header("Key bindings")]
-    public KeyCode moveForwardKey;
-    public KeyCode moveBackwardKey;
-    public KeyCode moveLeftKey;
-    public KeyCode moveRightKey;
-
+    public KeyCode jumpKey;
+    
+    float horizontalInput;
+    float verticalInput;
+    public Transform orientation;
+    Vector3 moveDirection;
+    Vector3 playerGroundSpot;
+    
 
 
     // Start is called before the first frame update
@@ -31,14 +35,39 @@ public class PlayerMotor : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
+    private void Update()
+    {
+        MyInput();
+
+        if (Input.GetKeyDown(jumpKey))
+        {
+            print("Jump key pressed");
+            Jump();
+        }
+    }
+
+    void MyInput()
+    {
+        horizontalInput = Input.GetAxisRaw("Horizontal");
+        verticalInput = Input.GetAxisRaw("Vertical");
+    }
+
+    void MovePlayer()
+    {
+        moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
+        rb.AddForce(moveDirection.normalized * speed * 10f, ForceMode.VelocityChange);
+    }
+
     // Update is called once per frame
     void FixedUpdate()
     {
         GroundCheck();
+        MovePlayer();
+        LimitSpeed();
+    }
 
-        if (Input.GetKey(moveForwardKey))
-            rb.AddForce(Camera.main.transform.forward * speed, ForceMode.Acceleration);
-
+    void LimitSpeed()
+    {
         // Speed limitation.
         Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
         if (flatVel.magnitude > speed)
@@ -50,7 +79,12 @@ public class PlayerMotor : MonoBehaviour
 
     void GroundCheck()
     {
-        IsGrounded = Physics.Raycast(transform.position, Vector3.down, 2f);
+        RaycastHit hitInfo;
+        IsGrounded = Physics.Raycast(transform.position, Vector3.down, out hitInfo, 2f);
+        playerGroundSpot = hitInfo.point;
+
+        Debug.DrawRay(transform.position, Vector3.down, Color.red, .5f);
+        print("IsGrounded = " + IsGrounded);
     }
 
     public void StartRunning()
@@ -80,11 +114,18 @@ public class PlayerMotor : MonoBehaviour
 
     public void Jump()
     {
-        if (IsGrounded)
+        if (IsGrounded) // Ground check
         {
             sfx.PlayGrunt();
-            Debug.Log("Jumped");
-            playerVelcocity.y = Mathf.Sqrt(jumpHeight * -3.0f * gravity);
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
+            // rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
     }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.black;
+        Gizmos.DrawSphere(playerGroundSpot, .3f);
+    }
 }
+ 
