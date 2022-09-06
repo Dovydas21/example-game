@@ -18,13 +18,13 @@ public class PlayerMotor : MonoBehaviour
 
     [Header("Key bindings")]
     public KeyCode jumpKey;
-    
+    public KeyCode dropWeaponKey;
+
     float horizontalInput;
     float verticalInput;
     public Transform orientation;
     Vector3 moveDirection;
-    Vector3 playerGroundSpot;
-    
+
 
 
     // Start is called before the first frame update
@@ -43,6 +43,15 @@ public class PlayerMotor : MonoBehaviour
         {
             print("Jump key pressed");
             Jump();
+        }
+
+        if (Input.GetKeyDown(dropWeaponKey))
+        {
+            GunInfo gunInfo = GetComponentInChildren<GunInfo>();
+            if (gunInfo != null)
+            {
+                StartCoroutine(gunInfo.Drop());
+            }
         }
     }
 
@@ -79,12 +88,7 @@ public class PlayerMotor : MonoBehaviour
 
     void GroundCheck()
     {
-        RaycastHit hitInfo;
-        IsGrounded = Physics.Raycast(transform.position, Vector3.down, out hitInfo, 2f);
-        playerGroundSpot = hitInfo.point;
-
-        Debug.DrawRay(transform.position, Vector3.down, Color.red, .5f);
-        print("IsGrounded = " + IsGrounded);
+        IsGrounded = Physics.Raycast(transform.position, Vector3.down, 2f);
     }
 
     public void StartRunning()
@@ -100,32 +104,10 @@ public class PlayerMotor : MonoBehaviour
         speed = baseSpeed;
     }
 
-    public void ProcessMove(Vector2 input)
-    {
-        Vector3 moveDirection = Vector3.zero;
-        moveDirection.x = input.x;
-        moveDirection.z = input.y;
-        // controller.Move(transform.TransformDirection(moveDirection) * speed * Time.deltaTime);
-        playerVelcocity.y += gravity * Time.deltaTime;
-        if (IsGrounded && playerVelcocity.y < 0)
-            playerVelcocity.y = -2f;
-        // controller.Move(playerVelcocity * Time.deltaTime);
-    }
-
     public void Jump()
     {
-        if (IsGrounded) // Ground check
-        {
-            sfx.PlayGrunt();
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
-            // rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-        }
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.black;
-        Gizmos.DrawSphere(playerGroundSpot, .3f);
+        if (!IsGrounded) return; // Exit if the player is not grounded.
+        sfx.PlayGrunt(); // Play the jump sound effect.
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange); // Apply the jump force to the player.
     }
 }
- 

@@ -41,8 +41,8 @@ public class GunInfo : MonoBehaviour
 
     [Header("Misc components")]
     public BoxCollider pickupTrigger;                           // The box collider that triggers the player to pick up the gun if it is on the ground.
-    public Shoot shootScript;
-    GameObject playerObj;
+    public Shoot shootScript;                                   // The shoot script that is attached to the player that controls when the gun is fired.
+    GameObject playerObj;                                       // The GameObject that is the player.
 
 
 
@@ -50,12 +50,14 @@ public class GunInfo : MonoBehaviour
     Rigidbody rb;
     float gunMass, gunDrag;
     bool gunGravity;
+    bool allowPickup = true;
 
     private void Start()
     {
         ammoInGun = magCapacity; // Set the current ammo count to be the mag capacity (i.e. fully loaded).
         gunHolder = GameObject.FindGameObjectWithTag("GunHolder");
         playerObj = GameObject.FindGameObjectWithTag("Player");
+        dropGunKey = playerObj.GetComponent<PlayerMotor>().dropWeaponKey;
         shootScript = playerObj.GetComponent<Shoot>();
         rb = gameObject.GetComponent<Rigidbody>();
 
@@ -67,42 +69,67 @@ public class GunInfo : MonoBehaviour
 
     private void OnTriggerEnter(Collider pickupTrigger)
     {
-        if (pickupTrigger.tag == "Player" && gunHolder.transform.childCount == 0) // Trigger a pick-up if you are the player and you are not already holding something.
+        print("GunInfo.cs:OnTriggerEnter(Collider pickupTrigger):  Something has collided with " + gameObject.name);
+        if (pickupTrigger.tag == "Player" && gunHolder.transform.childCount == 0 && allowPickup) // Trigger a pick-up if you are the player AND you are not already holding something AND you are allowed to pickup the weapon.
         {
+            print("GunInfo.cs:OnTriggerEnter(Collider pickupTrigger):  Player has collided with " + gameObject.name + " starting pickup.");
             gameObject.transform.parent = gunHolder.transform;
             gameObject.transform.position = gunHolder.transform.position;
             gameObject.transform.rotation = gunHolder.transform.rotation;
             gameObject.transform.localEulerAngles = defaultGunAngles;
             gameObject.transform.localPosition = defaultGunPosition;
+            print("GunInfo.cs:OnTriggerEnter(Collider pickupTrigger):  Set " + gameObject.name + "'s parent to GunHolder gameobject and adjusted the weapon pos accordingly.");
 
 
             Destroy(gameObject.GetComponent<Rigidbody>());              // Disable the rigidbody on the object.
+            print("GunInfo.cs:OnTriggerEnter(Collider pickupTrigger):  Removed Rigidbody from " + gameObject.name);
+
             gameObject.GetComponent<BoxCollider>().enabled = false;     // Disable the box collider that was used to trigger the pickup.
+            print("GunInfo.cs:OnTriggerEnter(Collider pickupTrigger):  Disabled the pickup-trigger on " + gameObject.name);
 
             shootScript.Refresh(); // Refresh the shoot script to give it information about the gun just picked up.
+            print("GunInfo.cs:OnTriggerEnter(Collider pickupTrigger):  Refreshed 'Shoot.cs'");
+
             UpdateAmmoInGun(ammoInGun);
-        }
+            print("GunInfo.cs:OnTriggerEnter(Collider pickupTrigger):  Calling 'UpdateAmmoInGun(ammoInGun)'");
+        } else print("GunInfo.cs:OnTriggerEnter(Collider pickupTrigger):  Object that collided with " + gameObject.name + " is not a player.");
     }
 
     public IEnumerator Drop()
     {
+        print("GunInfo.cs:Drop():  Dropping weapon...");
+
         if (!playerAimedDownSights)
         {
+            print("GunInfo.cs:Drop():  Setting parent of " + gameObject.name + " to null.");
             gameObject.transform.parent = null;
 
             // Set the Rigidbody values back to what they were before we destroyed it.
             rb = gameObject.AddComponent<Rigidbody>();
+            print("GunInfo.cs:Drop():  Added rigidbody to " + gameObject.name);
             rb.mass = gunMass;
             rb.drag = gunDrag;
             rb.useGravity = gunGravity;
+            print("GunInfo.cs:Drop():  Set rigidbody components: rb.mass = " + rb.mass + ", rb.drag = " + rb.drag + ", rb.useGravity  = " + rb.useGravity);
 
             rb.AddForce(Vector3.forward * 10f, ForceMode.Force);
+            print("GunInfo.cs:Drop():  Added force to " + gameObject.name);
             ResetAmmoCounter(); // Hide the ammo counter.
+            print("GunInfo.cs:Drop():  Hidden ammo counter on UI.");
             shootScript.Refresh(); // Refresh the shoot script to give it information about the gun just picked up / dropped.
+            print("GunInfo.cs:Drop():  Refreshed 'Shoot.cs' so it knows the player is no longer holding a weapon.");
 
-            yield return new WaitForSeconds(1f); // Wait for 1 second before re-enabling the pickup-trigger.
+            print("GunInfo.cs:Drop():  Waiting for 2 seconds before re-enabling the weapon's pickup collider.");
+            allowPickup = false;
+            yield return new WaitForSeconds(2f); // Wait for 1 second before re-enabling the pickup-trigger.
+
+            print("GunInfo.cs:Drop():  re-enabling the weapon's pickup collider.");
             gameObject.GetComponent<BoxCollider>().enabled = true; // Re-enable the pickup trigger.
+            allowPickup = true;
+
+            print("GunInfo.cs:Drop():  Finished dropping weapon.");
         }
+        else print("GunInfo.cs:Drop():  Cannot drop weapon because player is aiming down sights.");
     }
 
     public void ResetAmmoCounter()
@@ -125,8 +152,9 @@ public class GunInfo : MonoBehaviour
 
     public void PlayCockingAnimation()
     {
+        // Not enabled yet!! (BG:2022-09-06)
         if (cockingAnimation != null)
-            cockingAnimation.SetTrigger("Fire");
+            cockingAnimation.SetTrigger("Cock");
     }
 
     IEnumerator PlayAndWaitForSound(AudioSource soundSource)

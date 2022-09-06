@@ -42164,7 +42164,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6424801273080836023, guid: 5c72a14b138661f41abc505b1bd1c287, type: 3}
       propertyPath: jumpForce
-      value: 10
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6424801273080836023, guid: 5c72a14b138661f41abc505b1bd1c287, type: 3}
       propertyPath: moveLeftKey
@@ -42177,6 +42177,10 @@ PrefabInstance:
     - target: {fileID: 6424801273080836023, guid: 5c72a14b138661f41abc505b1bd1c287, type: 3}
       propertyPath: moveRightKey
       value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 6424801273080836023, guid: 5c72a14b138661f41abc505b1bd1c287, type: 3}
+      propertyPath: dropWeaponKey
+      value: 103
       objectReference: {fileID: 0}
     - target: {fileID: 6424801273080836023, guid: 5c72a14b138661f41abc505b1bd1c287, type: 3}
       propertyPath: moveForwardKey
