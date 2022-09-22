@@ -45,19 +45,21 @@ public class GunInfo : MonoBehaviour
     GameObject playerObj;                                       // The GameObject that is the player.
 
 
-
-
     Rigidbody rb;
     float gunMass, gunDrag;
     bool gunGravity;
     bool allowPickup = true;
+
+    private void OnValidate()
+    {
+        shootScript.Refresh();
+    }
 
     private void Start()
     {
         ammoInGun = magCapacity; // Set the current ammo count to be the mag capacity (i.e. fully loaded).
         gunHolder = GameObject.FindGameObjectWithTag("GunHolder");
         playerObj = GameObject.FindGameObjectWithTag("Player");
-        dropGunKey = playerObj.GetComponent<PlayerMotor>().dropWeaponKey;
         shootScript = playerObj.GetComponent<Shoot>();
         rb = gameObject.GetComponent<Rigidbody>();
 
@@ -67,7 +69,7 @@ public class GunInfo : MonoBehaviour
         gunGravity = rb.useGravity;
     }
 
-    private void OnTriggerEnter(Collider pickupTrigger)
+    private void OnTriggerEnter(Collider pickupTrigger) // Pickup weapon.
     {
         print("GunInfo.cs:OnTriggerEnter(Collider pickupTrigger):  Something has collided with " + gameObject.name);
         if (pickupTrigger.tag == "Player" && gunHolder.transform.childCount == 0 && allowPickup) // Trigger a pick-up if you are the player AND you are not already holding something AND you are allowed to pickup the weapon.
@@ -87,6 +89,8 @@ public class GunInfo : MonoBehaviour
             gameObject.GetComponent<BoxCollider>().enabled = false;     // Disable the box collider that was used to trigger the pickup.
             print("GunInfo.cs:OnTriggerEnter(Collider pickupTrigger):  Disabled the pickup-trigger on " + gameObject.name);
 
+
+
             shootScript.Refresh(); // Refresh the shoot script to give it information about the gun just picked up.
             print("GunInfo.cs:OnTriggerEnter(Collider pickupTrigger):  Refreshed 'Shoot.cs'");
 
@@ -95,7 +99,7 @@ public class GunInfo : MonoBehaviour
         } else print("GunInfo.cs:OnTriggerEnter(Collider pickupTrigger):  Object that collided with " + gameObject.name + " is not a player.");
     }
 
-    public IEnumerator Drop()
+    public IEnumerator Drop() // Drop weapon.
     {
         print("GunInfo.cs:Drop():  Dropping weapon...");
 

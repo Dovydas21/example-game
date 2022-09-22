@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 8452099593710504206}
   - component: {fileID: 289158461035353013}
   - component: {fileID: 6424801273080836023}
-  - component: {fileID: 1978855473626153019}
   - component: {fileID: 463730085767565282}
   - component: {fileID: 7606261990496520990}
   m_Layer: 0
@@ -133,20 +132,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
+  runSpeed: 10
+  jumpForce: 100
   gravity: -9.8
   jumpHeight: 1
---- !u!114 &1978855473626153019
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1804726754752681671}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f72d8ad3e5b28ae4395bcc67f3c946a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  baseSpeed: 0
+  jumpKey: 0
+  dropWeaponKey: 0
+  orientation: {fileID: 0}
 --- !u!114 &463730085767565282
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -160,6 +153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jumpSoundEffect: {fileID: 0}
+  shotSoundEffect: {fileID: 0}
 --- !u!114 &7606261990496520990
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -173,3 +167,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 0}
+  gunObject: {fileID: 0}
+  FireKey: 0
+  AimKey: 0
+  ReloadKey: 0

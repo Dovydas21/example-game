@@ -16,6 +16,11 @@ public class PlayerMotor : MonoBehaviour
     private SFXScript sfx;
     Rigidbody rb;
 
+    // Variables that control the spring force
+    public float rideHeight = .5f;
+    public float springStrength = .5f;
+    public float springDamper = .5f;    
+
     [Header("Key bindings")]
     public KeyCode jumpKey;
     public KeyCode dropWeaponKey;
@@ -30,7 +35,6 @@ public class PlayerMotor : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // controller = GetComponent<CharacterController>();
         sfx = GetComponent<SFXScript>();
         rb = GetComponent<Rigidbody>();
     }
@@ -38,41 +42,71 @@ public class PlayerMotor : MonoBehaviour
     private void Update()
     {
         MyInput();
+        Fall();
+        GroundCheck();
+        MovePlayer();
+        LimitSpeed();
+
 
         if (Input.GetKeyDown(jumpKey))
-        {
-            print("Jump key pressed");
             Jump();
-        }
 
         if (Input.GetKeyDown(dropWeaponKey))
         {
             GunInfo gunInfo = GetComponentInChildren<GunInfo>();
             if (gunInfo != null)
-            {
                 StartCoroutine(gunInfo.Drop());
-            }
         }
     }
 
     void MyInput()
     {
-        horizontalInput = Input.GetAxisRaw("Horizontal");
-        verticalInput = Input.GetAxisRaw("Vertical");
+        horizontalInput = Input.GetAxis("Horizontal");
+        verticalInput = Input.GetAxis("Vertical");
+
+
+
+        /* if ( horizontalInput + verticalInput == 0 && IsGrounded)
+        {
+            print("horizontalInput = " + horizontalInput);
+            print("verticalInput = " + verticalInput);
+            rb.isKinematic = true;
+        }
+        rb.isKinematic = false;
+        */
     }
 
     void MovePlayer()
     {
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
-        rb.AddForce(moveDirection.normalized * speed * 10f, ForceMode.VelocityChange);
+        rb.AddForce(moveDirection.normalized * speed * 10f, ForceMode.Acceleration);
+        // rb.AddForce(moveDirection.normalized * speed * 10f, ForceMode.Force);
     }
 
-    // Update is called once per frame
-    void FixedUpdate()
+    void FloatPlayer()
     {
-        GroundCheck();
-        MovePlayer();
-        LimitSpeed();
+        RaycastHit hitInfo;
+        bool rayHit = Physics.Raycast(transform.position, Vector3.down, out hitInfo);
+        if (rayHit)
+        {
+            Vector3 velocity = rb.velocity;
+            Vector3 rayDirection = transform.TransformDirection(Vector3.down);
+            Vector3 otherVelocity = Vector3.zero;
+            Rigidbody hitBody = hitInfo.rigidbody;
+
+            if (hitBody != null)
+                otherVelocity = hitBody.velocity;
+
+            float rayDirectionVelocity = Vector3.Dot(rayDirection, velocity);
+            float otherDirectionVelocity = Vector3.Dot(rayDirection, otherVelocity);
+
+            float relativeVelocity = rayDirectionVelocity - otherDirectionVelocity;
+
+            float x = hitInfo.distance - rideHeight;
+            float springForce = (x * springStrength) - (relativeVelocity * springDamper);
+            rb.AddForce(rayDirection * springForce);
+            Debug.DrawLine(transform.position, transform.position + (rayDirection * springForce), Color.magenta);
+        }
     }
 
     void LimitSpeed()
@@ -81,14 +115,14 @@ public class PlayerMotor : MonoBehaviour
         Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
         if (flatVel.magnitude > speed)
         {
-            Vector3 limitedVel = flatVel.normalized * speed;
+            Vector3 limitedVel = flatVel.normalized * speed * Time.deltaTime;
             rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
         }
     }
 
     void GroundCheck()
     {
-        IsGrounded = Physics.Raycast(transform.position, Vector3.down, 2f);
+        IsGrounded = Physics.Raycast(transform.position, Vector3.down, 3f);
     }
 
     public void StartRunning()
@@ -108,6 +142,13 @@ public class PlayerMotor : MonoBehaviour
     {
         if (!IsGrounded) return; // Exit if the player is not grounded.
         sfx.PlayGrunt(); // Play the jump sound effect.
-        rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange); // Apply the jump force to the player.
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse); // Apply the jump force to the player.
+    }
+
+    public void Fall()
+    {
+        // If the player is falling down from a jump, make them fall faster to make the jump feel betetr.
+        if (rb.velocity.y < 0f)
+            rb.velocity += Vector3.up * Physics.gravity.y * 1.5f * Time.deltaTime;
     }
 }

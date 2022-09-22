@@ -11,10 +11,9 @@ public class Shoot : MonoBehaviour
     Transform gunHolder;
     Transform gun;
     public GameObject gunObject;
-    private SFXScript sfx;
-    private bool canShoot;
+    private bool canShoot;              // Set to true while the character is able to shoot. See "CanShoot()" function.
+    bool waitingForNextShot;            // Set to true while the character is waiting for the next round to be chambered.
     WaitForSeconds rapidFireWait;
-    [SerializeField] private float fireRate = 0.5f;
     private float _nextRate = -1f;
     bool aiming = false;
     bool playerHoldingGun = false;
@@ -26,6 +25,7 @@ public class Shoot : MonoBehaviour
     [Header("Key bindings")]
     public KeyCode FireKey;
     public KeyCode AimKey;
+    public KeyCode ReloadKey;
 
     public void Start()
     {
@@ -34,9 +34,26 @@ public class Shoot : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKey(FireKey))
-            Fire();
 
+        canShoot = CanShoot();
+
+        // Shooting
+        if (gunInfo.fullAuto)
+        {
+            if (Input.GetKey(FireKey) && canShoot)
+                StartCoroutine(Fire());
+        }
+        else
+        {
+            if (Input.GetKeyDown(FireKey) && canShoot)
+                StartCoroutine(Fire());
+        }
+
+        // Reloading
+        if (Input.GetKey(ReloadKey))
+            Reload();
+
+        // Aiming
         if (Input.GetKeyDown(AimKey) || Input.GetKeyUp(AimKey))
             Aim();
     }
@@ -58,11 +75,9 @@ public class Shoot : MonoBehaviour
             gunInfo = gunHolder.GetComponentInChildren<GunInfo>();
             rapidFireWait = new WaitForSeconds(gunInfo.fireRate);
         }
-
-        sfx = GetComponent<SFXScript>();
     }
 
-    public void Fire()
+    public IEnumerator Fire()
     {
         if (playerHoldingGun)
         {
@@ -76,7 +91,6 @@ public class Shoot : MonoBehaviour
 
             gunInfo.UpdateAmmoInGun(gunInfo.ammoInGun - 1); // Reduce the current ammo count by 1.
 
-            // sfx.PlayShot();
             if (Physics.Raycast(cam.transform.position, cam.transform.forward, out HitInfo, gunInfo.range))
             {
                 Transform objectHit = HitInfo.transform;
@@ -85,6 +99,7 @@ public class Shoot : MonoBehaviour
                 {
                     objectHit.GetComponent<Rigidbody>().AddForceAtPosition(cam.transform.forward * gunInfo.power, HitInfo.point, ForceMode.Impulse);
                 }
+
                 if (objectHit.GetComponent<EnemyController>() != null)
                 {
                     print("Enemy hit!");
@@ -93,6 +108,9 @@ public class Shoot : MonoBehaviour
                     enemyController.BleedAtPosition(HitInfo.point);
                 }
             }
+            waitingForNextShot = true;
+            yield return new WaitForSeconds(gunInfo.fireRate); // Wait until you can fire the next round.
+            waitingForNextShot = false;
         }
     }
 
@@ -120,19 +138,25 @@ public class Shoot : MonoBehaviour
 
     public bool CanShoot()
     {
-        if (!playerHoldingGun) return false; // Exit if the player is not holding a gun.
+        print("Shoot.cs:CanShoot(): Checking if the player is able to shoot the gun.");
+        if (!playerHoldingGun)
+        {
+            print("Shoot.cs:CanShoot(): Player is not holding a gun and therefore cannot fire.");
+            print("Shoot.cs:CanShoot(): Returning FALSE");
+            return false; // Exit if the player is not holding a gun.
+        }
 
-        if (gunInfo.ammoInGun > 0)
+        if (gunInfo.ammoInGun > 0 && !waitingForNextShot)
+        {
+            print("Shoot.cs:CanShoot(): Player has " + gunInfo.ammoInGun + " ammo in " + gunInfo.name + " and is not waiting for the next shot to be ready.");
+            print("Shoot.cs:CanShoot(): Returning TRUE");
             return true;
-        else return false;
-
-        // print("Time.time = " + Time.time + " " + "_nextRate = " + _nextRate);
-        //if (Time.time > _nextRate && gunInfo.ammoInGun > 0)
-        //{
-        //    _nextRate = gunInfo.fireRate + Time.time;
-        //    return true;
-        //}
-        //return true;
+        }
+        else {
+            print("Shoot.cs:CanShoot(): Player has " + gunInfo.ammoInGun + " ammo in " + gunInfo.name + " and 'waitingForNextShot' is set to " + waitingForNextShot);
+            print("Shoot.cs:CanShoot(): Returning FALSE");
+            return false;
+        }
     }
 
     public void Aim()
