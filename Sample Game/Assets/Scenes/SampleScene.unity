@@ -27169,7 +27169,7 @@ GameObject:
   - component: {fileID: 1721755840}
   m_Layer: 0
   m_Name: Ground
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -42266,7 +42266,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6424801273080836023, guid: 5c72a14b138661f41abc505b1bd1c287, type: 3}
       propertyPath: speed
-      value: 75
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 6424801273080836023, guid: 5c72a14b138661f41abc505b1bd1c287, type: 3}
+      propertyPath: runKey
+      value: 304
       objectReference: {fileID: 0}
     - target: {fileID: 6424801273080836023, guid: 5c72a14b138661f41abc505b1bd1c287, type: 3}
       propertyPath: jumpKey
@@ -42274,7 +42278,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6424801273080836023, guid: 5c72a14b138661f41abc505b1bd1c287, type: 3}
       propertyPath: runSpeed
-      value: 2.5
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 6424801273080836023, guid: 5c72a14b138661f41abc505b1bd1c287, type: 3}
       propertyPath: jumpForce
