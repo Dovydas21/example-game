@@ -57,6 +57,7 @@ public class EnemyController : MonoBehaviour
             float growFactor = .2f;
             scale += new Vector3(growFactor, growFactor, growFactor);
             gameObject.transform.localScale = scale;
+            agent.speed += 10f;
         }
         else if (type == EnemyType.Duper && !dupeAttributes.duplicated && dupeAttributes.maxDupes > dupeAttributes.dupeCount) // Duper makes the enemy duplicate each time
         {

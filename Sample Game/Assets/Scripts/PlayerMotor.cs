@@ -88,7 +88,7 @@ public class PlayerMotor : MonoBehaviour
         print("Moving player.");
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
         rb.AddForce(moveDirection.normalized * speed * 10f, ForceMode.Acceleration);
-        //rb.AddForce(moveDirection.normalized * speed * 10f, ForceMode.Force);
+        // rb.AddForce(moveDirection.normalized * speed * 10f, ForceMode.Force);
     }
 
     void FloatPlayer()
