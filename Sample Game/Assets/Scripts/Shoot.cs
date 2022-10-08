@@ -18,6 +18,7 @@ public class Shoot : MonoBehaviour
     WaitForSeconds rapidFireWait;
     [SerializeField] private float fireRate = 0.5f;
     private float _nextRate = -1f;
+    public bool firing = false;
     bool aiming = false;
     bool playerHoldingGun = false;
     GunInfo gunInfo;
@@ -30,6 +31,16 @@ public class Shoot : MonoBehaviour
         Refresh();
     }
 
+    public void Update()
+    {
+        if (firing)
+        {
+            float recoil = 20f;
+            // Work out the rotation.
+            Quaternion targetRotation = Quaternion.AngleAxis(recoil, Vector3.right);
+            gunHolder.localRotation = Quaternion.Slerp(transform.localRotation, targetRotation, Time.deltaTime);
+        }
+    }
 
     public void Refresh()
     {
@@ -59,11 +70,13 @@ public class Shoot : MonoBehaviour
     {
         if (playerHoldingGun)
         {
+            firing = true;
             print("Shot fired");
             RaycastHit HitInfo;
+            // Recoil();
 
             gunInfo.PlayMuzzleFlash();
-            gunInfo.PlayShootAnimation();
+            // gunInfo.PlayShootAnimation();
             gunInfo.PlayShootSound();
             gunInfo.PlayCockingAnimation();
 
@@ -86,6 +99,7 @@ public class Shoot : MonoBehaviour
                     enemyController.BleedAtPosition(HitInfo.point);
                 }
             }
+            firing = false;
         }
     }
 
@@ -118,14 +132,6 @@ public class Shoot : MonoBehaviour
         if (gunInfo.ammoInGun > 0)
             return true;
         else return false;
-
-        // print("Time.time = " + Time.time + " " + "_nextRate = " + _nextRate);
-        //if (Time.time > _nextRate && gunInfo.ammoInGun > 0)
-        //{
-        //    _nextRate = gunInfo.fireRate + Time.time;
-        //    return true;
-        //}
-        //return true;
     }
 
     public void Aim()

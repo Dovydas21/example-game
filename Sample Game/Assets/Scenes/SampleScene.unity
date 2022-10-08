@@ -9857,6 +9857,17 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &537051755 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7606261990496520990, guid: 5c72a14b138661f41abc505b1bd1c287, type: 3}
+  m_PrefabInstance: {fileID: 6458421294844776087}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 537051704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aef7888306b024a02a64deab302d908d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &539601365
 GameObject:
   m_ObjectHideFlags: 0
@@ -15172,6 +15183,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 884282628}
+  - component: {fileID: 884282629}
   m_Layer: 0
   m_Name: GunHolder
   m_TagString: GunHolder
@@ -15194,6 +15206,21 @@ Transform:
   m_Father: {fileID: 1675823446}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &884282629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 884282627}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee571f162b1f04e72b6cce917d8b6ba7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  swayMultiplier: 10
+  smooth: 6
+  shoot: {fileID: 537051755}
 --- !u!1001 &885585436
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -29581,6 +29608,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 884282628}
+  - {fileID: 1800844916}
   m_Father: {fileID: 537051726}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -31804,6 +31832,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1800690577}
   m_Mesh: {fileID: -5950699308799644289, guid: 28f02aac37bf24de1be7410453138456, type: 3}
+--- !u!1 &1800844915
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1800844916}
+  m_Layer: 0
+  m_Name: GunADS
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1800844916
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1800844915}
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.15}
+  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1675823446}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1801066992 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -7973576822035291401, guid: 89f4d88f9a8204762b46ba863e0821c5, type: 3}

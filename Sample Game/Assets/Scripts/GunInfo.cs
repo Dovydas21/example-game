@@ -45,8 +45,6 @@ public class GunInfo : MonoBehaviour
     GameObject playerObj;
 
 
-
-
     Rigidbody rb;
     float gunMass, gunDrag;
     bool gunGravity;
