@@ -221,7 +221,7 @@ public class EnemyController : MonoBehaviour
     {
         // Red
         Gizmos.color = Color.red;
-        Gizmos.DrawSphere(transform.position, .7f); // Enemy
+        Gizmos.DrawSphere(transform.position, .5f); // Enemy
         Gizmos.DrawWireSphere(gameObject.transform.position, lookRadius); // Sphere where the enemy can see and detect the player.
         foreach (var pos in hitPositions)
         {
