@@ -183,6 +183,7 @@ public class EnemyController : MonoBehaviour
             {
                 FaceTarget();   // Face the player.
                 Chase(true);    // Chase the player
+
                 // print("remaining dist = " + agent.remainingDistance);
 
                 if (agent.remainingDistance + .5f <= agent.stoppingDistance && agent.hasPath) // Check if the distance that the enemy still has to run is less than or equal to the stopping distance and stop them if it is.
