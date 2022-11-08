@@ -5284,7 +5284,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3739217751437665262
 Transform:
   m_ObjectHideFlags: 0
@@ -5626,6 +5626,8 @@ MonoBehaviour:
   cockingSoundEffect: {fileID: 0}
   pickupTrigger: {fileID: 6674147988831542745}
   shootScript: {fileID: 0}
+  gunRecoilScript: {fileID: 0}
+  gunObj: {fileID: 0}
 --- !u!1 &8716677581784139324
 GameObject:
   m_ObjectHideFlags: 0

@@ -15579,6 +15579,7 @@ GameObject:
   m_Component:
   - component: {fileID: 884282628}
   - component: {fileID: 884282629}
+  - component: {fileID: 884282630}
   m_Layer: 0
   m_Name: GunHolder
   m_TagString: GunHolder
@@ -15615,6 +15616,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   swayMultiplier: 10
   smooth: 6
+--- !u!114 &884282630
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 884282627}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 823593c8fa1e44d91aea9fe4d2385f4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 1675823446}
+  recoilX: 0.005
+  recoilY: 0.1
+  recoilZ: 0.1
+  kickbackZ: 0.15
+  snappiness: 12.05
+  returnAmount: 8
 --- !u!1001 &885585436
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -30118,7 +30138,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 884282628}
-  - {fileID: 1800844916}
   m_Father: {fileID: 537051726}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -32357,37 +32376,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1800690577}
   m_Mesh: {fileID: -5950699308799644289, guid: 28f02aac37bf24de1be7410453138456, type: 3}
---- !u!1 &1800844915
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1800844916}
-  m_Layer: 0
-  m_Name: GunADS
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1800844916
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1800844915}
-  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 0.15}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1675823446}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1801066992 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -7973576822035291401, guid: 89f4d88f9a8204762b46ba863e0821c5, type: 3}
@@ -46878,6 +46866,10 @@ PrefabInstance:
       propertyPath: fullAuto
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7606261990496520990, guid: 5c72a14b138661f41abc505b1bd1c287, type: 3}
+      propertyPath: bulletHoleDecal
+      value: 
+      objectReference: {fileID: 5050970248480947443, guid: de2d92285bcba4bff84f8f9cd9badafe, type: 3}
     - target: {fileID: 8291628736543941989, guid: 5c72a14b138661f41abc505b1bd1c287, type: 3}
       propertyPath: m_RootOrder
       value: 5

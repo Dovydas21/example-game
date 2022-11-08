@@ -13,6 +13,7 @@ public class Shoot : MonoBehaviour
     Transform gunHolder;
     Transform gun;
     public GameObject gunObject;
+    public GameObject bulletHoleDecal;
     private SFXScript sfx;
     private bool canShoot;
     WaitForSeconds rapidFireWait;
@@ -22,6 +23,7 @@ public class Shoot : MonoBehaviour
     bool aiming = false;
     bool playerHoldingGun = false;
     GunInfo gunInfo;
+    
 
     Vector3 defaultGunHolderPos;
     Vector3 defaultGunHolderRot;
@@ -29,17 +31,6 @@ public class Shoot : MonoBehaviour
     public void Start()
     {
         Refresh();
-    }
-
-    public void Update()
-    {
-        if (firing)
-        {
-            float recoil = 20f;
-            // Work out the rotation.
-            Quaternion targetRotation = Quaternion.AngleAxis(recoil, Vector3.right);
-            gunHolder.localRotation = Quaternion.Slerp(transform.localRotation, targetRotation, Time.deltaTime);
-        }
     }
 
     public void Refresh()
@@ -73,20 +64,20 @@ public class Shoot : MonoBehaviour
             firing = true;
             print("Shot fired");
             RaycastHit HitInfo;
-            // Recoil();
+            gunHolder.GetComponent<GunRecoil>().Recoil(); // Call the recoil function.
 
             gunInfo.PlayMuzzleFlash();
-            // gunInfo.PlayShootAnimation();
             gunInfo.PlayShootSound();
             gunInfo.PlayCockingAnimation();
 
             gunInfo.UpdateAmmoInGun(gunInfo.ammoInGun - 1); // Reduce the current ammo count by 1.
 
             // sfx.PlayShot();
-            if (Physics.Raycast(cam.transform.position, cam.transform.forward, out HitInfo, gunInfo.range))
+            if (Physics.Raycast(gunInfo.gunObj.transform.position, gunInfo.gunObj.transform.forward, out HitInfo, gunInfo.range))
             {
                 Transform objectHit = HitInfo.transform;
                 Debug.DrawLine(cam.transform.position, HitInfo.point, Color.red, 2, false);
+                GameObject bulletHole = Instantiate(bulletHoleDecal, objectHit, true);
                 if (HitInfo.rigidbody != null)
                     objectHit.GetComponent<Rigidbody>().AddForceAtPosition(cam.transform.forward * gunInfo.power, HitInfo.point, ForceMode.Impulse);
 

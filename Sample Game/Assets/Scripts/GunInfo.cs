@@ -42,7 +42,10 @@ public class GunInfo : MonoBehaviour
     [Header("Misc components")]
     public BoxCollider pickupTrigger;                           // The box collider that triggers the player to pick up the gun if it is on the ground.
     public Shoot shootScript;
+    public GunRecoil gunRecoilScript;
+    public GameObject gunObj;
     GameObject playerObj;
+    
 
 
     Rigidbody rb;
@@ -67,11 +70,12 @@ public class GunInfo : MonoBehaviour
     {
         if (pickupTrigger.tag == "Player" && gunHolder.transform.childCount == 0) // Trigger a pick-up if you are the player and you are not already holding something.
         {
-            gameObject.transform.parent = gunHolder.transform;
-            gameObject.transform.position = gunHolder.transform.position;
-            gameObject.transform.rotation = gunHolder.transform.rotation;
-            gameObject.transform.localEulerAngles = defaultGunAngles;
-            gameObject.transform.localPosition = defaultGunPosition;
+            gunObj = gameObject;
+            gunObj.transform.parent = gunHolder.transform;
+            gunObj.transform.position = gunHolder.transform.position;
+            gunObj.transform.rotation = gunHolder.transform.rotation;
+            gunObj.transform.localEulerAngles = defaultGunAngles;
+            gunObj.transform.localPosition = defaultGunPosition;
 
             playerObj.GetComponent<InputManager>().gunInfo = this;
 
