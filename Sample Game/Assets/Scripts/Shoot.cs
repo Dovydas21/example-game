@@ -23,7 +23,7 @@ public class Shoot : MonoBehaviour
     bool aiming = false;
     bool playerHoldingGun = false;
     GunInfo gunInfo;
-    
+
 
     Vector3 defaultGunHolderPos;
     Vector3 defaultGunHolderRot;
@@ -76,17 +76,21 @@ public class Shoot : MonoBehaviour
             if (Physics.Raycast(gunInfo.gunObj.transform.position, gunInfo.gunObj.transform.forward, out HitInfo, gunInfo.range))
             {
                 Transform objectHit = HitInfo.transform;
-                Debug.DrawLine(cam.transform.position, HitInfo.point, Color.red, 2, false);
-                GameObject bulletHole = Instantiate(bulletHoleDecal, objectHit, true);
-                if (HitInfo.rigidbody != null)
-                    objectHit.GetComponent<Rigidbody>().AddForceAtPosition(cam.transform.forward * gunInfo.power, HitInfo.point, ForceMode.Impulse);
+                Debug.DrawLine(cam.transform.position, HitInfo.point, Color.red, 5f, false);
 
-                if (objectHit.GetComponent<EnemyController>() != null)
+                if (objectHit.transform.gameObject.tag != "Player")
                 {
-                    print("Enemy hit!");
-                    EnemyController enemyController = objectHit.GetComponent<EnemyController>();
-                    enemyController.TakeDamage(gunInfo.damage);
-                    enemyController.BleedAtPosition(HitInfo.point);
+                    GameObject bulletHole = Instantiate(bulletHoleDecal, objectHit, true);
+                    if (HitInfo.rigidbody != null)
+                        objectHit.GetComponent<Rigidbody>().AddForceAtPosition(cam.transform.forward * gunInfo.power, HitInfo.point, ForceMode.Impulse);
+
+                    if (objectHit.GetComponent<EnemyController>() != null)
+                    {
+                        print("Enemy hit!");
+                        EnemyController enemyController = objectHit.GetComponent<EnemyController>();
+                        enemyController.TakeDamage(gunInfo.damage);
+                        enemyController.BleedAtPosition(HitInfo.point);
+                    }
                 }
             }
             firing = false;

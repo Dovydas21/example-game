@@ -8,6 +8,8 @@ public class WeaponSway : MonoBehaviour
     public float swayMultiplier;
     public float smooth;
 
+    Quaternion targetRotation;
+
     // Update is called once per frame
     void Update()
     {
@@ -20,7 +22,13 @@ public class WeaponSway : MonoBehaviour
         Quaternion rotationY = Quaternion.AngleAxis(-mouseX, Vector3.up);
 
         // Work out where we are ultimately moving the gun to.
-        Quaternion targetRotation = rotationX * rotationY;
-        transform.localRotation = Quaternion.Slerp(transform.localRotation, targetRotation, smooth * Time.deltaTime);   
+        targetRotation = rotationX * rotationY;
+        targetRotation.eulerAngles *= Time.deltaTime * smooth;
+        // transform.localRotation = Quaternion.Slerp(transform.localRotation, targetRotation, smooth * Time.deltaTime);
+    }
+
+    public Vector3 GetSwayAngle()
+    {
+        return targetRotation.eulerAngles;
     }
 }

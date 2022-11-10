@@ -11,6 +11,7 @@ public class GunRecoil : MonoBehaviour
     Vector3 initialGunPosition;
 
     public Transform cam;
+    public WeaponSway ws;
     [Tooltip("Side to side recoil.")]
     [SerializeField] float recoilX; // Side to side recoil
     [Tooltip("Up and down recoil.")]
@@ -19,8 +20,6 @@ public class GunRecoil : MonoBehaviour
     [SerializeField] float recoilZ; // Front and back recoil
     [Tooltip("Amount to move the gun backwards with each shot.")]
     [SerializeField] float kickbackZ; // Amount to move the gun backwards with each shot
-
-    int shotsFired;
 
     [Tooltip("Speed / power of the recoil")]
     public float snappiness;
@@ -36,16 +35,14 @@ public class GunRecoil : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // RECOIL
         targetRotation = Vector3.Lerp(targetRotation, Vector3.zero, Time.deltaTime * returnAmount);
+        targetRotation += ws.GetSwayAngle();
         currentRotation = Vector3.Slerp(currentRotation, targetRotation, Time.fixedDeltaTime * snappiness);
         transform.localRotation = Quaternion.Euler(currentRotation);
         cam.localRotation = Quaternion.Euler(currentRotation);
+        print("cam.localRotation = " + cam.localRotation);
         Kickback();
-    }
-
-    public void UpdateShotsFired(int shots)
-    {
-        shotsFired = shots;
     }
 
     public void Recoil()
@@ -59,5 +56,10 @@ public class GunRecoil : MonoBehaviour
         targetPosition = Vector3.Lerp(targetPosition, initialGunPosition, Time.deltaTime * returnAmount);
         currentPosition = Vector3.Lerp(currentPosition, targetPosition, Time.fixedDeltaTime * snappiness);
         transform.localPosition = currentPosition;
+    }
+
+    public Vector3 GetRecoilAngle()
+    {
+        return currentRotation * Time.fixedDeltaTime * snappiness;
     }
 }

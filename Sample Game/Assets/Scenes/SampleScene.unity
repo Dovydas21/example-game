@@ -12959,6 +12959,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6674147988831542759, guid: c6531713d2ee74623befeabcaa59e845, type: 3}
+      propertyPath: fireRate
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 6674147988831542759, guid: c6531713d2ee74623befeabcaa59e845, type: 3}
       propertyPath: aimedInPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -15629,6 +15633,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 1675823446}
+  ws: {fileID: 884282629}
   recoilX: 0.005
   recoilY: 0.1
   recoilZ: 0.1
@@ -20156,7 +20161,7 @@ Transform:
   - {fileID: 766511216}
   - {fileID: 5836584156694386367}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!1 &1147187744
 GameObject:
@@ -23118,7 +23123,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1332060685
 Transform:
   m_ObjectHideFlags: 0
@@ -44765,7 +44770,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4966862671201180474, guid: 8ee8c778e92d048aa83bd6718c15a514, type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4966862671201180474, guid: 8ee8c778e92d048aa83bd6718c15a514, type: 3}
       propertyPath: m_LocalPosition.x
