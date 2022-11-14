@@ -12,6 +12,7 @@ public class Shoot : MonoBehaviour
 
     Transform gunHolder;
     Transform gun;
+    public Transform ADSPosition; // Trasnform of the GameObject called "Aiming Position" so we can slerp to it to ADS.
     public GameObject gunObject;
     public GameObject bulletHoleDecal;
     private SFXScript sfx;
@@ -27,10 +28,20 @@ public class Shoot : MonoBehaviour
 
     Vector3 defaultGunHolderPos;
     Vector3 defaultGunHolderRot;
+    Vector3 defaultADSPos;
+    List<Vector3> hitPositions = new List<Vector3>();
 
     public void Start()
     {
         Refresh();
+        defaultGunHolderPos = gunHolder.localPosition;
+        defaultADSPos = ADSPosition.localPosition;
+    }
+
+    private void Update()
+    {
+
+        Aim(Input.GetKey(KeyCode.Mouse1));
     }
 
     public void Refresh()
@@ -72,15 +83,24 @@ public class Shoot : MonoBehaviour
 
             gunInfo.UpdateAmmoInGun(gunInfo.ammoInGun - 1); // Reduce the current ammo count by 1.
 
-            // sfx.PlayShot();
             if (Physics.Raycast(gunInfo.gunObj.transform.position, gunInfo.gunObj.transform.forward, out HitInfo, gunInfo.range))
             {
                 Transform objectHit = HitInfo.transform;
-                Debug.DrawLine(cam.transform.position, HitInfo.point, Color.red, 5f, false);
+                hitPositions.Add(HitInfo.point);
+                Debug.DrawLine(cam.transform.position, HitInfo.point, Color.red, 20f, false);
 
                 if (objectHit.transform.gameObject.tag != "Player")
                 {
-                    GameObject bulletHole = Instantiate(bulletHoleDecal, objectHit, true);
+                    // Spawn a bullethole decal.
+                    GameObject bulletHole = Instantiate(bulletHoleDecal, HitInfo.point + HitInfo.normal * .001f, Quaternion.identity); // Spawn the bullethole decal.
+                    bulletHole.transform.localScale = new Vector3(.1f, .1f, .1f); // Set the scale of the decal.
+                    bulletHole.transform.parent = objectHit; // Parent the decal to the object that was hit.
+                    bulletHole.transform.LookAt(HitInfo.point + HitInfo.normal); // Reposition the decal to be oriented on the surface of the hit object.
+                    Destroy(bulletHole, 10f); // Destroy the decal after 10 seconds...
+
+
+                    Debug.DrawLine(HitInfo.point, HitInfo.normal, Color.green, 20f, false);
+
                     if (HitInfo.rigidbody != null)
                         objectHit.GetComponent<Rigidbody>().AddForceAtPosition(cam.transform.forward * gunInfo.power, HitInfo.point, ForceMode.Impulse);
 
@@ -128,17 +148,46 @@ public class Shoot : MonoBehaviour
         else return false;
     }
 
-    public void Aim()
+    public void Aim(bool aim)
     {
-        if (!aiming) // If the player is not aiming in then set aiming to true.
-            aiming = true;
-        else
-            aiming = false;
+        if (playerHoldingGun)
+        {
+            //if (!aiming)
+            if(aim)
+            {  // If the player is not aiming in then set aiming to true.
+                print("Player now aiming down sights, moving gun to ADS position.");
+                aiming = true;
+                Vector3 targetPosition = ADSPosition.position;
+                Vector3 slerpPos = Vector3.Slerp(defaultGunHolderPos, targetPosition, Time.deltaTime * 10f);
+                print("slerpPos = " + slerpPos);
+                gunHolder.localPosition = slerpPos;
+            }
+            else
+            {
+                print("Player no longer aiming down sights, moving gun to gunHolder position.");
+                aiming = false;
+                Vector3 targetPosition = defaultGunHolderPos;
+                Vector3 slerpPos = Vector3.Slerp(defaultADSPos, targetPosition, Time.deltaTime * 10f);
+                print("slerpPos = " + slerpPos);
+                gunHolder.localPosition = slerpPos;
+            }
+        }
 
+        /*
         if (playerHoldingGun) // Check that the player is actually holding a gun.
             gunInfo.ToggleAim(aiming); // Go and toggle aiming down sights.
+        */
     }
 
+    private void OnDrawGizmos()
+    {
+        foreach (var hitPos in hitPositions)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawCube(hitPos, new Vector3(.1f, .1f, .1f));
+            Gizmos.DrawLine(gunHolder.transform.position, hitPos);
+        }
+    }
 
     public void Reload()
     {

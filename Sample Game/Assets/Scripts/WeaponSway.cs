@@ -29,6 +29,6 @@ public class WeaponSway : MonoBehaviour
 
     public Vector3 GetSwayAngle()
     {
-        return targetRotation.eulerAngles;
+        return targetRotation.eulerAngles * -1f;
     }
 }

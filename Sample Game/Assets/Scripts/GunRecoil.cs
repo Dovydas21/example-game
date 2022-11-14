@@ -9,6 +9,7 @@ public class GunRecoil : MonoBehaviour
     Vector3 targetPosition;
     Vector3 currentPosition;
     Vector3 initialGunPosition;
+    Vector3 swayAngle;
 
     public Transform cam;
     public WeaponSway ws;
@@ -36,12 +37,11 @@ public class GunRecoil : MonoBehaviour
     void Update()
     {
         // RECOIL
+        swayAngle = ws.GetSwayAngle();
         targetRotation = Vector3.Lerp(targetRotation, Vector3.zero, Time.deltaTime * returnAmount);
-        targetRotation += ws.GetSwayAngle();
-        currentRotation = Vector3.Slerp(currentRotation, targetRotation, Time.fixedDeltaTime * snappiness);
+        currentRotation = Vector3.Slerp(currentRotation, targetRotation + swayAngle, Time.fixedDeltaTime * snappiness);
         transform.localRotation = Quaternion.Euler(currentRotation);
         cam.localRotation = Quaternion.Euler(currentRotation);
-        print("cam.localRotation = " + cam.localRotation);
         Kickback();
     }
 
@@ -60,6 +60,6 @@ public class GunRecoil : MonoBehaviour
 
     public Vector3 GetRecoilAngle()
     {
-        return currentRotation * Time.fixedDeltaTime * snappiness;
+        return currentRotation;
     }
 }
