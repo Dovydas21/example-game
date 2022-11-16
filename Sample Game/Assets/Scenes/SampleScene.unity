@@ -15618,8 +15618,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee571f162b1f04e72b6cce917d8b6ba7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  swayMultiplier: 5
+  swayMultiplier: 10
   smooth: 1
+  cam: {fileID: 1675823446}
+  ws: {fileID: 0}
+  recoilX: 0.1
+  recoilY: 0.1
+  recoilZ: 0.1
+  kickbackZ: 0.05
+  snappiness: 1
+  returnAmount: 10
 --- !u!114 &884282630
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15632,14 +15640,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 823593c8fa1e44d91aea9fe4d2385f4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cam: {fileID: 1675823446}
-  ws: {fileID: 884282629}
-  recoilX: 0.005
-  recoilY: 0.1
-  recoilZ: 0.1
-  kickbackZ: 0.15
-  snappiness: 12.05
-  returnAmount: 8
 --- !u!1001 &885585436
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -46903,6 +46903,10 @@ PrefabInstance:
       propertyPath: recoil
       value: 
       objectReference: {fileID: 884282630}
+    - target: {fileID: 289158461035353013, guid: 5c72a14b138661f41abc505b1bd1c287, type: 3}
+      propertyPath: cameraHolder
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 463730085767565282, guid: 5c72a14b138661f41abc505b1bd1c287, type: 3}
       propertyPath: jumpSoundEffect
       value: 

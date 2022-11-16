@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GunRecoil : MonoBehaviour
-{
+{ /*
     Vector3 currentRotation;
     Vector3 targetRotation;
     Vector3 targetPosition;
@@ -37,9 +37,9 @@ public class GunRecoil : MonoBehaviour
     void Update()
     {
         // RECOIL
-        swayAngle = ws.GetSwayAngle();
+        // swayAngle = ws.GetSwayAngle();
         targetRotation = Vector3.Lerp(targetRotation, Vector3.zero, Time.deltaTime * returnAmount);
-        currentRotation = Vector3.Slerp(currentRotation, targetRotation + swayAngle, Time.fixedDeltaTime * snappiness);
+        currentRotation = Vector3.Slerp(currentRotation, targetRotation, Time.fixedDeltaTime * snappiness);
         transform.localRotation = Quaternion.Euler(currentRotation);
         cam.localRotation = Quaternion.Euler(currentRotation);
         Kickback();
@@ -61,5 +61,5 @@ public class GunRecoil : MonoBehaviour
     public Vector3 GetRecoilAngle()
     {
         return currentRotation;
-    }
+    }*/
 }

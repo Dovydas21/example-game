@@ -15,11 +15,8 @@ public class Shoot : MonoBehaviour
     public Transform ADSPosition; // Trasnform of the GameObject called "Aiming Position" so we can slerp to it to ADS.
     public GameObject gunObject;
     public GameObject bulletHoleDecal;
-    private SFXScript sfx;
-    private bool canShoot;
     WaitForSeconds rapidFireWait;
-    [SerializeField] private float fireRate = 0.5f;
-    private float _nextRate = -1f;
+    //     [SerializeField] private float fireRate = 0.5f;
     public bool firing = false;
     bool aiming = false;
     bool playerHoldingGun = false;
@@ -29,19 +26,52 @@ public class Shoot : MonoBehaviour
     Vector3 defaultGunHolderPos;
     Vector3 defaultGunHolderRot;
     Vector3 defaultADSPos;
+    Vector3 defaultADSRot;
     List<Vector3> hitPositions = new List<Vector3>();
 
     public void Start()
     {
         Refresh();
+        // Position values.
         defaultGunHolderPos = gunHolder.localPosition;
         defaultADSPos = ADSPosition.localPosition;
+
+        // Rotation values.
+        defaultADSRot = ADSPosition.localRotation.eulerAngles;
+        defaultGunHolderRot = gunHolder.localRotation.eulerAngles;
     }
 
     private void Update()
     {
+        Aim(!Input.GetKey(KeyCode.Mouse1));
+    }
 
-        Aim(Input.GetKey(KeyCode.Mouse1));
+    public void Aim(bool aim)
+    {
+        if (playerHoldingGun)
+        {
+            Vector3 slerpPos;
+            Vector3 slerpRot;
+
+            if (aim)
+            {  // If the player is not aiming in then set aiming to true.
+                print("Player no longer aiming down sights, moving gun to gunHolder position.");
+                aiming = true;
+                slerpPos = Vector3.Slerp(defaultGunHolderPos, defaultADSPos, Time.deltaTime * .01f);
+                slerpRot = Vector3.Slerp(defaultGunHolderRot, defaultADSRot, Time.deltaTime * .01f);
+                print("slerpPos = " + slerpPos);
+            }
+            else
+            {
+                print("Player now aiming down sights, moving gun to ADS position.");
+                aiming = false;
+                slerpPos = Vector3.Slerp(defaultADSPos, defaultGunHolderPos, Time.deltaTime * .01f);
+                slerpRot = Vector3.Slerp(defaultADSRot, defaultGunHolderRot, Time.deltaTime * .01f);
+                print("slerpPos = " + slerpPos);
+            }
+            gunHolder.localPosition = slerpPos;
+            gunHolder.localRotation = Quaternion.Euler(slerpRot);
+        }
     }
 
     public void Refresh()
@@ -65,7 +95,7 @@ public class Shoot : MonoBehaviour
             rapidFireWait = new WaitForSeconds(gunInfo.fireRate);
         }
 
-        sfx = GetComponent<SFXScript>();
+        // sfx = GetComponent<SFXScript>();
     }
 
     public void Fire()
@@ -75,7 +105,8 @@ public class Shoot : MonoBehaviour
             firing = true;
             print("Shot fired");
             RaycastHit HitInfo;
-            gunHolder.GetComponent<GunRecoil>().Recoil(); // Call the recoil function.
+            // gunHolder.GetComponent<GunRecoil>().Recoil(); // Call the recoil function.
+            gunHolder.GetComponent<WeaponSway>().Recoil(); // Call the recoil function.
 
             gunInfo.PlayMuzzleFlash();
             gunInfo.PlayShootSound();
@@ -117,12 +148,16 @@ public class Shoot : MonoBehaviour
         }
     }
 
+
+    // Drop the weapon.
     public void Drop()
     {
         StartCoroutine(gunInfo.Drop());
     }
 
-    public IEnumerator FullAuto()
+
+    // Fire in a loop waiting for the appropriate amount of time between shots.
+    public IEnumerator FullAuto() 
     {
         if (CanShoot())
         {
@@ -146,37 +181,6 @@ public class Shoot : MonoBehaviour
         if (gunInfo.ammoInGun > 0)
             return true;
         else return false;
-    }
-
-    public void Aim(bool aim)
-    {
-        if (playerHoldingGun)
-        {
-            //if (!aiming)
-            if(aim)
-            {  // If the player is not aiming in then set aiming to true.
-                print("Player now aiming down sights, moving gun to ADS position.");
-                aiming = true;
-                Vector3 targetPosition = ADSPosition.position;
-                Vector3 slerpPos = Vector3.Slerp(defaultGunHolderPos, targetPosition, Time.deltaTime * 10f);
-                print("slerpPos = " + slerpPos);
-                gunHolder.localPosition = slerpPos;
-            }
-            else
-            {
-                print("Player no longer aiming down sights, moving gun to gunHolder position.");
-                aiming = false;
-                Vector3 targetPosition = defaultGunHolderPos;
-                Vector3 slerpPos = Vector3.Slerp(defaultADSPos, targetPosition, Time.deltaTime * 10f);
-                print("slerpPos = " + slerpPos);
-                gunHolder.localPosition = slerpPos;
-            }
-        }
-
-        /*
-        if (playerHoldingGun) // Check that the player is actually holding a gun.
-            gunInfo.ToggleAim(aiming); // Go and toggle aiming down sights.
-        */
     }
 
     private void OnDrawGizmos()
