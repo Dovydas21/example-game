@@ -15618,10 +15618,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee571f162b1f04e72b6cce917d8b6ba7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  swayMultiplier: 10
-  smooth: 1
+  swayMultiplier: 25
+  smooth: 10
   cam: {fileID: 1675823446}
-  ws: {fileID: 0}
   recoilX: 0.1
   recoilY: 0.1
   recoilZ: 0.1

@@ -40,13 +40,13 @@ public class WeaponSway : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Quaternion gunHolderRot = CalculateSway();
-        Vector3 gunHolderPos = CalculateRecoil();
+        Quaternion gunHolderRot = CalculateSway() * RecoilRotation();
+        Vector3 gunHolderPos = Kickback(); // CalculateRecoil() +
 
         print("gunHolderRot = " + gunHolderRot);
         print("gunHolderPos = " + gunHolderPos);
 
-        transform.localRotation = gunHolderRot; // Not working at the moment as line 77 is overwriting this rotation...
+        transform.localRotation = gunHolderRot;
         transform.localPosition = gunHolderPos;
     }
 
@@ -60,7 +60,7 @@ public class WeaponSway : MonoBehaviour
         // Work out the rotation.
         Quaternion rotationX = Quaternion.AngleAxis(-mouseY, Vector3.right);
         Quaternion rotationY = Quaternion.AngleAxis(-mouseX, Vector3.up);
-        print("MouseAngles, rotationX = " + rotationX + ", rotationY = " + rotationY);
+        print("MouseAngles, rotationX = " + rotationX.eulerAngles + ", rotationY = " + rotationY.eulerAngles);
 
         // Work out where we are ultimately moving the gun to.
         targetRotation = rotationX * rotationY;
@@ -70,14 +70,21 @@ public class WeaponSway : MonoBehaviour
         return swayAngle;
     }
 
-    Vector3 CalculateRecoil()
+    Quaternion RecoilRotation()
+    {
+        recoilRotation = Vector3.Lerp(recoilRotation, Vector3.zero, Time.deltaTime * returnAmount);
+        currentRotation = Vector3.Slerp(currentRotation, recoilRotation, Time.fixedDeltaTime * snappiness);
+        return Quaternion.Euler(currentRotation);
+    }
+
+    /*Vector3 CalculateRecoil()
     {
         recoilRotation = Vector3.Lerp(recoilRotation, Vector3.zero, Time.deltaTime * returnAmount);
         currentRotation = Vector3.Slerp(currentRotation, recoilRotation, Time.fixedDeltaTime * snappiness);
         transform.localRotation = Quaternion.Euler(currentRotation);
         Vector3 kickback = Kickback();
         return kickback + currentRotation;
-    }
+    }*/
 
     public void Recoil()
     {
@@ -92,10 +99,5 @@ public class WeaponSway : MonoBehaviour
         currentPosition = Vector3.Lerp(currentPosition, targetPosition, Time.fixedDeltaTime * snappiness);
         //transform.localPosition = currentPosition;
         return currentPosition;
-    }
-
-    public Vector3 GetSwayAngle()
-    {
-        return targetRotation.eulerAngles * -1f;
     }
 }

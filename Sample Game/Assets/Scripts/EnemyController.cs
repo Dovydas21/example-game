@@ -81,7 +81,7 @@ public class EnemyController : MonoBehaviour
     public void BleedAtPosition(Vector3 pos)
     {
         hitPositions.Add(pos);
-        ParticleSystem ps = Instantiate(bloodEffects, pos, transform.rotation); // Spawn in the particle system to make it look like player is bleeding.
+        ParticleSystem ps = Instantiate(bloodEffects, pos, transform.rotation); // Spawn in the particle system to make it look like enemy is bleeding.
         ps.transform.SetParent(transform);
         particles.Add(ps);
     }

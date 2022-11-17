@@ -69,8 +69,8 @@ public class Shoot : MonoBehaviour
                 slerpRot = Vector3.Slerp(defaultADSRot, defaultGunHolderRot, Time.deltaTime * .01f);
                 print("slerpPos = " + slerpPos);
             }
-            gunHolder.localPosition = slerpPos;
-            gunHolder.localRotation = Quaternion.Euler(slerpRot);
+           // gunHolder.localPosition = slerpPos;
+           // gunHolder.localRotation = Quaternion.Euler(slerpRot);
         }
     }
 

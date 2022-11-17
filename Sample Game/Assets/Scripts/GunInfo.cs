@@ -73,7 +73,7 @@ public class GunInfo : MonoBehaviour
             gunObj = gameObject;
             gunObj.transform.parent = gunHolder.transform;
             gunObj.transform.position = gunHolder.transform.position;
-            gunObj.transform.rotation = gunHolder.transform.rotation;
+            //gunObj.transform.rotation = gunHolder.transform.rotation;
             gunObj.transform.localEulerAngles = defaultGunAngles;
             gunObj.transform.localPosition = defaultGunPosition;
 
