@@ -31,23 +31,60 @@ public class WeaponSway : MonoBehaviour
     [Tooltip("Speed to return the gun to the original position.")]
     public float returnAmount;
 
+    // Variables for gun aiming
+    [Header("Aiming variables:")]
+    public Transform aimPos;
+    public Shoot shoot;
+    public KeyCode aimKey;
+    public Quaternion aimRot;
+    public Quaternion originalRot;
+    public float aimSpeed = .5f;
+    float startTime;
+    float journeyLength;
+
+    Vector3 debugPosition;
+    Vector3 lastDebugPosition;
 
     private void Start()
     {
         initialGunPosition = transform.localPosition;
+        startTime = Time.time;
+        journeyLength = Vector3.Distance(transform.position, aimPos.position);
     }
 
     // Update is called once per frame
     void Update()
     {
         Quaternion gunHolderRot = CalculateSway() * RecoilRotation();
-        Vector3 gunHolderPos = Kickback(); // CalculateRecoil() +
+        Vector3 gunHolderPos = Kickback();
+        if (shoot.playerHoldingGun)
+            gunHolderPos += Aim(Input.GetKey(aimKey));
+            //gunHolderPos = Aim(Input.GetKey(aimKey)); // Works here if we don't add the aiming value to the kickback value...
 
-        print("gunHolderRot = " + gunHolderRot);
-        print("gunHolderPos = " + gunHolderPos);
-
+        debugPosition = aimPos.localPosition;
         transform.localRotation = gunHolderRot;
         transform.localPosition = gunHolderPos;
+        cam.localRotation = Quaternion.Euler(gunHolderRot.eulerAngles * -1f);
+        //cam.position = gunHolderPos;
+    }
+
+    Vector3 Aim(bool aim)
+    {
+        float distCovered = (Time.time - startTime) * aimSpeed; // Distance moved equals elapsed time times speed..
+        float fractionOfJourney = distCovered / journeyLength; // Fraction of journey completed equals current distance divided by total distance.
+        Vector3 result;
+
+        if (!aim)
+        {
+            print("Player STOPPED aiming.");
+            result = Vector3.Slerp(initialGunPosition, aimPos.localPosition, fractionOfJourney);
+        }
+        else
+        {
+            print("Player STARTED aiming.");
+            result = Vector3.Slerp(aimPos.localPosition, initialGunPosition, fractionOfJourney);
+        }
+        return result;
     }
 
     Quaternion CalculateSway()
@@ -55,12 +92,10 @@ public class WeaponSway : MonoBehaviour
         // Get mouse input.
         float mouseX = Input.GetAxisRaw("Mouse X") * swayMultiplier;
         float mouseY = Input.GetAxisRaw("Mouse Y") * swayMultiplier;
-        print("MouseInput, X = " + mouseX + ", Y = " + mouseY);
 
         // Work out the rotation.
         Quaternion rotationX = Quaternion.AngleAxis(-mouseY, Vector3.right);
         Quaternion rotationY = Quaternion.AngleAxis(-mouseX, Vector3.up);
-        print("MouseAngles, rotationX = " + rotationX.eulerAngles + ", rotationY = " + rotationY.eulerAngles);
 
         // Work out where we are ultimately moving the gun to.
         targetRotation = rotationX * rotationY;
@@ -99,5 +134,16 @@ public class WeaponSway : MonoBehaviour
         currentPosition = Vector3.Lerp(currentPosition, targetPosition, Time.fixedDeltaTime * snappiness);
         //transform.localPosition = currentPosition;
         return currentPosition;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.black;
+        if(lastDebugPosition != debugPosition)
+        {
+            lastDebugPosition = debugPosition;
+            print("GunHolder moved " + Vector3.Distance(lastDebugPosition, debugPosition));
+        }
+        Gizmos.DrawSphere(debugPosition, .1f);
     }
 }

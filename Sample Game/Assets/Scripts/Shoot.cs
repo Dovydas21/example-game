@@ -18,60 +18,14 @@ public class Shoot : MonoBehaviour
     WaitForSeconds rapidFireWait;
     //     [SerializeField] private float fireRate = 0.5f;
     public bool firing = false;
+    public bool playerHoldingGun = false;
     bool aiming = false;
-    bool playerHoldingGun = false;
     GunInfo gunInfo;
-
-
-    Vector3 defaultGunHolderPos;
-    Vector3 defaultGunHolderRot;
-    Vector3 defaultADSPos;
-    Vector3 defaultADSRot;
     List<Vector3> hitPositions = new List<Vector3>();
 
     public void Start()
     {
         Refresh();
-        // Position values.
-        defaultGunHolderPos = gunHolder.localPosition;
-        defaultADSPos = ADSPosition.localPosition;
-
-        // Rotation values.
-        defaultADSRot = ADSPosition.localRotation.eulerAngles;
-        defaultGunHolderRot = gunHolder.localRotation.eulerAngles;
-    }
-
-    private void Update()
-    {
-        Aim(!Input.GetKey(KeyCode.Mouse1));
-    }
-
-    public void Aim(bool aim)
-    {
-        if (playerHoldingGun)
-        {
-            Vector3 slerpPos;
-            Vector3 slerpRot;
-
-            if (aim)
-            {  // If the player is not aiming in then set aiming to true.
-                print("Player no longer aiming down sights, moving gun to gunHolder position.");
-                aiming = true;
-                slerpPos = Vector3.Slerp(defaultGunHolderPos, defaultADSPos, Time.deltaTime * .01f);
-                slerpRot = Vector3.Slerp(defaultGunHolderRot, defaultADSRot, Time.deltaTime * .01f);
-                print("slerpPos = " + slerpPos);
-            }
-            else
-            {
-                print("Player now aiming down sights, moving gun to ADS position.");
-                aiming = false;
-                slerpPos = Vector3.Slerp(defaultADSPos, defaultGunHolderPos, Time.deltaTime * .01f);
-                slerpRot = Vector3.Slerp(defaultADSRot, defaultGunHolderRot, Time.deltaTime * .01f);
-                print("slerpPos = " + slerpPos);
-            }
-           // gunHolder.localPosition = slerpPos;
-           // gunHolder.localRotation = Quaternion.Euler(slerpRot);
-        }
     }
 
     public void Refresh()
@@ -94,8 +48,6 @@ public class Shoot : MonoBehaviour
             gunInfo = gunHolder.GetComponentInChildren<GunInfo>();
             rapidFireWait = new WaitForSeconds(gunInfo.fireRate);
         }
-
-        // sfx = GetComponent<SFXScript>();
     }
 
     public void Fire()
@@ -128,9 +80,6 @@ public class Shoot : MonoBehaviour
                     bulletHole.transform.parent = objectHit; // Parent the decal to the object that was hit.
                     bulletHole.transform.LookAt(HitInfo.point + HitInfo.normal); // Reposition the decal to be oriented on the surface of the hit object.
                     Destroy(bulletHole, 10f); // Destroy the decal after 10 seconds...
-
-
-                    Debug.DrawLine(HitInfo.point, HitInfo.normal, Color.green, 20f, false);
 
                     if (HitInfo.rigidbody != null)
                         objectHit.GetComponent<Rigidbody>().AddForceAtPosition(cam.transform.forward * gunInfo.power, HitInfo.point, ForceMode.Impulse);
