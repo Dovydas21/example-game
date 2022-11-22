@@ -17,7 +17,7 @@ public class WeaponSway : MonoBehaviour
     Vector3 targetPosition;
     Vector3 currentPosition;
     Vector3 initialGunPosition;
-    public Transform cam;
+    public Camera cam;
     [Tooltip("Side to side recoil.")]
     [SerializeField] float recoilX; // Side to side recoil
     [Tooltip("Up and down recoil.")]
@@ -39,11 +39,11 @@ public class WeaponSway : MonoBehaviour
     public Quaternion aimRot;
     public Quaternion originalRot;
     public float aimSpeed = .5f;
+    public float ADSFov = 30f;
+    float initialFOV; // The FOV of the camera by default.
     bool playerAiming = false;
     float startTime;
     float journeyLength;
-    float distanceTravelled;
-
     Vector3 debugPosition;
 
     private void Start()
@@ -51,6 +51,7 @@ public class WeaponSway : MonoBehaviour
         initialGunPosition = transform.localPosition;
         startTime = Time.time;
         journeyLength = Vector3.Distance(transform.position, aimPos.position);
+        initialFOV = cam.fieldOfView;
     }
 
     // Update is called once per frame
@@ -58,20 +59,28 @@ public class WeaponSway : MonoBehaviour
     {
         Quaternion gunHolderRot = CalculateSway() * RecoilRotation();
         Vector3 gunHolderPos = Kickback();
-        if (shoot.playerHoldingGun)
+        print("PositionBeforeDiff = " + gunHolderPos);
+        Quaternion camRot = RecoilRotation();
+
+
+        if (shoot.playerHoldingGun) // If the player is holding a gun.
         {
-            gunHolderPos = Aim(Input.GetKey(aimKey));
+            bool aimKeyDown = Input.GetKey(aimKey);
+            Vector3 aim = Aim(aimKeyDown); // Work out the position of the gun if we're currently scoping in or out.
+            Vector3 positionDifference = aim - targetPosition;
+            gunHolderPos += positionDifference;
+            print("PositionAfterDiff = " + gunHolderPos);
 
             // Need to find a way to implement the below properly.
             //gunHolderPos += Aim(Input.GetKey(aimKey));
 
-            if (Vector3.Distance(transform.localPosition, aimPos.localPosition) < .01f && !playerAiming && Input.GetKey(aimKey)) // Gun holder has reached the aiming position.
+            if (Vector3.Distance(transform.localPosition, aimPos.localPosition) < .01f && !playerAiming && aimKeyDown) // Gun holder has reached the aiming position.
             {
                 playerAiming = true;
                 startTime = Time.time;
                 print("playerAiming = " + playerAiming + "(t" + startTime + ")");
             }
-            else if (Vector3.Distance(transform.localPosition, initialGunPosition) < .01f && playerAiming && !Input.GetKey(aimKey)) // Gun holder has reached the original pos again.
+            else if (Vector3.Distance(transform.localPosition, initialGunPosition) < .01f && playerAiming && !aimKeyDown) // Gun holder has reached the original pos again.
             {
                 playerAiming = false;
                 startTime = Time.time;
@@ -81,10 +90,9 @@ public class WeaponSway : MonoBehaviour
 
         debugPosition = aimPos.position;
         transform.localRotation = gunHolderRot;
+        cam.transform.localRotation = camRot;
         transform.localPosition = gunHolderPos;
-        cam.localRotation = Quaternion.Euler(gunHolderRot.eulerAngles * -1f);
-
-        //cam.position = gunHolderPos;
+        // cam.transform.localRotation = Quaternion.Euler(gunHolderRot.eulerAngles);
     }
 
     Vector3 Aim(bool aim)
@@ -95,14 +103,15 @@ public class WeaponSway : MonoBehaviour
 
         if (aim)
         {
-            print("Player STOPPED aiming.");
             result = Vector3.Slerp(initialGunPosition, aimPos.localPosition, fractionOfJourney);
+            cam.fieldOfView = Mathf.Lerp(initialFOV, ADSFov, fractionOfJourney);
         }
         else
         {
-            print("Player STARTED aiming.");
             result = Vector3.Slerp(aimPos.localPosition, initialGunPosition, fractionOfJourney);
+            cam.fieldOfView = Mathf.Lerp(ADSFov, initialFOV, fractionOfJourney);
         }
+
         return result;
     }
 
@@ -130,14 +139,28 @@ public class WeaponSway : MonoBehaviour
         return Quaternion.Euler(currentRotation);
     }
 
-    public void Recoil()
+    public void Recoil() // Called from shoot.cs when the player shoots.
     {
-        // Global here for the recoil pos? Then we can just add the current pos to the recoil pos in Update(){} and then CalculateRecoil() only needs to work out angles.
-        targetPosition -= new Vector3(0f, 0f, kickbackZ);
-        targetPosition += new Vector3(recoilX, Random.Range(0f, recoilY), Random.Range(-recoilZ, recoilZ));
+        Vector3 kickBack = new Vector3(0f, 0f, kickbackZ);
+        Vector3 recoil = new Vector3(recoilX, Random.Range(0f, recoilY), Random.Range(-recoilZ, recoilZ));
+
+        print("kickBack = " + kickBack + ", recoil = " + recoil);
+
+        // Add these to the target position of the GunHolder object.
+        targetPosition -= kickBack; 
+        targetPosition += recoil;
+
     }
 
     Vector3 Kickback()
+    {
+        targetPosition = Vector3.Lerp(targetPosition, initialGunPosition, Time.deltaTime * returnAmount); // Moves from the gun's last target position back to the initial gun position.
+        debugPositions.Add(targetPosition);
+        currentPosition = Vector3.Lerp(currentPosition, targetPosition, Time.fixedDeltaTime * snappiness); // Moves the gun from the current position to the target position.
+        return currentPosition; // Unless aiming or firing, 'currentPosition' will be equal to the initialGunPosition.
+    }
+
+    Vector3 KickbackVerTwo()
     {
         targetPosition = Vector3.Lerp(targetPosition, initialGunPosition, Time.deltaTime * returnAmount);
         currentPosition = Vector3.Lerp(currentPosition, targetPosition, Time.fixedDeltaTime * snappiness);
