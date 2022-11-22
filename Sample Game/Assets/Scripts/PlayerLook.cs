@@ -29,15 +29,6 @@ public class PlayerLook : MonoBehaviour
         // apply this to camera transform
         Vector3 targetCameraRotation = new Vector3(xRotation, 0f, 0f);
         cam.transform.localRotation = Quaternion.Euler(targetCameraRotation);
-
-        // Apply the recoil.
-        //Vector3 recoilPosition = recoil.GetRecoilAngle();
-
-        // Rotate player to look left and right
-        // transform.Rotate(Vector3.up + recoilPosition * (mouseX * Time.deltaTime) * xSensitivity);
         transform.Rotate(Vector3.up * (mouseX * Time.deltaTime) * xSensitivity);
-
-        
-        // transform.localPosition = Vector3.Slerp(cameraHolder.localPosition, recoilPosition, Time.deltaTime * 10f);
     }
 }

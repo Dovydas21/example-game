@@ -39,11 +39,12 @@ public class WeaponSway : MonoBehaviour
     public Quaternion aimRot;
     public Quaternion originalRot;
     public float aimSpeed = .5f;
+    bool playerAiming = false;
     float startTime;
     float journeyLength;
+    float distanceTravelled;
 
     Vector3 debugPosition;
-    Vector3 lastDebugPosition;
 
     private void Start()
     {
@@ -58,13 +59,31 @@ public class WeaponSway : MonoBehaviour
         Quaternion gunHolderRot = CalculateSway() * RecoilRotation();
         Vector3 gunHolderPos = Kickback();
         if (shoot.playerHoldingGun)
-            gunHolderPos += Aim(Input.GetKey(aimKey));
-            //gunHolderPos = Aim(Input.GetKey(aimKey)); // Works here if we don't add the aiming value to the kickback value...
+        {
+            gunHolderPos = Aim(Input.GetKey(aimKey));
 
-        debugPosition = aimPos.localPosition;
+            // Need to find a way to implement the below properly.
+            //gunHolderPos += Aim(Input.GetKey(aimKey));
+
+            if (Vector3.Distance(transform.localPosition, aimPos.localPosition) < .01f && !playerAiming && Input.GetKey(aimKey)) // Gun holder has reached the aiming position.
+            {
+                playerAiming = true;
+                startTime = Time.time;
+                print("playerAiming = " + playerAiming + "(t" + startTime + ")");
+            }
+            else if (Vector3.Distance(transform.localPosition, initialGunPosition) < .01f && playerAiming && !Input.GetKey(aimKey)) // Gun holder has reached the original pos again.
+            {
+                playerAiming = false;
+                startTime = Time.time;
+                print("PlayerNotAiming = " + playerAiming + "(t" + startTime + ")");
+            }
+        }
+
+        debugPosition = aimPos.position;
         transform.localRotation = gunHolderRot;
         transform.localPosition = gunHolderPos;
         cam.localRotation = Quaternion.Euler(gunHolderRot.eulerAngles * -1f);
+
         //cam.position = gunHolderPos;
     }
 
@@ -74,7 +93,7 @@ public class WeaponSway : MonoBehaviour
         float fractionOfJourney = distCovered / journeyLength; // Fraction of journey completed equals current distance divided by total distance.
         Vector3 result;
 
-        if (!aim)
+        if (aim)
         {
             print("Player STOPPED aiming.");
             result = Vector3.Slerp(initialGunPosition, aimPos.localPosition, fractionOfJourney);
@@ -101,7 +120,6 @@ public class WeaponSway : MonoBehaviour
         targetRotation = rotationX * rotationY;
         targetRotation.eulerAngles *= Time.deltaTime * smooth;
         Quaternion swayAngle = Quaternion.Slerp(transform.localRotation, targetRotation, smooth * Time.deltaTime);
-        print("Sway angle = " + swayAngle);
         return swayAngle;
     }
 
@@ -111,15 +129,6 @@ public class WeaponSway : MonoBehaviour
         currentRotation = Vector3.Slerp(currentRotation, recoilRotation, Time.fixedDeltaTime * snappiness);
         return Quaternion.Euler(currentRotation);
     }
-
-    /*Vector3 CalculateRecoil()
-    {
-        recoilRotation = Vector3.Lerp(recoilRotation, Vector3.zero, Time.deltaTime * returnAmount);
-        currentRotation = Vector3.Slerp(currentRotation, recoilRotation, Time.fixedDeltaTime * snappiness);
-        transform.localRotation = Quaternion.Euler(currentRotation);
-        Vector3 kickback = Kickback();
-        return kickback + currentRotation;
-    }*/
 
     public void Recoil()
     {
@@ -132,18 +141,12 @@ public class WeaponSway : MonoBehaviour
     {
         targetPosition = Vector3.Lerp(targetPosition, initialGunPosition, Time.deltaTime * returnAmount);
         currentPosition = Vector3.Lerp(currentPosition, targetPosition, Time.fixedDeltaTime * snappiness);
-        //transform.localPosition = currentPosition;
         return currentPosition;
     }
 
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.black;
-        if(lastDebugPosition != debugPosition)
-        {
-            lastDebugPosition = debugPosition;
-            print("GunHolder moved " + Vector3.Distance(lastDebugPosition, debugPosition));
-        }
         Gizmos.DrawSphere(debugPosition, .1f);
     }
 }

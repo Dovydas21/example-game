@@ -15643,7 +15643,7 @@ MonoBehaviour:
   aimKey: 324
   aimRot: {x: 0, y: 0, z: 0, w: 0}
   originalRot: {x: 0, y: 0, z: 0, w: 0}
-  aimSpeed: 0.7
+  aimSpeed: 1
 --- !u!114 &884282630
 MonoBehaviour:
   m_ObjectHideFlags: 0
