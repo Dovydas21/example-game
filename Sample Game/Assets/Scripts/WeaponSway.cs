@@ -155,7 +155,6 @@ public class WeaponSway : MonoBehaviour
     Vector3 Kickback()
     {
         targetPosition = Vector3.Lerp(targetPosition, initialGunPosition, Time.deltaTime * returnAmount); // Moves from the gun's last target position back to the initial gun position.
-        debugPositions.Add(targetPosition);
         currentPosition = Vector3.Lerp(currentPosition, targetPosition, Time.fixedDeltaTime * snappiness); // Moves the gun from the current position to the target position.
         return currentPosition; // Unless aiming or firing, 'currentPosition' will be equal to the initialGunPosition.
     }
