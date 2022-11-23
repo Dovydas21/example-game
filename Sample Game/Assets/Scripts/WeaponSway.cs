@@ -67,8 +67,8 @@ public class WeaponSway : MonoBehaviour
         {
             bool aimKeyDown = Input.GetKey(aimKey);
             Vector3 aim = Aim(aimKeyDown); // Work out the position of the gun if we're currently scoping in or out.
-            Vector3 positionDifference = aim - targetPosition;
-            gunHolderPos += positionDifference;
+            Vector3 positionDifference = targetPosition - aim;
+            gunHolderPos -= positionDifference;
             print("PositionAfterDiff = " + gunHolderPos);
 
             // Need to find a way to implement the below properly.
@@ -143,6 +143,8 @@ public class WeaponSway : MonoBehaviour
     {
         Vector3 kickBack = new Vector3(0f, 0f, kickbackZ);
         Vector3 recoil = new Vector3(recoilX, Random.Range(0f, recoilY), Random.Range(-recoilZ, recoilZ));
+        kickBack *= -1f;
+        recoil *= -1f;
 
         print("kickBack = " + kickBack + ", recoil = " + recoil);
 
@@ -159,12 +161,6 @@ public class WeaponSway : MonoBehaviour
         return currentPosition; // Unless aiming or firing, 'currentPosition' will be equal to the initialGunPosition.
     }
 
-    Vector3 KickbackVerTwo()
-    {
-        targetPosition = Vector3.Lerp(targetPosition, initialGunPosition, Time.deltaTime * returnAmount);
-        currentPosition = Vector3.Lerp(currentPosition, targetPosition, Time.fixedDeltaTime * snappiness);
-        return currentPosition;
-    }
 
     private void OnDrawGizmos()
     {

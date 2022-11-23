@@ -15,6 +15,7 @@ public class Shoot : MonoBehaviour
     public Transform ADSPosition; // Trasnform of the GameObject called "Aiming Position" so we can slerp to it to ADS.
     public GameObject gunObject;
     public GameObject bulletHoleDecal;
+    public TrailRenderer bulletTrail;
     WaitForSeconds rapidFireWait;
     //     [SerializeField] private float fireRate = 0.5f;
     public bool firing = false;
@@ -72,6 +73,9 @@ public class Shoot : MonoBehaviour
                 hitPositions.Add(HitInfo.point);
                 Debug.DrawLine(cam.transform.position, HitInfo.point, Color.red, 20f, false);
 
+                TrailRenderer trail = Instantiate(bulletTrail, gunHolder.transform.position, Quaternion.identity);
+                StartCoroutine(BulletTrail(HitInfo, trail));
+
                 if (objectHit.transform.gameObject.tag != "Player")
                 {
                     // Spawn a bullethole decal.
@@ -97,6 +101,20 @@ public class Shoot : MonoBehaviour
         }
     }
 
+    private IEnumerator BulletTrail(RaycastHit hitInfo, TrailRenderer trail)
+    {
+        float t = Time.time;
+        Vector3 originalPos = trail.transform.position;
+
+        while(t < 1)
+        {
+            trail.transform.position = Vector3.Lerp(originalPos, hitInfo.point, t);
+            t += Time.deltaTime / trail.time;
+            yield return new WaitForSeconds(.01f);
+        }
+
+        Destroy(trail, trail.time);
+    }
 
     // Drop the weapon.
     public void Drop()
