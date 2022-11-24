@@ -18,32 +18,26 @@ public class WeaponSway : MonoBehaviour
     Vector3 currentPosition;
     Vector3 initialGunPosition;
     public Camera cam;
-    [Tooltip("Side to side recoil.")]
-    [SerializeField] float recoilX; // Side to side recoil
-    [Tooltip("Up and down recoil.")]
-    [SerializeField] float recoilY; // Up and down recoil
-    [Tooltip("Front and back recoil.")]
-    [SerializeField] float recoilZ; // Front and back recoil
-    [Tooltip("Amount to move the gun backwards with each shot.")]
-    [SerializeField] float kickbackZ; // Amount to move the gun backwards with each shot
-    [Tooltip("Speed / power of the recoil")]
-    public float snappiness;
-    [Tooltip("Speed to return the gun to the original position.")]
-    public float returnAmount;
+    [Tooltip("Side to side recoil.")][SerializeField] float recoilX;                                 // Side to side recoil
+    [Tooltip("Up and down recoil.")][SerializeField] float recoilY;                                  // Up and down recoil
+    [Tooltip("Front and back recoil.")][SerializeField] float recoilZ;                               // Front and back recoil
+    [Tooltip("Amount to move the gun backwards with each shot.")][SerializeField] float kickbackZ;   // Amount to move the gun backwards with each shot
+    [Tooltip("Speed / power of the recoil")]public float snappiness;                                 // How snappy the recoil feels.                            
+    [Tooltip("Speed to return the gun to the original position.")]public float returnAmount;         // The speed at which the weapon returns to it's original pos
 
     // Variables for gun aiming
     [Header("Aiming variables:")]
-    public Transform aimPos;
-    public Shoot shoot;
-    public KeyCode aimKey;
-    public Quaternion aimRot;
-    public Quaternion originalRot;
-    public float aimSpeed = .5f;
-    public float ADSFov = 30f;
-    float initialFOV; // The FOV of the camera by default.
-    bool playerAiming = false;
-    float startTime;
-    float journeyLength;
+    public Transform aimPos;            // The Transform component of the "AimingPosition" GameObject.
+    public Shoot shoot;                 // A reference to the Shoot.cs script.
+    public KeyCode aimKey;              // The key the player presses to aim down sights.
+    public float aimSpeed = .5f;        // The speed that the gun moves to the "AimingPosition".
+    public float ADSFov = 30f;          // The FOV of the camera when you are aiming down sights.
+    float initialFOV;                   // The FOV of the camera by default.
+    bool playerAiming = false;          // Boolean value to track whether the player is aiming in or not.
+    float startTime;                    // A value used to smoothly calculate the movement of aiming into the sights of the gun.      
+    float journeyLength;                // A value used to smoothly calculate the movement of aiming into the sights of the gun.      
+
+    // Variables for debugging.
     Vector3 debugPosition;
 
     private void Start()
@@ -69,22 +63,16 @@ public class WeaponSway : MonoBehaviour
             Vector3 aim = Aim(aimKeyDown); // Work out the position of the gun if we're currently scoping in or out.
             Vector3 positionDifference = targetPosition - aim;
             gunHolderPos -= positionDifference;
-            print("PositionAfterDiff = " + gunHolderPos);
-
-            // Need to find a way to implement the below properly.
-            //gunHolderPos += Aim(Input.GetKey(aimKey));
 
             if (Vector3.Distance(transform.localPosition, aimPos.localPosition) < .01f && !playerAiming && aimKeyDown) // Gun holder has reached the aiming position.
             {
                 playerAiming = true;
                 startTime = Time.time;
-                print("playerAiming = " + playerAiming + "(t" + startTime + ")");
             }
             else if (Vector3.Distance(transform.localPosition, initialGunPosition) < .01f && playerAiming && !aimKeyDown) // Gun holder has reached the original pos again.
             {
                 playerAiming = false;
                 startTime = Time.time;
-                print("PlayerNotAiming = " + playerAiming + "(t" + startTime + ")");
             }
         }
 

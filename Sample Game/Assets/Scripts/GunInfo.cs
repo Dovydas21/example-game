@@ -27,13 +27,14 @@ public class GunInfo : MonoBehaviour
     [Header("Gun positions")]
     public GameObject gunHolder;                                // Gameobject attached to the camera that holds the gun.
     public Vector3 defaultGunPosition, defaultGunAngles;        // The local position & rotation of the gun inside of gunHolder when NOT aimed in.
-    public Camera sightCamera;                                  // The camera that looks down the sight of the gun.
     bool playerAimedDownSights = false;                         // Keeps track of whether the player is currently aiming down their sights.
 
     [Header("Gun animations")]
     public Animator shootingAnimation;                          // The animaTOR that has the animation the gun should play when the gun is fired.
     public Animator cockingAnimation;                           // The animaTOR that has the animation the gun should play when the gun is being cocked.
     public ParticleSystem muzzleFlash;                          // The particle effect that should serve as the muzzle flash when the gun is fired.
+    public TrailRenderer bulletTrail;                           // The TrailRenderer asset that immitates the travel of a tracer round, when the gun is fired.
+    public float bulletTrailSpeed = 1000f;                      // The speed that the trail moves to the hitposition in Shoot.cs.
 
     [Header("Gun audio")]
     public AudioSource shotSoundEffect;                         // The audio source of the sound effect that should play when the gun is fired.
@@ -118,12 +119,6 @@ public class GunInfo : MonoBehaviour
         ammoInGun = value;
         GameObject.Find("AmmoCounter").GetComponent<Text>().text = ammoInGun.ToString();
         // if(value == ammoInGun) 
-    }
-
-    public void ToggleAim(bool aiming)
-    {
-        sightCamera.enabled = aiming;
-        playerAimedDownSights = aiming;
     }
 
     public void PlayCockingAnimation()

@@ -13,16 +13,16 @@ public class Shoot : MonoBehaviour
     Transform gunHolder;
     Transform gun;
     public Transform ADSPosition; // Trasnform of the GameObject called "Aiming Position" so we can slerp to it to ADS.
-    public GameObject gunObject;
     public GameObject bulletHoleDecal;
-    public TrailRenderer bulletTrail;
+    //public TrailRenderer bulletTrail;
     WaitForSeconds rapidFireWait;
-    //     [SerializeField] private float fireRate = 0.5f;
     public bool firing = false;
     public bool playerHoldingGun = false;
-    bool aiming = false;
+
+
     GunInfo gunInfo;
     List<Vector3> hitPositions = new List<Vector3>();
+
 
     public void Start()
     {
@@ -69,12 +69,16 @@ public class Shoot : MonoBehaviour
 
             if (Physics.Raycast(gunInfo.gunObj.transform.position, gunInfo.gunObj.transform.forward, out HitInfo, gunInfo.range))
             {
+
                 Transform objectHit = HitInfo.transform;
                 hitPositions.Add(HitInfo.point);
                 Debug.DrawLine(cam.transform.position, HitInfo.point, Color.red, 20f, false);
 
-                TrailRenderer trail = Instantiate(bulletTrail, gunHolder.transform.position, Quaternion.identity);
-                StartCoroutine(BulletTrail(HitInfo, trail));
+                if (gunInfo.bulletTrail != null && gunInfo.bulletTrailSpeed > 0f) // Ensure that we have a bullet trail defined before spawning one in.
+                {
+                    TrailRenderer trail = Instantiate(gunInfo.bulletTrail, gunHolder.transform.position, Quaternion.identity);
+                    StartCoroutine(BulletTrail(HitInfo, trail));
+                }
 
                 if (objectHit.transform.gameObject.tag != "Player")
                 {
@@ -103,17 +107,19 @@ public class Shoot : MonoBehaviour
 
     private IEnumerator BulletTrail(RaycastHit hitInfo, TrailRenderer trail)
     {
-        float t = Time.time;
-        Vector3 originalPos = trail.transform.position;
+        float t = 0;
+        float targetTime = t + 1;
+        Vector3 originalPos = gun.GetComponent<GunInfo>().muzzleFlash.transform.position;
 
-        while(t < 1)
+        while (t < targetTime)
         {
             trail.transform.position = Vector3.Lerp(originalPos, hitInfo.point, t);
-            t += Time.deltaTime / trail.time;
-            yield return new WaitForSeconds(.01f);
+            print("trail.transform.position = " + trail.transform.position);
+            t += Time.deltaTime * gunInfo.bulletTrailSpeed;
+            yield return rapidFireWait;
         }
-
-        Destroy(trail, trail.time);
+        Destroy(trail, 10f);
+        yield return null;
     }
 
     // Drop the weapon.
@@ -124,7 +130,7 @@ public class Shoot : MonoBehaviour
 
 
     // Fire in a loop waiting for the appropriate amount of time between shots.
-    public IEnumerator FullAuto() 
+    public IEnumerator FullAuto()
     {
         if (CanShoot())
         {
