@@ -5542,12 +5542,12 @@ MonoBehaviour:
   gunHolder: {fileID: 0}
   defaultGunPosition: {x: 0, y: 0, z: 0}
   defaultGunAngles: {x: 0, y: 0, z: 0}
-  sightCamera: {fileID: 0}
   shootingAnimation: {fileID: 1883812385473700743}
   cockingAnimation: {fileID: 0}
   muzzleFlash: {fileID: 7292355579754927216}
   bulletTrail: {fileID: 7425004647957812907, guid: 68338a0ac53c743368d0e63ba764486a, type: 3}
   bulletTrailSpeed: 50
+  gunPickupSpeed: 15
   shotSoundEffect: {fileID: 6674147988831542758}
   cockingSoundEffect: {fileID: 0}
   pickupTrigger: {fileID: 6674147988831542745}

@@ -22,8 +22,8 @@ public class WeaponSway : MonoBehaviour
     [Tooltip("Up and down recoil.")][SerializeField] float recoilY;                                  // Up and down recoil
     [Tooltip("Front and back recoil.")][SerializeField] float recoilZ;                               // Front and back recoil
     [Tooltip("Amount to move the gun backwards with each shot.")][SerializeField] float kickbackZ;   // Amount to move the gun backwards with each shot
-    [Tooltip("Speed / power of the recoil")]public float snappiness;                                 // How snappy the recoil feels.                            
-    [Tooltip("Speed to return the gun to the original position.")]public float returnAmount;         // The speed at which the weapon returns to it's original pos
+    [Tooltip("Speed / power of the recoil")] public float snappiness;                                 // How snappy the recoil feels.                            
+    [Tooltip("Speed to return the gun to the original position.")] public float returnAmount;         // The speed at which the weapon returns to it's original pos
 
     // Variables for gun aiming
     [Header("Aiming variables:")]
@@ -51,35 +51,39 @@ public class WeaponSway : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Quaternion gunHolderRot = CalculateSway() * RecoilRotation();
-        Vector3 gunHolderPos = Kickback();
-        print("PositionBeforeDiff = " + gunHolderPos);
-        Quaternion camRot = RecoilRotation();
-
-
-        if (shoot.playerHoldingGun) // If the player is holding a gun.
+        if (gameObject.transform.childCount != 0)
         {
-            bool aimKeyDown = Input.GetKey(aimKey);
-            Vector3 aim = Aim(aimKeyDown); // Work out the position of the gun if we're currently scoping in or out.
-            Vector3 positionDifference = targetPosition - aim;
-            gunHolderPos -= positionDifference;
 
-            if (Vector3.Distance(transform.localPosition, aimPos.localPosition) < .01f && !playerAiming && aimKeyDown) // Gun holder has reached the aiming position.
+            Quaternion gunHolderRot = CalculateSway() * RecoilRotation();
+            Vector3 gunHolderPos = Kickback();
+            print("PositionBeforeDiff = " + gunHolderPos);
+            Quaternion camRot = RecoilRotation();
+
+
+            if (shoot.playerHoldingGun) // If the player is holding a gun.
             {
-                playerAiming = true;
-                startTime = Time.time;
+                bool aimKeyDown = Input.GetKey(aimKey);
+                Vector3 aim = Aim(aimKeyDown); // Work out the position of the gun if we're currently scoping in or out.
+                Vector3 positionDifference = targetPosition - aim;
+                gunHolderPos -= positionDifference;
+
+                if (Vector3.Distance(transform.localPosition, aimPos.localPosition) < .01f && !playerAiming && aimKeyDown) // Gun holder has reached the aiming position.
+                {
+                    playerAiming = true;
+                    startTime = Time.time;
+                }
+                else if (Vector3.Distance(transform.localPosition, initialGunPosition) < .01f && playerAiming && !aimKeyDown) // Gun holder has reached the original pos again.
+                {
+                    playerAiming = false;
+                    startTime = Time.time;
+                }
             }
-            else if (Vector3.Distance(transform.localPosition, initialGunPosition) < .01f && playerAiming && !aimKeyDown) // Gun holder has reached the original pos again.
-            {
-                playerAiming = false;
-                startTime = Time.time;
-            }
+
+            debugPosition = aimPos.position;
+            transform.localRotation = gunHolderRot;
+            cam.transform.localRotation = camRot;
+            transform.localPosition = gunHolderPos;
         }
-
-        debugPosition = aimPos.position;
-        transform.localRotation = gunHolderRot;
-        cam.transform.localRotation = camRot;
-        transform.localPosition = gunHolderPos;
         // cam.transform.localRotation = Quaternion.Euler(gunHolderRot.eulerAngles);
     }
 
@@ -99,7 +103,6 @@ public class WeaponSway : MonoBehaviour
             result = Vector3.Slerp(aimPos.localPosition, initialGunPosition, fractionOfJourney);
             cam.fieldOfView = Mathf.Lerp(ADSFov, initialFOV, fractionOfJourney);
         }
-
         return result;
     }
 
@@ -137,7 +140,7 @@ public class WeaponSway : MonoBehaviour
         print("kickBack = " + kickBack + ", recoil = " + recoil);
 
         // Add these to the target position of the GunHolder object.
-        targetPosition -= kickBack; 
+        targetPosition -= kickBack;
         targetPosition += recoil;
 
     }

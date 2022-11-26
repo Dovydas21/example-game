@@ -35,6 +35,7 @@ public class GunInfo : MonoBehaviour
     public ParticleSystem muzzleFlash;                          // The particle effect that should serve as the muzzle flash when the gun is fired.
     public TrailRenderer bulletTrail;                           // The TrailRenderer asset that immitates the travel of a tracer round, when the gun is fired.
     public float bulletTrailSpeed = 1000f;                      // The speed that the trail moves to the hitposition in Shoot.cs.
+    public float gunPickupSpeed = 100f;                         // the speed that the gun moves to the GunHolder position when the player picks it up.
 
     [Header("Gun audio")]
     public AudioSource shotSoundEffect;                         // The audio source of the sound effect that should play when the gun is fired.
@@ -46,6 +47,7 @@ public class GunInfo : MonoBehaviour
     public GunRecoil gunRecoilScript;
     public GameObject gunObj;
     GameObject playerObj;
+    float pickupTime;
     
 
 
@@ -60,6 +62,7 @@ public class GunInfo : MonoBehaviour
         playerObj = GameObject.FindGameObjectWithTag("Player");
         shootScript = playerObj.GetComponent<Shoot>();
         rb = gameObject.GetComponent<Rigidbody>();
+        pickupTime = Time.time;
 
         // Remember properties about the rigidbody of the object.
         gunMass = rb.mass;
@@ -69,14 +72,15 @@ public class GunInfo : MonoBehaviour
 
     private void OnTriggerEnter(Collider pickupTrigger)
     {
-        if (pickupTrigger.tag == "Player" && gunHolder.transform.childCount == 0) // Trigger a pick-up if you are the player and you are not already holding something.
+        bool allowPickup = Time.time > pickupTime;
+        bool playerHandsEmpty = gunHolder.transform.childCount == 0;
+        if (pickupTrigger.tag == "Player" && playerHandsEmpty && allowPickup) // Trigger a pick-up if you are the player, you are not already holding something and that you have waited long enough after dropping the gun the last time...
         {
             gunObj = gameObject;
             gunObj.transform.parent = gunHolder.transform;
-            //gunObj.transform.position = gunHolder.transform.position;
-            // gunObj.transform.rotation = gunHolder.transform.rotation;
             gunObj.transform.localEulerAngles = defaultGunAngles;
-            gunObj.transform.localPosition = defaultGunPosition;
+            //gunObj.transform.localPosition = defaultGunPosition;
+            StartCoroutine(WeaponPickup(pickupTrigger));
 
             playerObj.GetComponent<InputManager>().gunInfo = this;
 
@@ -86,6 +90,20 @@ public class GunInfo : MonoBehaviour
             shootScript.Refresh(); // Refresh the shoot script to give it information about the gun just picked up.
             UpdateAmmoInGun(ammoInGun);
         }
+    }
+
+    private IEnumerator WeaponPickup(Collider pickupTrigger)
+    {
+        float t = 0;
+        Vector3 originalPos = transform.position;
+        bool allowPickup = Time.time > pickupTime;
+        while (Vector3.Distance(originalPos, gunHolder.transform.position) > 0.1f && allowPickup)
+        {
+            transform.position = Vector3.Slerp(originalPos, gunHolder.transform.position, t);
+            t += Time.deltaTime * gunPickupSpeed;
+            yield return new WaitForEndOfFrame();
+        }
+        yield return null;
     }
 
     public IEnumerator Drop()
@@ -104,7 +122,9 @@ public class GunInfo : MonoBehaviour
             ResetAmmoCounter(); // Hide the ammo counter.
             shootScript.Refresh(); // Refresh the shoot script to give it information about the gun just picked up / dropped.
 
-            yield return new WaitForSeconds(1f); // Wait for 1 second before re-enabling the pickup-trigger.
+            pickupTime += Time.time + 3f; // Add 3 seconds to the 'PickupTime' variable so we can ensure 3 seconds have passed in the Pickup function before picking up the weapon.
+            yield return new WaitForSeconds(3f); // Wait for 1 second before re-enabling the pickup-trigger.
+            
             gameObject.GetComponent<BoxCollider>().enabled = true; // Re-enable the pickup trigger.
         }
     }
@@ -118,7 +138,6 @@ public class GunInfo : MonoBehaviour
     {
         ammoInGun = value;
         GameObject.Find("AmmoCounter").GetComponent<Text>().text = ammoInGun.ToString();
-        // if(value == ammoInGun) 
     }
 
     public void PlayCockingAnimation()
@@ -132,7 +151,6 @@ public class GunInfo : MonoBehaviour
         soundSource.Play();
         while (soundSource.isPlaying) //Wait Until Sound has finished playing
             yield return new WaitForSeconds(.01f);
-
         yield return true;
     }
 

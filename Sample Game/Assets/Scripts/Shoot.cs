@@ -64,21 +64,16 @@ public class Shoot : MonoBehaviour
             gunInfo.PlayMuzzleFlash();
             gunInfo.PlayShootSound();
             gunInfo.PlayCockingAnimation();
-
             gunInfo.UpdateAmmoInGun(gunInfo.ammoInGun - 1); // Reduce the current ammo count by 1.
 
-            if (Physics.Raycast(gunInfo.gunObj.transform.position, gunInfo.gunObj.transform.forward, out HitInfo, gunInfo.range))
-            {
+            bool shotHit = Physics.Raycast(gunInfo.gunObj.transform.position, gunInfo.gunObj.transform.forward, out HitInfo, gunInfo.range);
 
+            if (shotHit)
+            {
                 Transform objectHit = HitInfo.transform;
                 hitPositions.Add(HitInfo.point);
                 Debug.DrawLine(cam.transform.position, HitInfo.point, Color.red, 20f, false);
 
-                if (gunInfo.bulletTrail != null && gunInfo.bulletTrailSpeed > 0f) // Ensure that we have a bullet trail defined before spawning one in.
-                {
-                    TrailRenderer trail = Instantiate(gunInfo.bulletTrail, gunHolder.transform.position, Quaternion.identity);
-                    StartCoroutine(BulletTrail(HitInfo, trail));
-                }
 
                 if (objectHit.transform.gameObject.tag != "Player")
                 {
@@ -101,11 +96,29 @@ public class Shoot : MonoBehaviour
                     }
                 }
             }
+
+
+            if (gunInfo.bulletTrail != null && gunInfo.bulletTrailSpeed > 0f) // Ensure that we have a bullet trail defined before spawning one in.
+            {
+                TrailRenderer trail = Instantiate(gunInfo.bulletTrail, gunInfo.muzzleFlash.transform.position, Quaternion.identity);
+                Vector3 bulletDestination;
+                if (shotHit)
+                {
+                    bulletDestination = HitInfo.point;
+                }
+                else
+                {
+                    bulletDestination = new Vector3(gunInfo.muzzleFlash.transform.forward.x, gunInfo.muzzleFlash.transform.forward.y, gunInfo.muzzleFlash.transform.forward.z + 1000f);
+                }
+                StartCoroutine(BulletTrail(bulletDestination, trail));
+                Destroy(trail, 1f);
+            }
+
             firing = false;
         }
     }
 
-    private IEnumerator BulletTrail(RaycastHit hitInfo, TrailRenderer trail)
+    private IEnumerator BulletTrail(Vector3 destination, TrailRenderer trail)
     {
         float t = 0;
         float targetTime = t + 1;
@@ -113,12 +126,11 @@ public class Shoot : MonoBehaviour
 
         while (t < targetTime)
         {
-            trail.transform.position = Vector3.Lerp(originalPos, hitInfo.point, t);
+            trail.transform.position = Vector3.Lerp(originalPos, destination, t);
             print("trail.transform.position = " + trail.transform.position);
             t += Time.deltaTime * gunInfo.bulletTrailSpeed;
-            yield return rapidFireWait;
+            yield return new WaitForEndOfFrame();
         }
-        Destroy(trail, 10f);
         yield return null;
     }
 
