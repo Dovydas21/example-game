@@ -47,7 +47,6 @@ public class GunInfo : MonoBehaviour
     public GunRecoil gunRecoilScript;
     public GameObject gunObj;
     GameObject playerObj;
-    float pickupTime;
     
 
 
@@ -62,7 +61,6 @@ public class GunInfo : MonoBehaviour
         playerObj = GameObject.FindGameObjectWithTag("Player");
         shootScript = playerObj.GetComponent<Shoot>();
         rb = gameObject.GetComponent<Rigidbody>();
-        pickupTime = Time.time;
 
         // Remember properties about the rigidbody of the object.
         gunMass = rb.mass;
@@ -72,15 +70,14 @@ public class GunInfo : MonoBehaviour
 
     private void OnTriggerEnter(Collider pickupTrigger)
     {
-        bool allowPickup = Time.time > pickupTime;
         bool playerHandsEmpty = gunHolder.transform.childCount == 0;
-        if (pickupTrigger.tag == "Player" && playerHandsEmpty && allowPickup) // Trigger a pick-up if you are the player, you are not already holding something and that you have waited long enough after dropping the gun the last time...
+        if (pickupTrigger.tag == "Player" && playerHandsEmpty) // Trigger a pick-up if you are the player, you are not already holding something and that you have waited long enough after dropping the gun the last time...
         {
             gunObj = gameObject;
             gunObj.transform.parent = gunHolder.transform;
             gunObj.transform.localEulerAngles = defaultGunAngles;
-            //gunObj.transform.localPosition = defaultGunPosition;
-            StartCoroutine(WeaponPickup(pickupTrigger));
+            gunObj.transform.localPosition = defaultGunPosition;
+            //StartCoroutine(WeaponPickup(pickupTrigger));
 
             playerObj.GetComponent<InputManager>().gunInfo = this;
 
@@ -96,8 +93,7 @@ public class GunInfo : MonoBehaviour
     {
         float t = 0;
         Vector3 originalPos = transform.position;
-        bool allowPickup = Time.time > pickupTime;
-        while (Vector3.Distance(originalPos, gunHolder.transform.position) > 0.1f && allowPickup)
+        while (Vector3.Distance(originalPos, gunHolder.transform.position) > 0.1f)
         {
             transform.position = Vector3.Slerp(originalPos, gunHolder.transform.position, t);
             t += Time.deltaTime * gunPickupSpeed;
@@ -122,7 +118,6 @@ public class GunInfo : MonoBehaviour
             ResetAmmoCounter(); // Hide the ammo counter.
             shootScript.Refresh(); // Refresh the shoot script to give it information about the gun just picked up / dropped.
 
-            pickupTime += Time.time + 3f; // Add 3 seconds to the 'PickupTime' variable so we can ensure 3 seconds have passed in the Pickup function before picking up the weapon.
             yield return new WaitForSeconds(3f); // Wait for 1 second before re-enabling the pickup-trigger.
             
             gameObject.GetComponent<BoxCollider>().enabled = true; // Re-enable the pickup trigger.

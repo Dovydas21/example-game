@@ -35,7 +35,9 @@ public class WeaponSway : MonoBehaviour
     float initialFOV;                   // The FOV of the camera by default.
     bool playerAiming = false;          // Boolean value to track whether the player is aiming in or not.
     float startTime;                    // A value used to smoothly calculate the movement of aiming into the sights of the gun.      
-    float journeyLength;                // A value used to smoothly calculate the movement of aiming into the sights of the gun.      
+    float journeyLength;                // A value used to smoothly calculate the movement of aiming into the sights of the gun.
+    bool playerTriggeredAim = false;
+    float keyDownTime, keyUpTime;
 
     // Variables for debugging.
     Vector3 debugPosition;
@@ -51,7 +53,7 @@ public class WeaponSway : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (gameObject.transform.childCount != 0)
+        if (gameObject.transform.childCount > 0)
         {
 
             Quaternion gunHolderRot = CalculateSway() * RecoilRotation();
@@ -62,21 +64,44 @@ public class WeaponSway : MonoBehaviour
 
             if (shoot.playerHoldingGun) // If the player is holding a gun.
             {
-                bool aimKeyDown = Input.GetKey(aimKey);
-                Vector3 aim = Aim(aimKeyDown); // Work out the position of the gun if we're currently scoping in or out.
-                Vector3 positionDifference = targetPosition - aim;
-                gunHolderPos -= positionDifference;
 
-                if (Vector3.Distance(transform.localPosition, aimPos.localPosition) < .01f && !playerAiming && aimKeyDown) // Gun holder has reached the aiming position.
+                // Input controls for aiming.
+                if (Input.GetKeyDown(aimKey)) // RMB held
+                {
+                    playerTriggeredAim = !playerTriggeredAim; // Toggle the aiming to be the reverse of what it was before.
+                    keyDownTime = Time.time; // Remember when we pressed the button down...
+                }
+                else if (Input.GetKeyUp(aimKey))
+                {
+                    keyUpTime = Time.time; // Remember when we released the button...
+                }
+
+                float keyUpDownDifference = keyUpTime - keyDownTime; // work out the difference between pressing and releasing the aimKey.
+                if (keyUpDownDifference > 0 && keyUpDownDifference > .1f) // If the player has been holding the key down and they've just let go.
+                {
+                    playerTriggeredAim = false;
+                }
+                else if (keyUpDownDifference < 0 && keyUpDownDifference > .1f) // If the player has just pressed the down key quickly then set aiming to true.
+                {
+                    playerTriggeredAim = true;
+                }
+
+                // Work out if we are currently aiming in or not aiming in.
+                if (Vector3.Distance(transform.localPosition, aimPos.localPosition) < 0.01f && !playerAiming && playerTriggeredAim) // Gun holder has reached the aiming position.
                 {
                     playerAiming = true;
                     startTime = Time.time;
                 }
-                else if (Vector3.Distance(transform.localPosition, initialGunPosition) < .01f && playerAiming && !aimKeyDown) // Gun holder has reached the original pos again.
+                else if (Vector3.Distance(transform.localPosition, initialGunPosition) < 0.01f && playerAiming && !playerTriggeredAim) // Gun holder has reached the original pos again.
                 {
                     playerAiming = false;
                     startTime = Time.time;
                 }
+
+                // Position values for the gunHolder based on whether we are aiming or not.
+                Vector3 aim = Aim(playerTriggeredAim); // Work out the position of the gun if we're currently scoping in or out.
+                Vector3 positionDifference = targetPosition - aim;
+                gunHolderPos -= positionDifference;
             }
 
             debugPosition = aimPos.position;
@@ -96,12 +121,12 @@ public class WeaponSway : MonoBehaviour
         if (aim)
         {
             result = Vector3.Slerp(initialGunPosition, aimPos.localPosition, fractionOfJourney);
-            cam.fieldOfView = Mathf.Lerp(initialFOV, ADSFov, fractionOfJourney);
+            cam.fieldOfView = Mathf.LerpAngle(initialFOV, ADSFov, fractionOfJourney);
         }
         else
         {
             result = Vector3.Slerp(aimPos.localPosition, initialGunPosition, fractionOfJourney);
-            cam.fieldOfView = Mathf.Lerp(ADSFov, initialFOV, fractionOfJourney);
+            cam.fieldOfView = Mathf.LerpAngle(ADSFov, initialFOV, fractionOfJourney);
         }
         return result;
     }
@@ -142,7 +167,6 @@ public class WeaponSway : MonoBehaviour
         // Add these to the target position of the GunHolder object.
         targetPosition -= kickBack;
         targetPosition += recoil;
-
     }
 
     Vector3 Kickback()

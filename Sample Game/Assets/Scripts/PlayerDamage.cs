@@ -10,18 +10,29 @@ public class PlayerDamage : MonoBehaviour
 
     [Header("References")]
     public Collider playerDamageHitbox;
+    public Transform cameraHolder;
 
     // Locals
     Vector3 enemyPos;
     Rigidbody rb;
     Vector3 hitPos;
     EnemyController enemyController;
+    Quaternion cameraRot;
+    Quaternion targetCameraRot;
+    float cameraReturnAmount = 10f;
 
     private void Start()
     {
         currentHealth = maxHealth;
         rb = GetComponent<Rigidbody>();
+        cameraRot = cameraHolder.rotation;
     }
+
+    //private void Update()
+    //{
+    //    targetCameraRot = Quaternion.Slerp(targetCameraRot, cameraRot, Time.deltaTime * cameraReturnAmount);
+    //    cameraHolder.rotation = targetCameraRot;
+    //}
 
     private void OnTriggerEnter(Collider enemyCollider)
     {
@@ -34,6 +45,10 @@ public class PlayerDamage : MonoBehaviour
             print("Enemy attacked player");
             enemyController = collidedGO.GetComponent<EnemyController>();
             TakeDamage(enemyController.enemyDamage);
+
+            //Quaternion affectedCamRot = Quaternion.Euler(Random.Range(0f, enemyController.enemyDamage), Random.Range(0f, enemyController.enemyDamage), Random.Range(0f, enemyController.enemyDamage));
+            //print("Camera movement being applied to simulate being hit by enemy, angles are: " + affectedCamRot);
+            //targetCameraRot *= affectedCamRot; // Add the rotation to the usual rotation of the camera.
         }
     }
 
