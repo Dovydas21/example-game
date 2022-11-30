@@ -35,7 +35,9 @@ public class GunInfo : MonoBehaviour
     public ParticleSystem muzzleFlash;                          // The particle effect that should serve as the muzzle flash when the gun is fired.
     public TrailRenderer bulletTrail;                           // The TrailRenderer asset that immitates the travel of a tracer round, when the gun is fired.
     public float bulletTrailSpeed = 1000f;                      // The speed that the trail moves to the hitposition in Shoot.cs.
-    public float gunPickupSpeed = 100f;                         // the speed that the gun moves to the GunHolder position when the player picks it up.
+    public float gunPickupSpeed = 100f;                         // The speed that the gun moves to the GunHolder position when the player picks it up.
+    public float gunPickupDistance = 20f;                       // The maximum distance the player is allowed to be from gun.
+    public KeyCode gunPickupKey;
 
     [Header("Gun audio")]
     public AudioSource shotSoundEffect;                         // The audio source of the sound effect that should play when the gun is fired.
@@ -47,7 +49,7 @@ public class GunInfo : MonoBehaviour
     public GunRecoil gunRecoilScript;
     public GameObject gunObj;
     GameObject playerObj;
-    
+
 
 
     Rigidbody rb;
@@ -68,6 +70,23 @@ public class GunInfo : MonoBehaviour
         gunGravity = rb.useGravity;
     }
 
+    private void OnMouseOver()
+    {
+        if (Vector3.Distance(transform.position, playerObj.transform.position) <= gunPickupDistance )
+        {
+            UIText.SetText(gameObject.name);    
+            if (Input.GetKey(gunPickupKey))
+            {
+                StartCoroutine(WeaponPickup());
+            }
+        }
+    }
+
+    private void OnMouseExit()
+    {
+        UIText.ClearText();
+    }
+
     private void OnTriggerEnter(Collider pickupTrigger)
     {
         bool playerHandsEmpty = gunHolder.transform.childCount == 0;
@@ -77,7 +96,7 @@ public class GunInfo : MonoBehaviour
             gunObj.transform.parent = gunHolder.transform;
             gunObj.transform.localEulerAngles = defaultGunAngles;
             gunObj.transform.localPosition = defaultGunPosition;
-            //StartCoroutine(WeaponPickup(pickupTrigger));
+            //StartCoroutine(WeaponPickup());
 
             playerObj.GetComponent<InputManager>().gunInfo = this;
 
@@ -89,21 +108,35 @@ public class GunInfo : MonoBehaviour
         }
     }
 
-    private IEnumerator WeaponPickup(Collider pickupTrigger)
+    private IEnumerator WeaponPickup()
     {
-        float t = 0;
-        Vector3 originalPos = transform.position;
-        while (Vector3.Distance(originalPos, gunHolder.transform.position) > 0.1f)
+        bool playerHandsEmpty = gunHolder.transform.childCount == 0;
+        if (playerHandsEmpty)
         {
-            transform.position = Vector3.Slerp(originalPos, gunHolder.transform.position, t);
-            t += Time.deltaTime * gunPickupSpeed;
-            yield return new WaitForEndOfFrame();
+            // Destroy the rigidbody from the object.
+            Destroy(gameObject.GetComponent<Rigidbody>());
+
+            float t = 0;
+            Vector3 originalPos = transform.position;
+            Quaternion originalRot = transform.rotation;
+            float distanceFromPlayer = Vector3.Distance(originalPos, gunHolder.transform.position);
+            while (distanceFromPlayer > 0.1f && t <= 1) // This is running infinitely... bad.
+            {
+                transform.position = Vector3.Lerp(originalPos, gunHolder.transform.position, t);
+                transform.rotation = Quaternion.Lerp(originalRot, gunHolder.transform.rotation, t);
+                t += Time.deltaTime * gunPickupSpeed;
+                yield return new WaitForEndOfFrame();
+            }
+            // Fully set the rot and pos of the gun incase t was <1.
+            transform.position = gunHolder.transform.position; 
+            transform.rotation = gunHolder.transform.rotation;
         }
         yield return null;
     }
 
     public IEnumerator Drop()
     {
+        // Weapon will not drop when we have a value for "GunHolder".
         if (!playerAimedDownSights)
         {
             gameObject.transform.parent = null;
@@ -119,7 +152,7 @@ public class GunInfo : MonoBehaviour
             shootScript.Refresh(); // Refresh the shoot script to give it information about the gun just picked up / dropped.
 
             yield return new WaitForSeconds(3f); // Wait for 1 second before re-enabling the pickup-trigger.
-            
+
             gameObject.GetComponent<BoxCollider>().enabled = true; // Re-enable the pickup trigger.
         }
     }

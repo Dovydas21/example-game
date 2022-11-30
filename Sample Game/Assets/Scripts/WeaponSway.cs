@@ -38,6 +38,7 @@ public class WeaponSway : MonoBehaviour
     float journeyLength;                // A value used to smoothly calculate the movement of aiming into the sights of the gun.
     bool playerTriggeredAim = false;
     float keyDownTime, keyUpTime;
+    float initialSmooth;
 
     // Variables for debugging.
     Vector3 debugPosition;
@@ -48,6 +49,7 @@ public class WeaponSway : MonoBehaviour
         startTime = Time.time;
         journeyLength = Vector3.Distance(transform.position, aimPos.position);
         initialFOV = cam.fieldOfView;
+        initialSmooth = smooth;
     }
 
     // Update is called once per frame
@@ -58,7 +60,6 @@ public class WeaponSway : MonoBehaviour
 
             Quaternion gunHolderRot = CalculateSway() * RecoilRotation();
             Vector3 gunHolderPos = Kickback();
-            print("PositionBeforeDiff = " + gunHolderPos);
             Quaternion camRot = RecoilRotation();
 
 
@@ -122,11 +123,13 @@ public class WeaponSway : MonoBehaviour
         {
             result = Vector3.Slerp(initialGunPosition, aimPos.localPosition, fractionOfJourney);
             cam.fieldOfView = Mathf.LerpAngle(initialFOV, ADSFov, fractionOfJourney);
+            smooth = initialSmooth / 2f;
         }
         else
         {
             result = Vector3.Slerp(aimPos.localPosition, initialGunPosition, fractionOfJourney);
             cam.fieldOfView = Mathf.LerpAngle(ADSFov, initialFOV, fractionOfJourney);
+            smooth = initialSmooth;
         }
         return result;
     }
