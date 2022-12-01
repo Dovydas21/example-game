@@ -23,6 +23,7 @@ public class GunInfo : MonoBehaviour
     public int magCapacity;                                     // The gun's capacity of rounds that it can fire before reloading.
     public int damage;                                          // Damage the gun does when it hits enemies.
     public int ammoInGun;
+    public float throwForce = 25f;
 
     [Header("Gun positions")]
     public GameObject gunHolder;                                // Gameobject attached to the camera that holds the gun.
@@ -33,6 +34,7 @@ public class GunInfo : MonoBehaviour
     public Animator shootingAnimation;                          // The animaTOR that has the animation the gun should play when the gun is fired.
     public Animator cockingAnimation;                           // The animaTOR that has the animation the gun should play when the gun is being cocked.
     public ParticleSystem muzzleFlash;                          // The particle effect that should serve as the muzzle flash when the gun is fired.
+    public Transform bulletOrigin;                              // Where the bullet originates. i.e. The end of the barrel.
     public TrailRenderer bulletTrail;                           // The TrailRenderer asset that immitates the travel of a tracer round, when the gun is fired.
     public float bulletTrailSpeed = 1000f;                      // The speed that the trail moves to the hitposition in Shoot.cs.
     public float gunPickupSpeed = 100f;                         // The speed that the gun moves to the GunHolder position when the player picks it up.
@@ -74,7 +76,7 @@ public class GunInfo : MonoBehaviour
 
     private void OnMouseOver()
     {
-        if (Vector3.Distance(transform.position, playerObj.transform.position) <= gunPickupDistance)
+        if (Vector3.Distance(transform.position, playerObj.transform.position) <= gunPickupDistance && Time.time >= allowedToPickupTime)
         {
             UIText.SetText(gameObject.name);
             if (Input.GetKey(gunPickupKey))
@@ -115,9 +117,6 @@ public class GunInfo : MonoBehaviour
         bool playerHandsEmpty = gunHolder.transform.childCount == 0;
         if (playerHandsEmpty)
         {
-            // Destroy the rigidbody from the object.
-            Destroy(gameObject.GetComponent<Rigidbody>());
-
             // Start keeping track of the time, t will be used to decide how far along slerp we are.
             float t = 0;
 
@@ -142,6 +141,10 @@ public class GunInfo : MonoBehaviour
                 t += Time.deltaTime * gunPickupSpeed; // Increment t.
                 yield return new WaitForEndOfFrame(); // Wait for the next frame
             }
+
+            // Destroy the rigidbody from the object.
+            Destroy(gameObject.GetComponent<Rigidbody>());
+
             // Fully set the rot and pos of the gun incase t was <1.
             transform.position = gunHolder.transform.position;
             transform.rotation = gunHolder.transform.rotation;
@@ -154,7 +157,7 @@ public class GunInfo : MonoBehaviour
         // Weapon will not drop when we have a value for "GunHolder".
         if (!playerAimedDownSights)
         {
-            allowedToPickupTime += 2f; // Set the time that the player is allowed to pickup the gun again after...
+            allowedToPickupTime = Time.time + 2f; // Set the time that the player is allowed to pickup the gun again after...
             gameObject.transform.parent = null;
 
             // Set the Rigidbody values back to what they were before we destroyed it.
@@ -163,7 +166,7 @@ public class GunInfo : MonoBehaviour
             rb.drag = gunDrag;
             rb.useGravity = gunGravity;
 
-            rb.AddForce(Vector3.forward * 25f, ForceMode.Impulse); // Throw the gun with some force rather than just letting it drop.
+            rb.AddForce(transform.forward * throwForce, ForceMode.Impulse); // Throw the gun with some force rather than just letting it drop.
             ResetAmmoCounter(); // Hide the ammo counter.
             shootScript.Refresh(); // Refresh the shoot script to give it information about the gun just picked up / dropped.
 

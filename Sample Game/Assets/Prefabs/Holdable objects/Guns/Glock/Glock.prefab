@@ -5539,12 +5539,14 @@ MonoBehaviour:
   magCapacity: 18
   damage: 13
   ammoInGun: 18
+  throwForce: 25
   gunHolder: {fileID: 0}
   defaultGunPosition: {x: 0, y: 0, z: 0}
   defaultGunAngles: {x: 0, y: 0, z: 0}
   shootingAnimation: {fileID: 1883812385473700743}
   cockingAnimation: {fileID: 0}
   muzzleFlash: {fileID: 7292355579754927216}
+  bulletOrigin: {fileID: 4974863075756432875}
   bulletTrail: {fileID: 7425004647957812907, guid: 68338a0ac53c743368d0e63ba764486a, type: 3}
   bulletTrailSpeed: 50
   gunPickupSpeed: 3

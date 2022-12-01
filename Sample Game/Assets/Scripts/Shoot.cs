@@ -66,7 +66,7 @@ public class Shoot : MonoBehaviour
             gunInfo.PlayCockingAnimation();
             gunInfo.UpdateAmmoInGun(gunInfo.ammoInGun - 1); // Reduce the current ammo count by 1.
 
-            bool shotHit = Physics.Raycast(gunInfo.gunObj.transform.position, gunInfo.muzzleFlash.transform.forward, out HitInfo, gunInfo.range);
+            bool shotHit = Physics.Raycast(gunInfo.gunObj.transform.position, gunInfo.bulletOrigin.forward, out HitInfo, gunInfo.range);
             //bool shotHit = Physics.Raycast(gunInfo.gunObj.transform.position, gunInfo.gunObj.transform.forward, out HitInfo, gunInfo.range);
 
             if (shotHit)

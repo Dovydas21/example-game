@@ -11912,6 +11912,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1741900489}
     - target: {fileID: 6674147988831542759, guid: c6531713d2ee74623befeabcaa59e845, type: 3}
+      propertyPath: bulletOrigin
+      value: 
+      objectReference: {fileID: 1741900490}
+    - target: {fileID: 6674147988831542759, guid: c6531713d2ee74623befeabcaa59e845, type: 3}
       propertyPath: pickupTrigger
       value: 
       objectReference: {fileID: 2105335698}
@@ -28510,6 +28514,11 @@ ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 7292355579754927216, guid: c6531713d2ee74623befeabcaa59e845, type: 3}
   m_PrefabInstance: {fileID: 728981776}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &1741900490 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4974863075756432875, guid: c6531713d2ee74623befeabcaa59e845, type: 3}
+  m_PrefabInstance: {fileID: 728981776}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1743386897 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5778299879261106203, guid: 26458ae12646a41be8c91d0b0b542962, type: 3}
@@ -39601,6 +39610,10 @@ PrefabInstance:
       value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 4521471700996469189, guid: ba2616ace11d84b538aefd5d046074f2, type: 3}
+      propertyPath: throwForce
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 4521471700996469189, guid: ba2616ace11d84b538aefd5d046074f2, type: 3}
       propertyPath: gunPickupKey
       value: 101
       objectReference: {fileID: 0}
@@ -39611,6 +39624,10 @@ PrefabInstance:
     - target: {fileID: 4521471700996469189, guid: ba2616ace11d84b538aefd5d046074f2, type: 3}
       propertyPath: gunPickupDistance
       value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 4521471700996469189, guid: ba2616ace11d84b538aefd5d046074f2, type: 3}
+      propertyPath: defaultGunAngles.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5685878399353279814, guid: ba2616ace11d84b538aefd5d046074f2, type: 3}
       propertyPath: m_Layer
