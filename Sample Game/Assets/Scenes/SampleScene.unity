@@ -10166,8 +10166,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 232819869799025007, guid: c28a955152a5c46f1afb983a8b827656, type: 3}
+      propertyPath: gunPickupKey
+      value: 101
+      objectReference: {fileID: 0}
+    - target: {fileID: 232819869799025007, guid: c28a955152a5c46f1afb983a8b827656, type: 3}
       propertyPath: gunPickupSpeed
-      value: 3
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 232819869799025007, guid: c28a955152a5c46f1afb983a8b827656, type: 3}
+      propertyPath: gunPickupDistance
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 232819869799025007, guid: c28a955152a5c46f1afb983a8b827656, type: 3}
       propertyPath: defaultGunAngles.y
@@ -11909,7 +11917,7 @@ PrefabInstance:
       objectReference: {fileID: 2105335698}
     - target: {fileID: 6674147988831542759, guid: c6531713d2ee74623befeabcaa59e845, type: 3}
       propertyPath: gunPickupSpeed
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6674147988831542759, guid: c6531713d2ee74623befeabcaa59e845, type: 3}
       propertyPath: shotSoundEffect
@@ -11926,6 +11934,10 @@ PrefabInstance:
     - target: {fileID: 6674147988831542759, guid: c6531713d2ee74623befeabcaa59e845, type: 3}
       propertyPath: aimedInPosition.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6674147988831542759, guid: c6531713d2ee74623befeabcaa59e845, type: 3}
+      propertyPath: gunPickupDistance
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 6674147988831542759, guid: c6531713d2ee74623befeabcaa59e845, type: 3}
       propertyPath: shootingAnimation
@@ -39577,8 +39589,16 @@ PrefabInstance:
       value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 4521471700996469189, guid: ba2616ace11d84b538aefd5d046074f2, type: 3}
+      propertyPath: gunPickupKey
+      value: 101
+      objectReference: {fileID: 0}
+    - target: {fileID: 4521471700996469189, guid: ba2616ace11d84b538aefd5d046074f2, type: 3}
       propertyPath: gunPickupSpeed
-      value: 3
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4521471700996469189, guid: ba2616ace11d84b538aefd5d046074f2, type: 3}
+      propertyPath: gunPickupDistance
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 5685878399353279814, guid: ba2616ace11d84b538aefd5d046074f2, type: 3}
       propertyPath: m_Layer

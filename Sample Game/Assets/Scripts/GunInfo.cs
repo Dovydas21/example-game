@@ -49,6 +49,7 @@ public class GunInfo : MonoBehaviour
     public GunRecoil gunRecoilScript;
     public GameObject gunObj;
     GameObject playerObj;
+    float allowedToPickupTime;
 
 
 
@@ -63,6 +64,7 @@ public class GunInfo : MonoBehaviour
         playerObj = GameObject.FindGameObjectWithTag("Player");
         shootScript = playerObj.GetComponent<Shoot>();
         rb = gameObject.GetComponent<Rigidbody>();
+        allowedToPickupTime = Time.time;
 
         // Remember properties about the rigidbody of the object.
         gunMass = rb.mass;
@@ -72,9 +74,9 @@ public class GunInfo : MonoBehaviour
 
     private void OnMouseOver()
     {
-        if (Vector3.Distance(transform.position, playerObj.transform.position) <= gunPickupDistance )
+        if (Vector3.Distance(transform.position, playerObj.transform.position) <= gunPickupDistance)
         {
-            UIText.SetText(gameObject.name);    
+            UIText.SetText(gameObject.name);
             if (Input.GetKey(gunPickupKey))
             {
                 StartCoroutine(WeaponPickup());
@@ -90,7 +92,7 @@ public class GunInfo : MonoBehaviour
     private void OnTriggerEnter(Collider pickupTrigger)
     {
         bool playerHandsEmpty = gunHolder.transform.childCount == 0;
-        if (pickupTrigger.tag == "Player" && playerHandsEmpty) // Trigger a pick-up if you are the player, you are not already holding something and that you have waited long enough after dropping the gun the last time...
+        if (pickupTrigger.tag == "Player" && playerHandsEmpty && Time.time >= allowedToPickupTime) // Trigger a pick-up if you are the player, you are not already holding something and that you have waited long enough after dropping the gun the last time...
         {
             gunObj = gameObject;
             gunObj.transform.parent = gunHolder.transform;
@@ -116,19 +118,32 @@ public class GunInfo : MonoBehaviour
             // Destroy the rigidbody from the object.
             Destroy(gameObject.GetComponent<Rigidbody>());
 
+            // Start keeping track of the time, t will be used to decide how far along slerp we are.
             float t = 0;
+
+            // Remember the original gun's rotation and postition.
             Vector3 originalPos = transform.position;
             Quaternion originalRot = transform.rotation;
+
+            // Calculate how far away the gun is from the player.
             float distanceFromPlayer = Vector3.Distance(originalPos, gunHolder.transform.position);
-            while (distanceFromPlayer > 0.1f && t <= 1) // This is running infinitely... bad.
+
+            // Work out the centre of the two points and move it down slightly so that the Slerp arcs UP instead of to the side.
+            Vector3 centrePos = (originalPos + gunHolder.transform.position) / 2f;
+            centrePos -= new Vector3(0, 1, 0);
+            Vector3 gunRelCenter = transform.position - centrePos; // Work out the relative centre of the gun object.
+
+            // While the gun is in transit...
+            while (distanceFromPlayer > 0.1f && t <= 1)
             {
-                transform.position = Vector3.Lerp(originalPos, gunHolder.transform.position, t);
-                transform.rotation = Quaternion.Lerp(originalRot, gunHolder.transform.rotation, t);
-                t += Time.deltaTime * gunPickupSpeed;
-                yield return new WaitForEndOfFrame();
+                Vector3 holderRelCenter = gunHolder.transform.position - centrePos; // Work out the relative centre of the gunHolder in the loop incase the player moves.
+                transform.position = Vector3.Slerp(gunRelCenter, holderRelCenter, t) + centrePos; // Move the gun...
+                transform.rotation = Quaternion.Slerp(originalRot, gunHolder.transform.rotation, t); // Rotate the gun...
+                t += Time.deltaTime * gunPickupSpeed; // Increment t.
+                yield return new WaitForEndOfFrame(); // Wait for the next frame
             }
             // Fully set the rot and pos of the gun incase t was <1.
-            transform.position = gunHolder.transform.position; 
+            transform.position = gunHolder.transform.position;
             transform.rotation = gunHolder.transform.rotation;
         }
         yield return null;
@@ -139,6 +154,7 @@ public class GunInfo : MonoBehaviour
         // Weapon will not drop when we have a value for "GunHolder".
         if (!playerAimedDownSights)
         {
+            allowedToPickupTime += 2f; // Set the time that the player is allowed to pickup the gun again after...
             gameObject.transform.parent = null;
 
             // Set the Rigidbody values back to what they were before we destroyed it.
@@ -147,14 +163,15 @@ public class GunInfo : MonoBehaviour
             rb.drag = gunDrag;
             rb.useGravity = gunGravity;
 
-            rb.AddForce(Vector3.forward * 10f, ForceMode.Force);
+            rb.AddForce(Vector3.forward * 25f, ForceMode.Impulse); // Throw the gun with some force rather than just letting it drop.
             ResetAmmoCounter(); // Hide the ammo counter.
             shootScript.Refresh(); // Refresh the shoot script to give it information about the gun just picked up / dropped.
 
-            yield return new WaitForSeconds(3f); // Wait for 1 second before re-enabling the pickup-trigger.
+            //yield return new WaitForSeconds(3f); // Wait for 1 second before re-enabling the pickup-trigger.
 
             gameObject.GetComponent<BoxCollider>().enabled = true; // Re-enable the pickup trigger.
         }
+        yield return null;
     }
 
     public void ResetAmmoCounter()
