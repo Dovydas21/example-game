@@ -27,7 +27,8 @@ public class GunInfo : MonoBehaviour
 
     [Header("Gun positions")]
     public GameObject gunHolder;                                // Gameobject attached to the camera that holds the gun.
-    public Vector3 defaultGunPosition, defaultGunAngles;        // The local position & rotation of the gun inside of gunHolder when NOT aimed in.
+    public Vector3 defaultGunPosition;                          // The local position of the gun inside of gunHolder when NOT aimed in.
+    public Quaternion defaultGunAngles;                         // The local rotation of the gun inside of gunHolder when NOT aimed in.
     bool playerAimedDownSights = false;                         // Keeps track of whether the player is currently aiming down their sights.
 
     [Header("Gun animations")]
@@ -54,7 +55,7 @@ public class GunInfo : MonoBehaviour
     float allowedToPickupTime;
 
 
-
+    // Rigidbody variables.
     Rigidbody rb;
     float gunMass, gunDrag;
     bool gunGravity;
@@ -81,7 +82,7 @@ public class GunInfo : MonoBehaviour
             UIText.SetText(gameObject.name);
             if (Input.GetKey(gunPickupKey))
             {
-                StartCoroutine(WeaponPickup());
+                StartCoroutine(SummonWeapon());
             }
         }
     }
@@ -96,11 +97,10 @@ public class GunInfo : MonoBehaviour
         bool playerHandsEmpty = gunHolder.transform.childCount == 0;
         if (pickupTrigger.tag == "Player" && playerHandsEmpty && Time.time >= allowedToPickupTime) // Trigger a pick-up if you are the player, you are not already holding something and that you have waited long enough after dropping the gun the last time...
         {
-            gunObj = gameObject;
-            gunObj.transform.parent = gunHolder.transform;
-            gunObj.transform.localEulerAngles = defaultGunAngles;
-            gunObj.transform.localPosition = defaultGunPosition;
-            //StartCoroutine(WeaponPickup());
+            transform.parent = gunHolder.transform;
+            transform.rotation = defaultGunAngles;
+            print("WEAPON: transform.rotation = " + transform.rotation);
+            transform.localPosition = defaultGunPosition;
 
             playerObj.GetComponent<InputManager>().gunInfo = this;
 
@@ -112,7 +112,7 @@ public class GunInfo : MonoBehaviour
         }
     }
 
-    private IEnumerator WeaponPickup()
+    private IEnumerator SummonWeapon() // Called when the player presses the "gunPickupKey" when looking at the weapon.
     {
         bool playerHandsEmpty = gunHolder.transform.childCount == 0;
         if (playerHandsEmpty)
@@ -157,7 +157,7 @@ public class GunInfo : MonoBehaviour
         // Weapon will not drop when we have a value for "GunHolder".
         if (!playerAimedDownSights)
         {
-            allowedToPickupTime = Time.time + 2f; // Set the time that the player is allowed to pickup the gun again after...
+            allowedToPickupTime = Time.time + .5f; // Set the time that the player is allowed to pickup the gun again after...
             gameObject.transform.parent = null;
 
             // Set the Rigidbody values back to what they were before we destroyed it.
@@ -167,6 +167,7 @@ public class GunInfo : MonoBehaviour
             rb.useGravity = gunGravity;
 
             rb.AddForce(transform.forward * throwForce, ForceMode.Impulse); // Throw the gun with some force rather than just letting it drop.
+            rb.AddTorque(transform.right * throwForce, ForceMode.VelocityChange);
             ResetAmmoCounter(); // Hide the ammo counter.
             shootScript.Refresh(); // Refresh the shoot script to give it information about the gun just picked up / dropped.
 

@@ -19,7 +19,7 @@ public class PlayerDamage : MonoBehaviour
     EnemyController enemyController;
     Quaternion cameraRot;
     Quaternion targetCameraRot;
-    float cameraReturnAmount = 10f;
+    //float cameraReturnAmount = 10f;
 
     private void Start()
     {

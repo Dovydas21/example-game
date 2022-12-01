@@ -66,8 +66,7 @@ public class Shoot : MonoBehaviour
             gunInfo.PlayCockingAnimation();
             gunInfo.UpdateAmmoInGun(gunInfo.ammoInGun - 1); // Reduce the current ammo count by 1.
 
-            bool shotHit = Physics.Raycast(gunInfo.gunObj.transform.position, gunInfo.bulletOrigin.forward, out HitInfo, gunInfo.range);
-            //bool shotHit = Physics.Raycast(gunInfo.gunObj.transform.position, gunInfo.gunObj.transform.forward, out HitInfo, gunInfo.range);
+            bool shotHit = Physics.Raycast(gunInfo.bulletOrigin.position, gunInfo.bulletOrigin.forward, out HitInfo, gunInfo.range);
 
             if (shotHit)
             {
@@ -153,6 +152,7 @@ public class Shoot : MonoBehaviour
                 while (CanShoot())
                 {
                     yield return rapidFireWait;
+                    yield return new WaitForEndOfFrame();
                     Fire();
                 }
             }
@@ -162,11 +162,13 @@ public class Shoot : MonoBehaviour
 
     public bool CanShoot()
     {
-        if (!playerHoldingGun) return false; // Exit if the player is not holding a gun.
+        if (!playerHoldingGun)
+            return false; // Exit if the player is not holding a gun.
 
-        if (gunInfo.ammoInGun > 0)
+        if (gunInfo.ammoInGun > 0) // Check that we still have bullets in the gun.
             return true;
-        else return false;
+        else
+            return false;
     }
 
     private void OnDrawGizmos()

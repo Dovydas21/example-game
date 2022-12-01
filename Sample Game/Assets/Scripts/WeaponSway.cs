@@ -146,8 +146,8 @@ public class WeaponSway : MonoBehaviour
 
         // Work out where we are ultimately moving the gun to.
         targetRotation = rotationX * rotationY;
-        targetRotation.eulerAngles *= Time.deltaTime * smooth;
-        Quaternion swayAngle = Quaternion.Slerp(transform.localRotation, targetRotation, smooth * Time.deltaTime);
+        Quaternion swayAngle = Quaternion.Lerp(transform.localRotation, targetRotation, smooth * Time.deltaTime);
+        
         return swayAngle;
     }
 
@@ -164,8 +164,6 @@ public class WeaponSway : MonoBehaviour
         Vector3 recoil = new Vector3(recoilX, Random.Range(0f, recoilY), Random.Range(-recoilZ, recoilZ));
         kickBack *= -1f;
         recoil *= -1f;
-
-        print("kickBack = " + kickBack + ", recoil = " + recoil);
 
         // Add these to the target position of the GunHolder object.
         targetPosition -= kickBack;
