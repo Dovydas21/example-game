@@ -46,6 +46,8 @@ public class EnemyController : MonoBehaviour
         currentHealth = maxHealth;
         dupeAttributes.duplicated = false;
         agent.ResetPath();
+        ToggleEnemyColliders(false); // Disable the ragdoll colliders.
+        ToggleEnemyRigidbodies(false); // Disable the ragdoll rigidbodies.
     }
 
     public void EnemyTypeBehaviour()
@@ -84,15 +86,16 @@ public class EnemyController : MonoBehaviour
         ParticleSystem ps = Instantiate(bloodEffects, pos, transform.rotation); // Spawn in the particle system to make it look like enemy is bleeding.
         ps.transform.SetParent(transform);
         particles.Add(ps);
+        Destroy(ps, 2f);
     }
 
-    public void StopBleed()
-    {
-        foreach (var ps in particles)
-        {
-            ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
-        }
-    }
+    //public void StopBleed()
+    //{
+    //    foreach (var ps in particles)
+    //    {
+    //        ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+    //    }
+    //}
 
     public void Chase(bool YN)
     {
@@ -150,12 +153,38 @@ public class EnemyController : MonoBehaviour
         {
             alive = false;
             agent.isStopped = true;
-            StopBleed();
-            Destroy(gameObject.GetComponent<Rigidbody>());
+            agent.enabled = false;
+            
+            //StopBleed();
+            //Destroy(gameObject.GetComponent<Rigidbody>());
             characterAnimator.SetTrigger("Dead");
-            yield return new WaitForSeconds(30);
-            Destroy(gameObject);
+            //yield return new WaitForSeconds(2f);
+            yield return null;
+            GetComponent<Animator>().enabled = false;
+            //Destroy(gameObject);
+            ToggleEnemyColliders(true); // Turn on all of the colliders for the ragdoll.
+            ToggleEnemyRigidbodies(true);
         }
+    }
+
+    void ToggleEnemyColliders(bool state)
+    {
+        Collider[] colliders = gameObject.GetComponentsInChildren<Collider>();
+        foreach (var col in colliders)
+        {
+            col.enabled = state;
+        }
+        gameObject.GetComponent<Collider>().enabled = !state;
+    }
+
+    void ToggleEnemyRigidbodies(bool state)
+    {
+        Rigidbody[] rigidbodies = gameObject.GetComponentsInChildren<Rigidbody>();
+        foreach (var rb in rigidbodies)
+        {
+            rb.isKinematic = !state;
+        }
+        gameObject.GetComponent<Rigidbody>().isKinematic = state;
     }
 
     public void PermanentStopEnemy() // Triggered by an animation event on the enemy character's death animation.
