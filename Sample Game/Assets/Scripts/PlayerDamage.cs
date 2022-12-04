@@ -60,7 +60,7 @@ public class PlayerDamage : MonoBehaviour
         return go;
     }
 
-    void TakeDamage(int damage)
+    public void TakeDamage(int damage)
     {
         currentHealth -= damage;
         print("Player taken damage, current health = " + currentHealth);

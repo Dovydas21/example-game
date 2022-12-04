@@ -17,6 +17,7 @@ public class EnemyController : MonoBehaviour
     [Header("References")]
     public ParticleSystem bloodEffects;
     public Animator characterAnimator;
+    public PlayerDamage playerDamage;
 
     // Locals
     bool alive = true;
@@ -89,13 +90,13 @@ public class EnemyController : MonoBehaviour
         Destroy(ps, 2f);
     }
 
-    //public void StopBleed()
-    //{
-    //    foreach (var ps in particles)
-    //    {
-    //        ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
-    //    }
-    //}
+    public void StopBleed()
+    {
+        foreach (var ps in particles)
+        {
+            ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        }
+    }
 
     public void Chase(bool YN)
     {
@@ -111,9 +112,7 @@ public class EnemyController : MonoBehaviour
         if (characterAnimator != null)
         {
             characterAnimator.SetBool("Attacking", YN);
-            // print("Stopped player to play the attack animation.");
             StartCoroutine(WaitForCurrentAnimation());
-            // print("Un-stopped player becayse the attack animation has finished.");
         }
     }
 
@@ -155,16 +154,19 @@ public class EnemyController : MonoBehaviour
             agent.isStopped = true;
             agent.enabled = false;
             
-            //StopBleed();
-            //Destroy(gameObject.GetComponent<Rigidbody>());
+            StopBleed();
             characterAnimator.SetTrigger("Dead");
-            //yield return new WaitForSeconds(2f);
-            yield return null;
             GetComponent<Animator>().enabled = false;
-            //Destroy(gameObject);
-            ToggleEnemyColliders(true); // Turn on all of the colliders for the ragdoll.
-            ToggleEnemyRigidbodies(true);
+            ToggleRagdoll(true); // enable the ragdoll on death.
+            yield return null;
+            Destroy(gameObject, 120f); // Despawn enemy after 2 min.
         }
+    }
+
+    void ToggleRagdoll(bool state)
+    {
+        ToggleEnemyColliders(state);
+        ToggleEnemyRigidbodies(state);
     }
 
     void ToggleEnemyColliders(bool state)
@@ -223,7 +225,7 @@ public class EnemyController : MonoBehaviour
                 if (distance - 2 <= agent.stoppingDistance) // If the enemy is within attacking range then face the target and 
                 {
                     Chase(false);   // Stop chasing the player.
-                    Attack(true);   // Attach the player.
+                    Attack(true);   // Attack the player.
                 }
                 else
                 {
