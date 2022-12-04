@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -73,6 +74,7 @@ public class EnemyController : MonoBehaviour
 
             // Duplicate the enemy
             GameObject dupe = Instantiate(gameObject, transform.position, Quaternion.identity);
+
             // Set the attributes like speed, health and the dupe count so we can keep count of how many we have duplicated so far.
             dupe.GetComponent<EnemyController>().currentHealth *= dupeAttributes.healthFactor;
             dupe.GetComponent<EnemyController>().dupeAttributes.dupeCount = dupeAttributes.dupeCount;
@@ -107,6 +109,14 @@ public class EnemyController : MonoBehaviour
             characterAnimator.SetBool("Running", YN);
     }
 
+    public void AttackConnected()
+    {
+        float distance = Vector3.Distance(target.position, transform.position); // Calculate the distance from the enemy to the player.
+
+        if (distance <= lookRadius)
+            playerDamage.TakeDamage(enemyDamage); // Inflict damage on the player if they are still within range when the enemy attacks.
+    }
+
     public void Attack(bool YN)
     {
         if (characterAnimator != null)
@@ -135,7 +145,7 @@ public class EnemyController : MonoBehaviour
         if (currentHealth <= 0)
             StartCoroutine(Die());
 
-        EnemyTypeBehaviour();
+        //EnemyTypeBehaviour();
     }
 
     IEnumerator WaitForCurrentAnimation()

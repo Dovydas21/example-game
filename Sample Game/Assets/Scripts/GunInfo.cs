@@ -99,8 +99,9 @@ public class GunInfo : MonoBehaviour
         {
             transform.parent = gunHolder.transform;
             transform.rotation = defaultGunAngles;
-            print("WEAPON: transform.rotation = " + transform.rotation);
-            transform.localPosition = defaultGunPosition;
+            gunHolder.transform.localPosition = defaultGunPosition;
+            //transform.localRotation = defaultGunAngles;
+            //transform.localPosition = defaultGunPosition;
 
             playerObj.GetComponent<InputManager>().gunInfo = this;
 
