@@ -1353,7 +1353,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 1
-  m_Speed: 10
+  m_Speed: 20
   m_Acceleration: 20
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -1391,6 +1391,7 @@ MonoBehaviour:
     healthFactor: 0
   bloodEffects: {fileID: 1226761637171649549, guid: fcc2af5d362e7425fb58fe5573c62041, type: 3}
   characterAnimator: {fileID: 2762304617380547258}
+  playerDamage: {fileID: 0}
   currentHealth: 100
 --- !u!1 &3080598892501001134
 GameObject:

@@ -67,6 +67,11 @@ public class PlayerDamage : MonoBehaviour
         Vector3 directionOfAttack = (enemyPos - gameObject.transform.position).normalized;
         rb.AddForceAtPosition(directionOfAttack * enemyController.enemyKnockback, hitPos, ForceMode.Impulse);
         Debug.DrawRay(enemyPos, directionOfAttack, Color.red, 20f);
+
+        if(currentHealth <= 0) // Player dead.
+        {
+            // Do something to kill the player...
+        }
     }
 
     private void OnDrawGizmosSelected()

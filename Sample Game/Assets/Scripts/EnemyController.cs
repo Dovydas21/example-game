@@ -109,7 +109,7 @@ public class EnemyController : MonoBehaviour
             characterAnimator.SetBool("Running", YN);
     }
 
-    public void AttackConnected()
+    public void AttackConnected() // Triggered by animation event trigger.
     {
         float distance = Vector3.Distance(target.position, transform.position); // Calculate the distance from the enemy to the player.
 
