@@ -165,7 +165,7 @@ public class EnemyController : MonoBehaviour
             agent.enabled = false;
             
             StopBleed();
-            characterAnimator.SetTrigger("Dead");
+            characterAnimator.StopPlayback();
             GetComponent<Animator>().enabled = false;
             ToggleRagdoll(true); // enable the ragdoll on death.
             yield return null;
