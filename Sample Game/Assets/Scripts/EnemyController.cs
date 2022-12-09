@@ -4,6 +4,11 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
+[RequireComponent(typeof(Rigidbody))] // Require a Rigidbody.
+[RequireComponent(typeof(NavMeshAgent))] // Require a NavMeshAgent.
+[RequireComponent(typeof(CapsuleCollider))] // Require a capsule collider.
+[RequireComponent(typeof(Animator))] // Require an animator component.
+
 public class EnemyController : MonoBehaviour
 {
     [Header("Enemy attributes")]
@@ -19,11 +24,13 @@ public class EnemyController : MonoBehaviour
     public ParticleSystem bloodEffects;
     public Animator characterAnimator;
     public PlayerDamage playerDamage;
+    
 
     // Locals
     bool alive = true;
     public float currentHealth;
     Transform target;
+    Rigidbody rb;
     NavMeshAgent agent;
     List<ParticleSystem> particles = new List<ParticleSystem>();
 
@@ -41,15 +48,20 @@ public class EnemyController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Grab the components
+        agent = GetComponent<NavMeshAgent>();
+        rb = GetComponent<Rigidbody>();
+        characterAnimator = GetComponent<Animator>();
+
+        // Set the tag of the gameobject to be "Enemy"
         gameObject.tag = "Enemy";
         target = GameObject.FindGameObjectWithTag("Player").transform;
-        agent = GetComponent<NavMeshAgent>();
         agent.baseOffset = 0;
+
         currentHealth = maxHealth;
         dupeAttributes.duplicated = false;
         agent.ResetPath();
-        ToggleEnemyColliders(false); // Disable the ragdoll colliders.
-        ToggleEnemyRigidbodies(false); // Disable the ragdoll rigidbodies.
+        ToggleRagdoll(false); // Disable the ragdoll.
     }
 
     public void EnemyTypeBehaviour()
