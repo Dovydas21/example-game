@@ -26,14 +26,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1449482614812168860}
-  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0, y: 0.15011819, z: 0}
+  m_LocalRotation: {x: -0.00000021340837, y: 0.7071068, z: 0.70710677, w: 0.00000021606681}
+  m_LocalPosition: {x: 0.0000000036670826, y: 0.15011819, z: 0.00407335}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3887923843629607802}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 180}
 --- !u!33 &5587352423396200724
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -121,15 +121,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4022674794291052821}
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 0.264, z: -0.0005}
+  m_LocalRotation: {x: 0.00000028112433, y: 0.0000005960464, z: 0.00000009123461, w: -1}
+  m_LocalPosition: {x: 0.000000024097972, y: 0.264, z: 0.0045732846}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6677425443343562417}
   m_Father: {fileID: 3887923843629607802}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 360, z: 0}
 --- !u!1 &4521471700996469184
 GameObject:
   m_ObjectHideFlags: 0
@@ -180,6 +180,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fullAuto: 1
+  canAim: 0
   hasToBeCocked: 0
   power: 500
   range: 10
@@ -187,10 +188,10 @@ MonoBehaviour:
   magCapacity: 1000
   damage: 10
   ammoInGun: 5
-  throwForce: 100
   gunHolder: {fileID: 0}
   defaultGunPosition: {x: 0, y: 0, z: 0}
-  defaultGunAngles: {x: 0, y: 180, z: 0}
+  defaultGunAngles: {x: 0, y: 180, z: 0, w: 0}
+  aimPosition: {x: 0, y: 0, z: 0}
   shootingAnimation: {fileID: 0}
   cockingAnimation: {fileID: 0}
   muzzleFlash: {fileID: 0}
@@ -200,6 +201,7 @@ MonoBehaviour:
   gunPickupSpeed: 100
   gunPickupDistance: 20
   gunPickupKey: 0
+  throwForce: 100
   shotSoundEffect: {fileID: 4521471700996469188}
   cockingSoundEffect: {fileID: 0}
   pickupTrigger: {fileID: 1940165886399079715}

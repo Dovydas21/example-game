@@ -12,14 +12,12 @@ public class Shoot : MonoBehaviour
 
     Transform gunHolder;
     Transform gun;
-    public Transform ADSPosition; // Trasnform of the GameObject called "Aiming Position" so we can slerp to it to ADS.
+    public Transform ADSPosition;               // Trasnform of the GameObject called "Aiming Position" so we can slerp to it to ADS.
     public GameObject bulletHoleDecal;
-    //public TrailRenderer bulletTrail;
     WaitForSeconds rapidFireWait;
     public bool firing = false;
     public bool playerHoldingGun = false;
-
-
+    float nextShotTime;                         // The time that the next shot is allowed to be fired at or after.
     GunInfo gunInfo;
     List<Vector3> hitPositions = new List<Vector3>();
 
@@ -27,6 +25,7 @@ public class Shoot : MonoBehaviour
     public void Start()
     {
         Refresh();
+        nextShotTime = Time.time;
     }
 
     public void Refresh()
@@ -53,8 +52,9 @@ public class Shoot : MonoBehaviour
 
     public void Fire()
     {
-        if (playerHoldingGun)
+        if (playerHoldingGun && Time.time >= nextShotTime)
         {
+            nextShotTime = Time.time + gunInfo.fireRate;
             firing = true;
             print("Shot fired");
             RaycastHit HitInfo;

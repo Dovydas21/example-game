@@ -14,6 +14,7 @@ public class GunInfo : MonoBehaviour
 
     [Header("Gun characteristics")]
     public bool fullAuto;                                       // True = Gun can be fired continuously while mouse is held down. False = semi-auto.
+    public bool canAim;                                         // True = Gun can be moved back and forth from the "AimingPosition".
     public bool hasToBeCocked;                                  // True = Gun must be cocked (e.g. Shotgun / Revolver), False = Gun is semi-auto.
 
     [Header("Gun stats")]
@@ -23,12 +24,12 @@ public class GunInfo : MonoBehaviour
     public int magCapacity;                                     // The gun's capacity of rounds that it can fire before reloading.
     public int damage;                                          // Damage the gun does when it hits enemies.
     public int ammoInGun;
-    public float throwForce = 25f;
 
     [Header("Gun positions")]
     public GameObject gunHolder;                                // Gameobject attached to the camera that holds the gun.
     public Vector3 defaultGunPosition;                          // The local position of the gun inside of gunHolder when NOT aimed in.
     public Quaternion defaultGunAngles;                         // The local rotation of the gun inside of gunHolder when NOT aimed in.
+    public Vector3 aimPosition;                                 // The local position of the "AimingPosition" GameObject for this weapon when we are aiming down sights.
     bool playerAimedDownSights = false;                         // Keeps track of whether the player is currently aiming down their sights.
 
     [Header("Gun animations")]
@@ -38,9 +39,12 @@ public class GunInfo : MonoBehaviour
     public Transform bulletOrigin;                              // Where the bullet originates. i.e. The end of the barrel.
     public TrailRenderer bulletTrail;                           // The TrailRenderer asset that immitates the travel of a tracer round, when the gun is fired.
     public float bulletTrailSpeed = 1000f;                      // The speed that the trail moves to the hitposition in Shoot.cs.
+
+    [Header("Gun pickup & drop")]
     public float gunPickupSpeed = 100f;                         // The speed that the gun moves to the GunHolder position when the player picks it up.
     public float gunPickupDistance = 20f;                       // The maximum distance the player is allowed to be from gun.
-    public KeyCode gunPickupKey;
+    public KeyCode gunPickupKey;                                // The key the player presses to pickup / summon the weapon.
+    public float throwForce = 25f;                              // The force applied to the weapon when the player presses the key to drop the weapon.
 
     [Header("Gun audio")]
     public AudioSource shotSoundEffect;                         // The audio source of the sound effect that should play when the gun is fired.
@@ -51,7 +55,8 @@ public class GunInfo : MonoBehaviour
     public Shoot shootScript;
     public GunRecoil gunRecoilScript;
     public GameObject gunObj;
-    GameObject playerObj;
+    GameObject playerObj;                                       // The "Player" GameObject
+    GameObject aimingPositionObj;                               // The "AimingPosition" GameObject
     float allowedToPickupTime;
 
 
@@ -64,6 +69,7 @@ public class GunInfo : MonoBehaviour
     {
         ammoInGun = magCapacity; // Set the current ammo count to be the mag capacity (i.e. fully loaded).
         gunHolder = GameObject.FindGameObjectWithTag("GunHolder");
+        aimingPositionObj = GameObject.FindGameObjectWithTag("AimingPosition");
         playerObj = GameObject.FindGameObjectWithTag("Player");
         shootScript = playerObj.GetComponent<Shoot>();
         rb = gameObject.GetComponent<Rigidbody>();
@@ -100,6 +106,9 @@ public class GunInfo : MonoBehaviour
             transform.parent = gunHolder.transform;
             transform.rotation = defaultGunAngles;
             gunHolder.transform.localPosition = defaultGunPosition;
+
+            aimingPositionObj.transform.localPosition = aimPosition;
+
             //transform.localRotation = defaultGunAngles;
             //transform.localPosition = defaultGunPosition;
 

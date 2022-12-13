@@ -22,8 +22,8 @@ public class WeaponSway : MonoBehaviour
     [Tooltip("Up and down recoil.")][SerializeField] float recoilY;                                  // Up and down recoil
     [Tooltip("Front and back recoil.")][SerializeField] float recoilZ;                               // Front and back recoil
     [Tooltip("Amount to move the gun backwards with each shot.")][SerializeField] float kickbackZ;   // Amount to move the gun backwards with each shot
-    [Tooltip("Speed / power of the recoil")] public float snappiness;                                 // How snappy the recoil feels.                            
-    [Tooltip("Speed to return the gun to the original position.")] public float returnAmount;         // The speed at which the weapon returns to it's original pos
+    [Tooltip("Speed / power of the recoil")] public float snappiness;                                // How snappy the recoil feels.                            
+    [Tooltip("Speed to return the gun to the original position.")] public float returnAmount;        // The speed at which the weapon returns to it's original pos
 
     // Variables for gun aiming
     [Header("Aiming variables:")]
@@ -39,6 +39,9 @@ public class WeaponSway : MonoBehaviour
     bool playerTriggeredAim = false;
     float keyDownTime, keyUpTime;
     float initialSmooth;
+
+    // References
+    GunInfo gunInfo;
 
     // Variables for debugging.
     Vector3 debugPosition;
@@ -57,7 +60,7 @@ public class WeaponSway : MonoBehaviour
     {
         if (gameObject.transform.childCount > 0)
         {
-
+            gunInfo = gameObject.transform.GetComponentInChildren<GunInfo>();
             Quaternion gunHolderRot = CalculateSway() * RecoilRotation();
             Vector3 gunHolderPos = Kickback();
             Quaternion camRot = RecoilRotation();
@@ -110,7 +113,6 @@ public class WeaponSway : MonoBehaviour
             cam.transform.localRotation = camRot;
             transform.localPosition = gunHolderPos;
         }
-        // cam.transform.localRotation = Quaternion.Euler(gunHolderRot.eulerAngles);
     }
 
     Vector3 Aim(bool aim)
@@ -119,11 +121,11 @@ public class WeaponSway : MonoBehaviour
         float fractionOfJourney = distCovered / journeyLength; // Fraction of journey completed equals current distance divided by total distance.
         Vector3 result;
 
-        if (aim)
+        if (aim && gunInfo.canAim)
         {
             result = Vector3.Slerp(initialGunPosition, aimPos.localPosition, fractionOfJourney);
             cam.fieldOfView = Mathf.LerpAngle(initialFOV, ADSFov, fractionOfJourney);
-            smooth = initialSmooth / 2f;
+            smooth = initialSmooth / 3f;
         }
         else
         {

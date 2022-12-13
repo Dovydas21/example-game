@@ -5806,6 +5806,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fullAuto: 1
+  canAim: 1
   hasToBeCocked: 0
   power: 3000
   range: 250
@@ -5813,10 +5814,10 @@ MonoBehaviour:
   magCapacity: 31
   damage: 25
   ammoInGun: 18
-  throwForce: 25
   gunHolder: {fileID: 0}
   defaultGunPosition: {x: 0, y: -0.27, z: 0}
   defaultGunAngles: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+  aimPosition: {x: 0, y: -0.223, z: 0}
   shootingAnimation: {fileID: 0}
   cockingAnimation: {fileID: 0}
   muzzleFlash: {fileID: 877112102652806526}
@@ -5826,6 +5827,7 @@ MonoBehaviour:
   gunPickupSpeed: 2
   gunPickupDistance: 75
   gunPickupKey: 101
+  throwForce: 25
   shotSoundEffect: {fileID: 2782098492886252927}
   cockingSoundEffect: {fileID: 0}
   pickupTrigger: {fileID: 2782098492886252922}
