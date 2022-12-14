@@ -5813,7 +5813,7 @@ MonoBehaviour:
   fireRate: 0.05
   magCapacity: 31
   damage: 25
-  projectileCount: 3
+  projectileCount: 1
   ammoInGun: 18
   gunHolder: {fileID: 0}
   defaultGunPosition: {x: 0, y: -0.27, z: 0}

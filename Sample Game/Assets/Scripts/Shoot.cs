@@ -54,7 +54,12 @@ public class Shoot : MonoBehaviour
     {
         if (playerHoldingGun && Time.time >= nextShotTime)
         {
-            for (int i = 0; i < Mathf.Min(gunInfo.projectileCount, gunInfo.ammoInGun); i++)
+
+            // Set the bullet offset to Vector3.Zero for the first shot, this way any guns with 1 projectile will fire straight and the first bullet will always be on target.
+            Vector3 nextBulletOffset = Vector3.zero;
+
+            // Loop through and fire a shot for as many projectiles as are defined in GunInfo.cs for the gun the player is holding.
+            for (int i = 0; i < Mathf.Min(gunInfo.projectileCount, gunInfo.ammoInGun); i++) 
             {
                 nextShotTime = Time.time + gunInfo.fireRate;
                 firing = true;
@@ -68,13 +73,13 @@ public class Shoot : MonoBehaviour
                 gunInfo.PlayCockingAnimation();
                 gunInfo.UpdateAmmoInGun(gunInfo.ammoInGun - 1); // Reduce the current ammo count by 1.
 
-                Vector3 nextBulletOffset = new Vector3(0f, 0f, 0f);
-                if (i != 0)
+                if (i != 0) // If we have fired the first bullet, the next projectile should have its direction randomised by the "gunInfo.projectileSpread" value.
                 {
-                    nextBulletOffset += new Vector3(Random.Range(0f, 10f), Random.Range(0f, 10f), Random.Range(0f, 10f));
+                    float bulletSpreadFactor = Random.Range(-gunInfo.projectileSpread, gunInfo.projectileSpread);
+                    nextBulletOffset += new Vector3(bulletSpreadFactor, bulletSpreadFactor, bulletSpreadFactor);
                 }
 
-                bool shotHit = Physics.Raycast(gunInfo.bulletOrigin.position + nextBulletOffset, gunInfo.bulletOrigin.forward, out HitInfo, gunInfo.range);
+                bool shotHit = Physics.Raycast(gunInfo.bulletOrigin.position, gunInfo.bulletOrigin.forward + nextBulletOffset, out HitInfo, gunInfo.range);
 
                 if (shotHit)
                 {

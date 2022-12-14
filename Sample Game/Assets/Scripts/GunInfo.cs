@@ -24,6 +24,7 @@ public class GunInfo : MonoBehaviour
     public int magCapacity;                                     // The gun's capacity of rounds that it can fire before reloading.
     public int damage;                                          // Damage the gun does when it hits enemies once.
     public int projectileCount = 1;                             // The number of projectiles fired from the weapon at one time, can be used for shotguns, burst fire etc.
+    public float projectileSpread;                              // The spread of the projectiles if there is more than one, for example this would be .2f for a shotgun.
     public int ammoInGun;                                       // The amount of ammo currently inside of the gun.
 
     [Header("Gun positions")]
