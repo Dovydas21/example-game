@@ -54,64 +54,72 @@ public class Shoot : MonoBehaviour
     {
         if (playerHoldingGun && Time.time >= nextShotTime)
         {
-            nextShotTime = Time.time + gunInfo.fireRate;
-            firing = true;
-            print("Shot fired");
-            RaycastHit HitInfo;
-            // gunHolder.GetComponent<GunRecoil>().Recoil(); // Call the recoil function.
-            gunHolder.GetComponent<WeaponSway>().Recoil(); // Call the recoil function.
-
-            gunInfo.PlayMuzzleFlash();
-            gunInfo.PlayShootSound();
-            gunInfo.PlayCockingAnimation();
-            gunInfo.UpdateAmmoInGun(gunInfo.ammoInGun - 1); // Reduce the current ammo count by 1.
-
-            bool shotHit = Physics.Raycast(gunInfo.bulletOrigin.position, gunInfo.bulletOrigin.forward, out HitInfo, gunInfo.range);
-
-            if (shotHit)
+            for (int i = 0; i < Mathf.Min(gunInfo.projectileCount, gunInfo.ammoInGun); i++)
             {
-                Transform objectHit = HitInfo.transform;
-                hitPositions.Add(HitInfo.point);
-                Debug.DrawLine(cam.transform.position, HitInfo.point, Color.red, 20f, false);
+                nextShotTime = Time.time + gunInfo.fireRate;
+                firing = true;
+                print("Shot fired");
+                RaycastHit HitInfo;
+                // gunHolder.GetComponent<GunRecoil>().Recoil(); // Call the recoil function.
+                gunHolder.GetComponent<WeaponSway>().Recoil(); // Call the recoil function.
 
+                gunInfo.PlayMuzzleFlash();
+                gunInfo.PlayShootSound();
+                gunInfo.PlayCockingAnimation();
+                gunInfo.UpdateAmmoInGun(gunInfo.ammoInGun - 1); // Reduce the current ammo count by 1.
 
-                if (objectHit.transform.gameObject.tag != "Player")
+                Vector3 nextBulletOffset = new Vector3(0f, 0f, 0f);
+                if (i != 0)
                 {
-                    // Spawn a bullethole decal.
-                    GameObject bulletHole = Instantiate(bulletHoleDecal, HitInfo.point + HitInfo.normal * .001f, Quaternion.identity); // Spawn the bullethole decal.
-                    bulletHole.transform.localScale = new Vector3(.1f, .1f, .1f); // Set the scale of the decal.
-                    bulletHole.transform.parent = objectHit; // Parent the decal to the object that was hit.
-                    bulletHole.transform.LookAt(HitInfo.point + HitInfo.normal); // Reposition the decal to be oriented on the surface of the hit object.
-                    Destroy(bulletHole, 10f); // Destroy the decal after 10 seconds...
-
-                    if (HitInfo.rigidbody != null)
-                        objectHit.GetComponent<Rigidbody>().AddForceAtPosition(cam.transform.forward * gunInfo.power, HitInfo.point, ForceMode.Impulse);
-
-                    if (objectHit.GetComponent<EnemyController>() != null)
-                    {
-                        print("Enemy hit!");
-                        EnemyController enemyController = objectHit.GetComponent<EnemyController>();
-                        enemyController.TakeDamage(gunInfo.damage);
-                        enemyController.BleedAtPosition(HitInfo.point);
-                    }
+                    nextBulletOffset += new Vector3(Random.Range(0f, 10f), Random.Range(0f, 10f), Random.Range(0f, 10f));
                 }
-            }
 
+                bool shotHit = Physics.Raycast(gunInfo.bulletOrigin.position + nextBulletOffset, gunInfo.bulletOrigin.forward, out HitInfo, gunInfo.range);
 
-            if (gunInfo.bulletTrail != null && gunInfo.bulletTrailSpeed > 0f) // Ensure that we have a bullet trail defined before spawning one in.
-            {
-                TrailRenderer trail = Instantiate(gunInfo.bulletTrail, gunInfo.muzzleFlash.transform.position, Quaternion.identity);
-                Vector3 bulletDestination;
                 if (shotHit)
                 {
-                    bulletDestination = HitInfo.point;
+                    Transform objectHit = HitInfo.transform;
+                    hitPositions.Add(HitInfo.point);
+                    Debug.DrawLine(cam.transform.position, HitInfo.point, Color.red, 20f, false);
+
+                    if (objectHit.transform.gameObject.tag != "Player")
+                    {
+                        // Spawn a bullethole decal.
+                        GameObject bulletHole = Instantiate(bulletHoleDecal, HitInfo.point + HitInfo.normal * .001f, Quaternion.identity); // Spawn the bullethole decal.
+                        bulletHole.transform.localScale = new Vector3(.1f, .1f, .1f); // Set the scale of the decal.
+                        bulletHole.transform.parent = objectHit; // Parent the decal to the object that was hit.
+                        bulletHole.transform.LookAt(HitInfo.point + HitInfo.normal); // Reposition the decal to be oriented on the surface of the hit object.
+                        Destroy(bulletHole, 10f); // Destroy the decal after 10 seconds...
+
+                        if (HitInfo.rigidbody != null)
+                            objectHit.GetComponent<Rigidbody>().AddForceAtPosition(cam.transform.forward * gunInfo.power, HitInfo.point, ForceMode.Impulse);
+
+                        if (objectHit.GetComponent<EnemyController>() != null)
+                        {
+                            print("Enemy hit!");
+                            EnemyController enemyController = objectHit.GetComponent<EnemyController>();
+                            enemyController.TakeDamage(gunInfo.damage);
+                            enemyController.BleedAtPosition(HitInfo.point);
+                        }
+                    }
                 }
-                else
+
+
+                if (gunInfo.bulletTrail != null && gunInfo.bulletTrailSpeed > 0f) // Ensure that we have a bullet trail defined before spawning one in.
                 {
-                    bulletDestination = new Vector3(gunInfo.muzzleFlash.transform.forward.x, gunInfo.muzzleFlash.transform.forward.y, gunInfo.muzzleFlash.transform.forward.z + 1000f);
+                    TrailRenderer trail = Instantiate(gunInfo.bulletTrail, gunInfo.muzzleFlash.transform.position, Quaternion.identity);
+                    Vector3 bulletDestination;
+                    if (shotHit)
+                    {
+                        bulletDestination = HitInfo.point;
+                    }
+                    else
+                    {
+                        bulletDestination = new Vector3(gunInfo.muzzleFlash.transform.forward.x, gunInfo.muzzleFlash.transform.forward.y, gunInfo.muzzleFlash.transform.forward.z + 1000f);
+                    }
+                    StartCoroutine(BulletTrail(bulletDestination, trail));
+                    Destroy(trail, 1f);
                 }
-                StartCoroutine(BulletTrail(bulletDestination, trail));
-                Destroy(trail, 1f);
             }
 
             firing = false;

@@ -5813,11 +5813,13 @@ MonoBehaviour:
   fireRate: 0.05
   magCapacity: 31
   damage: 25
+  projectileCount: 3
   ammoInGun: 18
   gunHolder: {fileID: 0}
   defaultGunPosition: {x: 0, y: -0.27, z: 0}
   defaultGunAngles: {x: 0, y: 1, z: 0, w: -0.00000004371139}
   aimPosition: {x: 0, y: -0.223, z: 0}
+  aimFieldOfView: 20
   shootingAnimation: {fileID: 0}
   cockingAnimation: {fileID: 0}
   muzzleFlash: {fileID: 877112102652806526}

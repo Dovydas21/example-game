@@ -22,14 +22,16 @@ public class GunInfo : MonoBehaviour
     public float range;                                         // The range of the raycast shot when the gun is fired.
     public float fireRate;                                      // The fire rate of the gun. .1 is fast 10 is slow.
     public int magCapacity;                                     // The gun's capacity of rounds that it can fire before reloading.
-    public int damage;                                          // Damage the gun does when it hits enemies.
-    public int ammoInGun;
+    public int damage;                                          // Damage the gun does when it hits enemies once.
+    public int projectileCount = 1;                             // The number of projectiles fired from the weapon at one time, can be used for shotguns, burst fire etc.
+    public int ammoInGun;                                       // The amount of ammo currently inside of the gun.
 
     [Header("Gun positions")]
     public GameObject gunHolder;                                // Gameobject attached to the camera that holds the gun.
     public Vector3 defaultGunPosition;                          // The local position of the gun inside of gunHolder when NOT aimed in.
     public Quaternion defaultGunAngles;                         // The local rotation of the gun inside of gunHolder when NOT aimed in.
     public Vector3 aimPosition;                                 // The local position of the "AimingPosition" GameObject for this weapon when we are aiming down sights.
+    public float aimFieldOfView = 30f;                          // The Field Of View that the camera will change to when player aims in.
     bool playerAimedDownSights = false;                         // Keeps track of whether the player is currently aiming down their sights.
 
     [Header("Gun animations")]

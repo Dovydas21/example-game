@@ -31,7 +31,6 @@ public class WeaponSway : MonoBehaviour
     public Shoot shoot;                 // A reference to the Shoot.cs script.
     public KeyCode aimKey;              // The key the player presses to aim down sights.
     public float aimSpeed = .5f;        // The speed that the gun moves to the "AimingPosition".
-    public float ADSFov = 30f;          // The FOV of the camera when you are aiming down sights.
     float initialFOV;                   // The FOV of the camera by default.
     bool playerAiming = false;          // Boolean value to track whether the player is aiming in or not.
     float startTime;                    // A value used to smoothly calculate the movement of aiming into the sights of the gun.      
@@ -124,13 +123,13 @@ public class WeaponSway : MonoBehaviour
         if (aim && gunInfo.canAim)
         {
             result = Vector3.Slerp(initialGunPosition, aimPos.localPosition, fractionOfJourney);
-            cam.fieldOfView = Mathf.LerpAngle(initialFOV, ADSFov, fractionOfJourney);
+            cam.fieldOfView = Mathf.LerpAngle(initialFOV, gunInfo.aimFieldOfView, fractionOfJourney);
             smooth = initialSmooth / 3f;
         }
         else
         {
             result = Vector3.Slerp(aimPos.localPosition, initialGunPosition, fractionOfJourney);
-            cam.fieldOfView = Mathf.LerpAngle(ADSFov, initialFOV, fractionOfJourney);
+            cam.fieldOfView = Mathf.LerpAngle(gunInfo.aimFieldOfView, initialFOV, fractionOfJourney);
             smooth = initialSmooth;
         }
         return result;
