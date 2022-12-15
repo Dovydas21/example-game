@@ -55,28 +55,28 @@ public class Shoot : MonoBehaviour
         if (playerHoldingGun && Time.time >= nextShotTime)
         {
 
+            
+            nextShotTime = Time.time + gunInfo.fireRate;
+            firing = true;
+            print("Shot fired");
+            RaycastHit HitInfo;
+            gunHolder.GetComponent<WeaponSway>().Recoil(); // Call the recoil function.
+
+            gunInfo.PlayMuzzleFlash();
+            gunInfo.PlayShootSound();
+            gunInfo.PlayCockingAnimation();
+
             // Set the bullet offset to Vector3.Zero for the first shot, this way any guns with 1 projectile will fire straight and the first bullet will always be on target.
             Vector3 nextBulletOffset = Vector3.zero;
 
+            gunInfo.UpdateAmmoInGun(gunInfo.ammoInGun - gunInfo.ammoReductionPerShot); // Reduce the current ammo count.
+
             // Loop through and fire a shot for as many projectiles as are defined in GunInfo.cs for the gun the player is holding.
-            for (int i = 0; i < Mathf.Min(gunInfo.projectileCount, gunInfo.ammoInGun); i++) 
+            for (int i = 0; i < gunInfo.projectileCount; i++) 
             {
-                nextShotTime = Time.time + gunInfo.fireRate;
-                firing = true;
-                print("Shot fired");
-                RaycastHit HitInfo;
-                // gunHolder.GetComponent<GunRecoil>().Recoil(); // Call the recoil function.
-                gunHolder.GetComponent<WeaponSway>().Recoil(); // Call the recoil function.
-
-                gunInfo.PlayMuzzleFlash();
-                gunInfo.PlayShootSound();
-                gunInfo.PlayCockingAnimation();
-                gunInfo.UpdateAmmoInGun(gunInfo.ammoInGun - 1); // Reduce the current ammo count by 1.
-
                 if (i != 0) // If we have fired the first bullet, the next projectile should have its direction randomised by the "gunInfo.projectileSpread" value.
                 {
-                    float bulletSpreadFactor = Random.Range(-gunInfo.projectileSpread, gunInfo.projectileSpread);
-                    nextBulletOffset += new Vector3(bulletSpreadFactor, bulletSpreadFactor, bulletSpreadFactor);
+                    nextBulletOffset += new Vector3(Random.Range(-gunInfo.projectileSpread, gunInfo.projectileSpread), Random.Range(-gunInfo.projectileSpread, gunInfo.projectileSpread), Random.Range(-gunInfo.projectileSpread, gunInfo.projectileSpread));
                 }
 
                 bool shotHit = Physics.Raycast(gunInfo.bulletOrigin.position, gunInfo.bulletOrigin.forward + nextBulletOffset, out HitInfo, gunInfo.range);
@@ -184,15 +184,15 @@ public class Shoot : MonoBehaviour
             return false;
     }
 
-    private void OnDrawGizmos()
-    {
-        foreach (var hitPos in hitPositions)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawCube(hitPos, new Vector3(.1f, .1f, .1f));
-            Gizmos.DrawLine(gunHolder.transform.position, hitPos);
-        }
-    }
+    //private void OnDrawGizmos()
+    //{
+    //    foreach (var hitPos in hitPositions)
+    //    {
+    //        Gizmos.color = Color.red;
+    //        Gizmos.DrawCube(hitPos, new Vector3(.1f, .1f, .1f));
+    //        Gizmos.DrawLine(gunHolder.transform.position, hitPos);
+    //    }
+    //}
 
     public void Reload()
     {

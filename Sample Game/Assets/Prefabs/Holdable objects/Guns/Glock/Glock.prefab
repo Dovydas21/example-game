@@ -5421,7 +5421,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 15, y: 15, z: 15}
+  m_Size: {x: 10, y: 10, z: 10}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!82 &6674147988831542758
 AudioSource:
@@ -5539,11 +5539,15 @@ MonoBehaviour:
   fireRate: 0.05
   magCapacity: 31
   damage: 25
+  projectileCount: 1
+  projectileSpread: 0
+  ammoReductionPerShot: 1
   ammoInGun: 18
   gunHolder: {fileID: 0}
   defaultGunPosition: {x: 0, y: 0, z: 0}
   defaultGunAngles: {x: 0, y: 0, z: 0, w: 0}
   aimPosition: {x: 0, y: -0.21, z: 0.404}
+  aimFieldOfView: 30
   shootingAnimation: {fileID: 1883812385473700743}
   cockingAnimation: {fileID: 0}
   muzzleFlash: {fileID: 7292355579754927216}

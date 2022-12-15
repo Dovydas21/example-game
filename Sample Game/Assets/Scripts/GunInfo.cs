@@ -25,6 +25,7 @@ public class GunInfo : MonoBehaviour
     public int damage;                                          // Damage the gun does when it hits enemies once.
     public int projectileCount = 1;                             // The number of projectiles fired from the weapon at one time, can be used for shotguns, burst fire etc.
     public float projectileSpread;                              // The spread of the projectiles if there is more than one, for example this would be .2f for a shotgun.
+    public int ammoReductionPerShot = 1;                        // The amount of ammo used per shot, for example if you have a shotgun this would be 1 but a burst weapon would be 3.
     public int ammoInGun;                                       // The amount of ammo currently inside of the gun.
 
     [Header("Gun positions")]
@@ -46,7 +47,7 @@ public class GunInfo : MonoBehaviour
     [Header("Gun pickup & drop")]
     public float gunPickupSpeed = 100f;                         // The speed that the gun moves to the GunHolder position when the player picks it up.
     public float gunPickupDistance = 20f;                       // The maximum distance the player is allowed to be from gun.
-    public KeyCode gunPickupKey;                                // The key the player presses to pickup / summon the weapon.
+    public KeyCode gunPickupKey = KeyCode.E;                    // The key the player presses to pickup / summon the weapon.
     public float throwForce = 25f;                              // The force applied to the weapon when the player presses the key to drop the weapon.
 
     [Header("Gun audio")]
