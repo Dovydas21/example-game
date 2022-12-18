@@ -11611,6 +11611,14 @@ PrefabInstance:
       propertyPath: projectileSpread
       value: 0.01
       objectReference: {fileID: 0}
+    - target: {fileID: 232819869799025007, guid: c28a955152a5c46f1afb983a8b827656, type: 3}
+      propertyPath: defaultGunAngles.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 232819869799025007, guid: c28a955152a5c46f1afb983a8b827656, type: 3}
+      propertyPath: defaultGunAngles.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2447268394928735497, guid: c28a955152a5c46f1afb983a8b827656, type: 3}
       propertyPath: m_RootOrder
       value: 5
