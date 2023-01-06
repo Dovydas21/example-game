@@ -8,11 +8,25 @@ public class MainMenu : MonoBehaviour
     public string GameSceneName;
     public GameObject mainMenu;
     public OptionsMenu optionsMenu;
+    Scene scene;
+
+    private void Start()
+    {
+        scene = SceneManager.GetActiveScene();
+    }
 
     public void PlayButton()
     {
         // Load the "Game" scene.
-        SceneManager.LoadScene(GameSceneName);
+        if (scene.name == "Game")
+        {
+            mainMenu.SetActive(false);
+            Time.timeScale = 1f;
+        }
+        else
+        {
+            SceneManager.LoadScene(GameSceneName);
+        }
     }
 
     public void OptionsButton()

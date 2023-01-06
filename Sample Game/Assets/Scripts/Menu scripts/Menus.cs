@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class Menus : MonoBehaviour
 {
@@ -11,16 +10,25 @@ public class Menus : MonoBehaviour
      * making it unideal for a pause menu... 
      */
 
-    //public KeyCode pauseKey = KeyCode.Tab;
+    public KeyCode pauseKey = KeyCode.Tab;
+    public GameObject menu;
 
-    //// Update is called once per frame
-    //void Update()
-    //{
-    //    if (Input.GetKeyDown(pauseKey))
-    //    {
-    //        SceneManager.LoadScene(0);
-    //        Cursor.lockState = CursorLockMode.None;
-    //        Cursor.visible = true;
-    //    }
-    //}
+    private void Start()
+    {
+        menu.SetActive(false);
+        Time.timeScale = 1f;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (Input.GetKeyDown(pauseKey))
+        {
+            print("Menu key presses");
+            Time.timeScale = 0f;
+            menu.SetActive(true);
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+    }
 }

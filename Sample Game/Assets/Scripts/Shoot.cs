@@ -21,7 +21,6 @@ public class Shoot : MonoBehaviour
     GunInfo gunInfo;
     List<Vector3> hitPositions = new List<Vector3>();
 
-
     public void Start()
     {
         Refresh();

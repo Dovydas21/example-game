@@ -212,8 +212,8 @@ MonoBehaviour:
     y: 0
     width: 295
     height: 676.5
-  m_MinSize: {x: 201, y: 221}
-  m_MaxSize: {x: 4001, y: 4021}
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 7}
   m_Panes:
   - {fileID: 7}
@@ -250,9 +250,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 3ae8ffff
-      m_LastClickedID: -6086
-      m_ExpandedIDs: 3ae8ffff2efbffff60620000
+      m_SelectedIDs: 1a800000
+      m_LastClickedID: 0
+      m_ExpandedIDs: 88e9ffff2efbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -268,7 +268,7 @@ MonoBehaviour:
         m_IsRenaming: 0
         m_OriginalEventType: 11
         m_IsRenamingFilename: 0
-        m_ClientGUIView: {fileID: 6}
+        m_ClientGUIView: {fileID: 0}
       m_SearchString: 
     m_ExpandedScenes: []
     m_CurrenRootInstanceID: 0
@@ -528,9 +528,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: -24.03667, y: 3.928039, z: -91.5245}
+    m_Target: {x: -18.153217, y: 7.4534955, z: 21}
     speed: 2
-    m_Value: {x: -24.03667, y: 3.928039, z: -91.5245}
+    m_Value: {x: -18.153217, y: 7.4534955, z: 21}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -577,13 +577,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.0500805, y: -0.8207543, z: 0.07282693, w: 0.56440234}
+    m_Target: {x: -0.02996148, y: 0.83264863, z: -0.045265242, w: -0.5511346}
     speed: 2
-    m_Value: {x: 0.050080515, y: -0.8207545, z: 0.07282695, w: 0.5644025}
+    m_Value: {x: -0.029961484, y: 0.83264875, z: -0.045265246, w: -0.55113465}
   m_Size:
-    m_Target: 12.441839
+    m_Target: 15.485742
     speed: 2
-    m_Value: 12.441839
+    m_Value: 15.485742
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -601,8 +601,8 @@ MonoBehaviour:
     m_FarClip: 10000
     m_DynamicClip: 0
     m_OcclusionCulling: 0
-  m_LastSceneViewRotation: {x: 0.12357046, y: -0.09807281, z: 0.012273349, w: 0.9874003}
-  m_LastSceneViewOrtho: 1
+  m_LastSceneViewRotation: {x: -0.08717229, y: 0.89959055, z: -0.21045254, w: -0.3726226}
+  m_LastSceneViewOrtho: 0
   m_ReplacementShader: {fileID: 0}
   m_ReplacementString: 
   m_SceneVisActive: 1
@@ -678,13 +678,13 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Models/Map/Shops
+    - Assets/Scenes
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 96
   m_LastFolders:
-  - Assets/Models/Map/Shops
+  - Assets/Scenes
   m_LastFoldersGridSize: 96
   m_LastProjectPath: /Users/bradleygallavin/Documents/Projects/Unity/BRADEZDOV/Halloween
     shooty game/Sample Game
@@ -692,9 +692,9 @@ MonoBehaviour:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 198.5}
-    m_SelectedIDs: b8800000
-    m_LastClickedID: 32952
-    m_ExpandedIDs: 00000000587d00005a7d00005c7d00005e7d0000607d0000627d0000647d0000667d0000687d0000cc7d000000ca9a3b
+    m_SelectedIDs: fe7f0000
+    m_LastClickedID: 32766
+    m_ExpandedIDs: 00000000827f0000847f0000867f0000887f00008a7f00008c7f00008e7f0000907f0000927f000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -722,7 +722,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000587d00005a7d00005c7d00005e7d0000607d0000627d0000647d0000667d0000687d0000
+    m_ExpandedIDs: 00000000827f0000847f0000867f0000887f00008a7f00008c7f00008e7f0000907f0000927f0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -747,8 +747,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 3ae8ffff
-    m_LastClickedInstanceID: -6086
+    m_SelectedInstanceIDs: 1a800000
+    m_LastClickedInstanceID: 32794
     m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c6230000ee5c0000c6600000d4610000dc6600005828010068ec0200f48e000000000000
     m_RenameOverlay:
@@ -836,7 +836,7 @@ MonoBehaviour:
     m_SaveData: []
   m_LockTracker:
     m_IsLocked: 0
-  m_LastSelectedObjectID: -3378
+  m_LastSelectedObjectID: -3120
 --- !u!114 &14
 MonoBehaviour:
   m_ObjectHideFlags: 52

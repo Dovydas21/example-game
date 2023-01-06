@@ -9,8 +9,8 @@ public class PlayerLook : MonoBehaviour
     public GunRecoil recoil;
     public Transform cameraHolder;
     private float xRotation = 0f;
-    private float xSensitivity = 100f;
-    private float ySensitivity = 100f;
+    public float xSensitivity = 100f;
+    public float ySensitivity = 100f;
 
     public void Start()
     {
