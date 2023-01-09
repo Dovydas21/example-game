@@ -36,15 +36,18 @@ public class OptionsMenu : MonoBehaviour
         SetSensitivity(sensitivitySlider.value);
     }
 
+    
+
     public void SetVolume(float volume)
     {
-        print(volume);
+        print("SetVolume = " + volume);
         AudioListener.volume = volume;
         PlayerPrefs.SetFloat("OPTIONS_Volume", volume); // Save the volume the player selected so the next time they open the game they don't have to set it again.
     }
 
     public void SetSensitivity(float sensitivity)
     {
+        print("SetSensitivity = " + sensitivity);
         playerLook.xSensitivity = sensitivity;
         playerLook.ySensitivity = sensitivity;
         PlayerPrefs.SetFloat("OPTIONS_Sensitivity", sensitivity); // Save the sensitivity the player selected so the next time they open the game they don't have to set it again.

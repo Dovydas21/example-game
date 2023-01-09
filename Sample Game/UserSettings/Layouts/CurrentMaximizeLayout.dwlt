@@ -212,8 +212,8 @@ MonoBehaviour:
     y: 0
     width: 295
     height: 676.5
-  m_MinSize: {x: 200, y: 200}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 201, y: 221}
+  m_MaxSize: {x: 4001, y: 4021}
   m_ActualView: {fileID: 7}
   m_Panes:
   - {fileID: 7}
@@ -250,9 +250,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 1a800000
-      m_LastClickedID: 0
-      m_ExpandedIDs: 88e9ffff2efbffff
+      m_SelectedIDs: 2a5f0000
+      m_LastClickedID: 24362
+      m_ExpandedIDs: 6eeaffff72eaffff84eaffff2cfbffff68620000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -528,9 +528,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: -18.153217, y: 7.4534955, z: 21}
+    m_Target: {x: -6.956605, y: 4.0918646, z: -3.1046515}
     speed: 2
-    m_Value: {x: -18.153217, y: 7.4534955, z: 21}
+    m_Value: {x: -6.956605, y: 4.0918646, z: -3.1046515}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -577,13 +577,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: -0.02996148, y: 0.83264863, z: -0.045265242, w: -0.5511346}
+    m_Target: {x: -0.22944719, y: 0.42496672, z: -0.11228143, w: -0.86841893}
     speed: 2
-    m_Value: {x: -0.029961484, y: 0.83264875, z: -0.045265246, w: -0.55113465}
+    m_Value: {x: -0.22944705, y: 0.42496648, z: -0.11228136, w: -0.8684184}
   m_Size:
-    m_Target: 15.485742
+    m_Target: 12.124355
     speed: 2
-    m_Value: 15.485742
+    m_Value: 12.124355
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -601,8 +601,8 @@ MonoBehaviour:
     m_FarClip: 10000
     m_DynamicClip: 0
     m_OcclusionCulling: 0
-  m_LastSceneViewRotation: {x: -0.08717229, y: 0.89959055, z: -0.21045254, w: -0.3726226}
-  m_LastSceneViewOrtho: 0
+  m_LastSceneViewRotation: {x: -0.07449652, y: 0.23903193, z: -0.01839606, w: -0.9679754}
+  m_LastSceneViewOrtho: 1
   m_ReplacementShader: {fileID: 0}
   m_ReplacementString: 
   m_SceneVisActive: 1
@@ -678,13 +678,13 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scenes
+    - Assets/Prefabs/UI
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 96
   m_LastFolders:
-  - Assets/Scenes
+  - Assets/Prefabs/UI
   m_LastFoldersGridSize: 96
   m_LastProjectPath: /Users/bradleygallavin/Documents/Projects/Unity/BRADEZDOV/Halloween
     shooty game/Sample Game
@@ -692,9 +692,9 @@ MonoBehaviour:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 198.5}
-    m_SelectedIDs: fe7f0000
-    m_LastClickedID: 32766
-    m_ExpandedIDs: 00000000827f0000847f0000867f0000887f00008a7f00008c7f00008e7f0000907f0000927f000000ca9a3b
+    m_SelectedIDs: de800000
+    m_LastClickedID: 32990
+    m_ExpandedIDs: 0000000070800000728000007480000076800000788000007a8000007c8000007e8000008080000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -722,7 +722,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000827f0000847f0000867f0000887f00008a7f00008c7f00008e7f0000907f0000927f0000
+    m_ExpandedIDs: 0000000070800000728000007480000076800000788000007a8000007c8000007e80000080800000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -747,9 +747,9 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 1a800000
-    m_LastClickedInstanceID: 32794
-    m_HadKeyboardFocusLastEvent: 1
+    m_SelectedInstanceIDs: 2a5f0000
+    m_LastClickedInstanceID: 24362
+    m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: c6230000ee5c0000c6600000d4610000dc6600005828010068ec0200f48e000000000000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -836,7 +836,7 @@ MonoBehaviour:
     m_SaveData: []
   m_LockTracker:
     m_IsLocked: 0
-  m_LastSelectedObjectID: -3120
+  m_LastSelectedObjectID: -5522
 --- !u!114 &14
 MonoBehaviour:
   m_ObjectHideFlags: 52

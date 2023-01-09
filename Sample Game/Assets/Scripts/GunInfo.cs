@@ -69,6 +69,11 @@ public class GunInfo : MonoBehaviour
     float gunMass, gunDrag;
     bool gunGravity;
 
+    private void OnValidate()
+    {
+        shootScript.Refresh(); // Refresh the shoot script to give it updatedn information about the gun modified in the Unity editor.
+    }
+
     private void Start()
     {
         ammoInGun = magCapacity; // Set the current ammo count to be the mag capacity (i.e. fully loaded).
