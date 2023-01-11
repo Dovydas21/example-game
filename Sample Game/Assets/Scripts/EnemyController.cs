@@ -24,6 +24,7 @@ public class EnemyController : MonoBehaviour
     public ParticleSystem bloodEffects;
     public Animator characterAnimator;
     public PlayerDamage playerDamage;
+    public GameManager gameManager;
     
 
     // Locals
@@ -180,8 +181,9 @@ public class EnemyController : MonoBehaviour
             characterAnimator.StopPlayback();
             GetComponent<Animator>().enabled = false;
             ToggleRagdoll(true); // enable the ragdoll on death.
+            gameManager.KillEnemy(); // Remove 1 from the number of enemies that are spawned in this round.
             yield return null;
-            Destroy(gameObject, 120f); // Despawn enemy after 2 min.
+            Destroy(gameObject, 30f); // Despawn enemy after 2 min.
         }
     }
 
