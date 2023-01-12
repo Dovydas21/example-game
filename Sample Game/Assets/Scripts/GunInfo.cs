@@ -51,6 +51,7 @@ public class GunInfo : MonoBehaviour
     public float gunPickupDistance = 20f;                       // The maximum distance the player is allowed to be from gun.
     public KeyCode gunPickupKey = KeyCode.E;                    // The key the player presses to pickup / summon the weapon.
     public float throwForce = 25f;                              // The force applied to the weapon when the player presses the key to drop the weapon.
+    GameObject pickupPrompt;                                    // The UI element to show the gun sprite when hovering over the gun to pick it up.
 
     [Header("Gun audio")]
     public AudioSource shotSoundEffect;                         // The audio source of the sound effect that should play when the gun is fired.
@@ -79,6 +80,7 @@ public class GunInfo : MonoBehaviour
     private void Start()
     {
         gunImage = GameObject.FindGameObjectWithTag("GunImage");
+        pickupPrompt = GameObject.FindGameObjectWithTag("PickupPrompt");
         ammoInGun = magCapacity; // Set the current ammo count to be the mag capacity (i.e. fully loaded).
         gunHolder = GameObject.FindGameObjectWithTag("GunHolder");
         aimingPositionObj = GameObject.FindGameObjectWithTag("AimingPosition");
@@ -97,7 +99,11 @@ public class GunInfo : MonoBehaviour
     {
         if (Vector3.Distance(transform.position, playerObj.transform.position) <= gunPickupDistance && Time.time >= allowedToPickupTime)
         {
-            UIText.SetText(gameObject.name);
+            //UIText.SetText(gameObject.name);
+            // Set the image
+            pickupPrompt.GetComponent<Image>().sprite = gunSprite;
+            // Make the image white so we can see it.
+            pickupPrompt.GetComponent<Image>().color = Color.gray;
             if (Input.GetKey(gunPickupKey))
             {
                 StartCoroutine(SummonWeapon());
@@ -107,7 +113,11 @@ public class GunInfo : MonoBehaviour
 
     private void OnMouseExit()
     {
-        UIText.ClearText();
+        // Clear the image.
+        pickupPrompt.GetComponent<Image>().sprite = null;
+
+        // Set it to be transparent.
+        pickupPrompt.GetComponent<Image>().color = Color.clear;
     }
 
     private void OnTriggerEnter(Collider pickupTrigger)
@@ -206,13 +216,13 @@ public class GunInfo : MonoBehaviour
 
     public void ResetAmmoCounter()
     {
-        GameObject.Find("AmmoCounter").GetComponent<Text>().text = "";
+        GameObject.FindGameObjectWithTag("AmmoValue").GetComponent<TMPro.TextMeshProUGUI>().text = "";
     }
 
     public void UpdateAmmoInGun(int value)
     {
         ammoInGun = value;
-        GameObject.Find("AmmoCounter").GetComponent<Text>().text = ammoInGun.ToString();
+        GameObject.FindGameObjectWithTag("AmmoValue").GetComponent<TMPro.TextMeshProUGUI>().text = ammoInGun.ToString();
     }
 
     public void PlayCockingAnimation()

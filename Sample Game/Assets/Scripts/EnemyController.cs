@@ -12,7 +12,7 @@ using UnityEngine.AI;
 public class EnemyController : MonoBehaviour
 {
     [Header("Enemy attributes")]
-    public float lookRadius = 10f;
+    public float lookRadius;
     public int maxHealth;
     public int enemyDamage;
     public int enemyKnockback;

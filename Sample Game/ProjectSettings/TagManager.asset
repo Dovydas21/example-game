@@ -12,6 +12,8 @@ TagManager:
   - GunImage
   - HealthBar
   - HealthValue
+  - PickupPrompt
+  - AmmoValue
   layers:
   - Default
   - TransparentFX
