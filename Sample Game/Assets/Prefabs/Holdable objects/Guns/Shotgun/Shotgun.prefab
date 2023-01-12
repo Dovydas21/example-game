@@ -869,6 +869,7 @@ MonoBehaviour:
   fullAuto: 0
   canAim: 1
   hasToBeCocked: 1
+  gunSprite: {fileID: 21300000, guid: cad2c036c90954c8ebd5fd36fec094f1, type: 3}
   power: 10000
   range: 500
   fireRate: 0.2

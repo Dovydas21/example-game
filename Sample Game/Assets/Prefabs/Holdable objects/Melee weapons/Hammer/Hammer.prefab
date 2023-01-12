@@ -182,16 +182,21 @@ MonoBehaviour:
   fullAuto: 1
   canAim: 0
   hasToBeCocked: 0
+  gunSprite: {fileID: 21300000, guid: 9fb21558bdbc640aa98e27fe7972e444, type: 3}
   power: 500
   range: 10
   fireRate: 0.01
   magCapacity: 1000
   damage: 10
+  projectileCount: 1
+  projectileSpread: 0
+  ammoReductionPerShot: 1
   ammoInGun: 5
   gunHolder: {fileID: 0}
   defaultGunPosition: {x: 0, y: 0, z: 0}
   defaultGunAngles: {x: 0, y: 180, z: 0, w: 0}
   aimPosition: {x: 0, y: 0, z: 0}
+  aimFieldOfView: 30
   shootingAnimation: {fileID: 0}
   cockingAnimation: {fileID: 0}
   muzzleFlash: {fileID: 0}

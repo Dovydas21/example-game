@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerDamage : MonoBehaviour
 {
     [Header("Damage attributes")]
     public int currentHealth;
-    public int maxHealth = 100;
+    public int maxHealth;
 
     [Header("References")]
     public Collider playerDamageHitbox;
@@ -19,6 +20,8 @@ public class PlayerDamage : MonoBehaviour
     EnemyController enemyController;
     Quaternion cameraRot;
     Quaternion targetCameraRot;
+    public GameObject healthBar;
+    public GameObject healthValue;
     //float cameraReturnAmount = 10f;
 
     private void Start()
@@ -26,6 +29,13 @@ public class PlayerDamage : MonoBehaviour
         currentHealth = maxHealth;
         rb = GetComponent<Rigidbody>();
         cameraRot = cameraHolder.rotation;
+
+        // Find the objects: HealthBar and HealthBarValue
+        healthBar = GameObject.FindGameObjectWithTag("HealthBar");
+        healthValue = GameObject.FindGameObjectWithTag("HealthValue");
+
+        // Update the health bar to be the max health of the player.
+        UpdateHealthBar(maxHealth);
     }
 
     //private void Update()
@@ -63,15 +73,27 @@ public class PlayerDamage : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
+        UpdateHealthBar(currentHealth);
         print("Player taken damage, current health = " + currentHealth);
         Vector3 directionOfAttack = (enemyPos - gameObject.transform.position).normalized;
         rb.AddForceAtPosition(directionOfAttack * enemyController.enemyKnockback, hitPos, ForceMode.Impulse);
         Debug.DrawRay(enemyPos, directionOfAttack, Color.red, 20f);
 
-        if(currentHealth <= 0) // Player dead.
+
+
+        if (currentHealth <= 0) // Player dead.
         {
             // Do something to kill the player...
         }
+    }
+
+    void UpdateHealthBar(int currentHealth)
+    {
+        // Set the health value overlapping the health bar on the UI.
+        healthValue.GetComponent<TMPro.TextMeshProUGUI>().text = currentHealth.ToString();
+
+        // Set the fill amount of the health bar to the same value as the health. Value is between 0 and 1 so divide by total health.
+        healthBar.GetComponent<Image>().fillAmount = (float)currentHealth / (float)maxHealth;
     }
 
     private void OnDrawGizmosSelected()

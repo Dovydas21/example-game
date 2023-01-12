@@ -16,6 +16,8 @@ public class GunInfo : MonoBehaviour
     public bool fullAuto;                                       // True = Gun can be fired continuously while mouse is held down. False = semi-auto.
     public bool canAim;                                         // True = Gun can be moved back and forth from the "AimingPosition".
     public bool hasToBeCocked;                                  // True = Gun must be cocked (e.g. Shotgun / Revolver), False = Gun is semi-auto.
+    public Sprite gunSprite;
+    GameObject gunImage;
 
     [Header("Gun stats")]
     public float power;                                         // The force multiplier applied when the gun lands a hit on a RigidBody.
@@ -76,6 +78,7 @@ public class GunInfo : MonoBehaviour
 
     private void Start()
     {
+        gunImage = GameObject.FindGameObjectWithTag("GunImage");
         ammoInGun = magCapacity; // Set the current ammo count to be the mag capacity (i.e. fully loaded).
         gunHolder = GameObject.FindGameObjectWithTag("GunHolder");
         aimingPositionObj = GameObject.FindGameObjectWithTag("AimingPosition");
@@ -128,6 +131,9 @@ public class GunInfo : MonoBehaviour
 
             shootScript.Refresh(); // Refresh the shoot script to give it information about the gun just picked up.
             UpdateAmmoInGun(ammoInGun);
+
+            gunImage.GetComponent<Image>().sprite = gunSprite;
+            gunImage.GetComponent<Image>().color = Color.white; // Make the GunSprite UI white, so we can see it.
         }
     }
 
@@ -176,6 +182,7 @@ public class GunInfo : MonoBehaviour
         // Weapon will not drop when we have a value for "GunHolder".
         if (!playerAimedDownSights)
         {
+            gunImage.GetComponent<Image>().color = Color.clear; // Make the GunSprite UI transparent.
             allowedToPickupTime = Time.time + .5f; // Set the time that the player is allowed to pickup the gun again after...
             gameObject.transform.parent = null;
 

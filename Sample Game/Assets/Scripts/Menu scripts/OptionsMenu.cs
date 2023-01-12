@@ -8,6 +8,7 @@ public class OptionsMenu : MonoBehaviour
 {
     public GameObject optionsMenu;
     public MainMenu mainMenu;
+    public bool menuOnScreen = false;
 
     public Slider volumeSlider, sensitivitySlider;
     public PlayerLook playerLook; // Reference to "PlayerLook.cs" which is where the sensitivity values are set.
@@ -66,5 +67,6 @@ public class OptionsMenu : MonoBehaviour
     {
         // Set the visibility of the options menu to the value of the parameter.
         optionsMenu.SetActive(visible);
+        menuOnScreen = visible;
     }
 }

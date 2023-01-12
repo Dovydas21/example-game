@@ -9,6 +9,9 @@ TagManager:
   - Particles
   - Enemy
   - AimingPosition
+  - GunImage
+  - HealthBar
+  - HealthValue
   layers:
   - Default
   - TransparentFX

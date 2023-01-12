@@ -5808,12 +5808,16 @@ MonoBehaviour:
   fullAuto: 1
   canAim: 1
   hasToBeCocked: 0
+  gunSprite: {fileID: 21300000, guid: 0fc684d8467524b78a0a54a16cf6ffa5, type: 3}
+  gunImage: {fileID: 0}
   power: 3000
   range: 250
   fireRate: 0.05
   magCapacity: 31
   damage: 25
   projectileCount: 1
+  projectileSpread: 0
+  ammoReductionPerShot: 1
   ammoInGun: 18
   gunHolder: {fileID: 0}
   defaultGunPosition: {x: 0, y: -0.27, z: 0}
