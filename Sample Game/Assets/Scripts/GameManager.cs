@@ -48,6 +48,7 @@ public class GameManager : MonoBehaviour
             if (Vector3.Distance(spawnPos, playerObj.transform.position) < 200f)
             {
                 GameObject spawnedEnemy = Instantiate(enemy.enemyPrefab, spawnPos, Quaternion.identity);
+                spawnedEnemy.GetComponent<EnemyController>().currentHealth *= difficultyFactor;
                 spawnedEnemy.GetComponent<EnemyController>().gameManager = this; // Set the gameManager script reference in the new enemy spawned.
                 enemiesSpawnedThisWave++;
             }

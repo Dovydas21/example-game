@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+//using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DeathMenu : MonoBehaviour
 {
@@ -9,7 +11,13 @@ public class DeathMenu : MonoBehaviour
     public GameObject deathMenu;
     public GameObject gameUI;
     public bool menuOnScreen = false;
+    Scene scene;
     GameObject panel;
+
+    private void Start()
+    {
+        scene = SceneManager.GetActiveScene();
+    }
 
     public void OpenDeathMenu()
     {
@@ -33,7 +41,8 @@ public class DeathMenu : MonoBehaviour
 
     public void RestartButton()
     {
-        mainMenuScript.PlayButton();
+        // Reload the Game scene to restart the game.
+        SceneManager.LoadScene(scene.name);
     }
 
     public void QuitButton()

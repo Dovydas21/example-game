@@ -7940,7 +7940,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHealth: 0
-  maxHealth: 250
+  maxHealth: 100
   playerDamageHitbox: {fileID: 537051735}
   cameraHolder: {fileID: 1675823446}
   deathMenuScript: {fileID: 969176610}
@@ -25250,6 +25250,10 @@ PrefabInstance:
       value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 4838477993787984233, guid: 60d64d2cdd93d498897d3d1389096c6a, type: 3}
+      propertyPath: maxHealth
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 4838477993787984233, guid: 60d64d2cdd93d498897d3d1389096c6a, type: 3}
       propertyPath: playerDamage
       value: 
       objectReference: {fileID: 537051736}
@@ -42046,12 +42050,16 @@ PrefabInstance:
       value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 2782098492886252920, guid: 011f050412e8744249b143abdcd41628, type: 3}
+      propertyPath: range
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 2782098492886252920, guid: 011f050412e8744249b143abdcd41628, type: 3}
       propertyPath: damage
       value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 2782098492886252920, guid: 011f050412e8744249b143abdcd41628, type: 3}
       propertyPath: fireRate
-      value: 0.15
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 2782098492886252920, guid: 011f050412e8744249b143abdcd41628, type: 3}
       propertyPath: gunHolder
@@ -42070,9 +42078,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2782098491713372100}
     - target: {fileID: 2782098492886252920, guid: 011f050412e8744249b143abdcd41628, type: 3}
+      propertyPath: projectileCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2782098492886252920, guid: 011f050412e8744249b143abdcd41628, type: 3}
       propertyPath: shotSoundEffect
       value: 
       objectReference: {fileID: 1176224444}
+    - target: {fileID: 2782098492886252920, guid: 011f050412e8744249b143abdcd41628, type: 3}
+      propertyPath: projectileSpread
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2782098492886252927, guid: 011f050412e8744249b143abdcd41628, type: 3}
       propertyPath: m_Pitch
       value: 0.8
@@ -52288,6 +52304,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1332060685}
     m_Modifications:
+    - target: {fileID: 5854476122207012932, guid: bc89e81a3885b46959bddff915805208, type: 3}
+      propertyPath: maxHealth
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 5854476122207012932, guid: bc89e81a3885b46959bddff915805208, type: 3}
       propertyPath: playerDamage
       value: 
