@@ -7,6 +7,7 @@ public class Menus : MonoBehaviour
     public KeyCode pauseKey; // The key that the player will need to press in order to open the menu.
     public MainMenu mainMenuScript;
     public OptionsMenu optionsMenuScript;
+    public DeathMenu deathMenuScript;
 
     private void Start()
     {

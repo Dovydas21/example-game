@@ -56,7 +56,9 @@ public class EnemyController : MonoBehaviour
 
         // Set the tag of the gameobject to be "Enemy"
         gameObject.tag = "Enemy";
-        target = GameObject.FindGameObjectWithTag("Player").transform;
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        target = playerObj.transform;
+        playerDamage = playerObj.GetComponent<PlayerDamage>();
         agent.baseOffset = 0;
 
         currentHealth = maxHealth;

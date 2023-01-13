@@ -12,6 +12,7 @@ public class PlayerDamage : MonoBehaviour
     [Header("References")]
     public Collider playerDamageHitbox;
     public Transform cameraHolder;
+    public DeathMenu deathMenuScript;
 
     // Locals
     Vector3 enemyPos;
@@ -20,8 +21,8 @@ public class PlayerDamage : MonoBehaviour
     EnemyController enemyController;
     Quaternion cameraRot;
     Quaternion targetCameraRot;
-    public GameObject healthBar;
-    public GameObject healthValue;
+    GameObject healthBar;
+    GameObject healthValue;
     //float cameraReturnAmount = 10f;
 
     private void Start()
@@ -75,15 +76,17 @@ public class PlayerDamage : MonoBehaviour
         currentHealth -= damage;
         UpdateHealthBar(currentHealth);
         print("Player taken damage, current health = " + currentHealth);
-        Vector3 directionOfAttack = (enemyPos - gameObject.transform.position).normalized;
-        rb.AddForceAtPosition(directionOfAttack * enemyController.enemyKnockback, hitPos, ForceMode.Impulse);
-        Debug.DrawRay(enemyPos, directionOfAttack, Color.red, 20f);
+        //Vector3 directionOfAttack = (enemyPos - gameObject.transform.position).normalized;
+        //rb.AddForceAtPosition(directionOfAttack * enemyController.enemyKnockback, hitPos, ForceMode.Impulse);
+        //Debug.DrawRay(enemyPos, directionOfAttack, Color.red, 20f);
 
 
 
         if (currentHealth <= 0) // Player dead.
         {
             // Do something to kill the player...
+            print("Player is dead");
+            deathMenuScript.OpenDeathMenu();
         }
     }
 
