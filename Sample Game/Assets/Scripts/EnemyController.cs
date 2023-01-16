@@ -112,6 +112,7 @@ public class EnemyController : MonoBehaviour
         foreach (var ps in particles)
         {
             ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            Destroy(ps);
         }
     }
 
@@ -155,11 +156,12 @@ public class EnemyController : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
-        PlayHitAnimation();
+        print(gameObject.name  + " has taken " + damage + " damage: " + currentHealth);
 
         if (currentHealth <= 0)
             StartCoroutine(Die());
-
+        else
+            PlayHitAnimation();
         //EnemyTypeBehaviour();
     }
 
@@ -170,7 +172,7 @@ public class EnemyController : MonoBehaviour
         // print("Current animation finished.");
     }
 
-    IEnumerator Die()
+    public IEnumerator Die()
     {
         print("Enemy has died");
         if (characterAnimator != null && alive)

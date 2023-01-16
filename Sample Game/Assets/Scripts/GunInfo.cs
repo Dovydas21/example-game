@@ -74,7 +74,10 @@ public class GunInfo : MonoBehaviour
 
     private void OnValidate()
     {
-        shootScript.Refresh(); // Refresh the shoot script to give it updatedn information about the gun modified in the Unity editor.
+        if (shootScript != null)
+        {
+            shootScript.Refresh(); // Refresh the shoot script to give it updatedn information about the gun modified in the Unity editor.
+        }
     }
 
     private void Start()
