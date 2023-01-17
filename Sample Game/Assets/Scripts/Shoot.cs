@@ -147,7 +147,6 @@ public class Shoot : MonoBehaviour
         while (t < targetTime)
         {
             trail.transform.position = Vector3.Lerp(originalPos, destination, t);
-            print("trail.transform.position = " + trail.transform.position);
             t += Time.deltaTime * gunInfo.bulletTrailSpeed;
             yield return new WaitForEndOfFrame();
         }
@@ -191,18 +190,9 @@ public class Shoot : MonoBehaviour
             return false;
     }
 
-    //private void OnDrawGizmos()
-    //{
-    //    foreach (var hitPos in hitPositions)
-    //    {
-    //        Gizmos.color = Color.red;
-    //        Gizmos.DrawCube(hitPos, new Vector3(.1f, .1f, .1f));
-    //        Gizmos.DrawLine(gunHolder.transform.position, hitPos);
-    //    }
-    //}
-
     public void Reload()
     {
+        //gunInfo.
         gunInfo.UpdateAmmoInGun(gunInfo.magCapacity);
     }
 

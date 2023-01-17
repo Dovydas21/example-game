@@ -214,13 +214,18 @@ public class GunInfo : MonoBehaviour
             rb.AddTorque(transform.right * throwForce, ForceMode.VelocityChange);
             ResetAmmoCounter(); // Hide the ammo counter.
             shootScript.Refresh(); // Refresh the shoot script to give it information about the gun just picked up / dropped.
-
-            //yield return new WaitForSeconds(3f); // Wait for 1 second before re-enabling the pickup-trigger.
-
             gameObject.GetComponent<BoxCollider>().enabled = true; // Re-enable the pickup trigger.
         }
         yield return null;
     }
+
+    //public IEnumerator ReloadWeapon() // Function to rotate the weapon when the player presses the reload button.
+    //{
+    //    Vector3 gunObjPos = gameObject.transform.position;
+    //    Quaternion gunObjRot = gameObject.transform.rotation;
+    //
+    //    yield return null;
+    //}
 
     public void ResetAmmoCounter()
     {
