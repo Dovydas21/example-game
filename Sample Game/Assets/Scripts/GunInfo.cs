@@ -16,6 +16,7 @@ public class GunInfo : MonoBehaviour
     public bool fullAuto;                                       // True = Gun can be fired continuously while mouse is held down. False = semi-auto.
     public bool canAim;                                         // True = Gun can be moved back and forth from the "AimingPosition".
     public bool hasToBeCocked;                                  // True = Gun must be cocked (e.g. Shotgun / Revolver), False = Gun is semi-auto.
+    public bool freezeEffect;                                    // Freezes the enemy in place when they are hit.
     public Sprite gunSprite;
     GameObject gunImage;
 
@@ -25,6 +26,7 @@ public class GunInfo : MonoBehaviour
     public float fireRate;                                      // The fire rate of the gun. .1 is fast 10 is slow.
     public int magCapacity;                                     // The gun's capacity of rounds that it can fire before reloading.
     public int damage;                                          // Damage the gun does when it hits enemies once.
+    public float freezeDuration;                                // The number of seconds that the enemy will be frozen for if the freezeEffect is set to True.
     public int projectileCount = 1;                             // The number of projectiles fired from the weapon at one time, can be used for shotguns, burst fire etc.
     public float projectileSpread;                              // The spread of the projectiles if there is more than one, for example this would be .2f for a shotgun.
     public int ammoReductionPerShot = 1;                        // The amount of ammo used per shot, for example if you have a shotgun this would be 1 but a burst weapon would be 3.
@@ -153,10 +155,11 @@ public class GunInfo : MonoBehaviour
     private IEnumerator SummonWeapon() // Called when the player presses the "gunPickupKey" when looking at the weapon.
     {
         bool playerHandsEmpty = gunHolder.transform.childCount == 0;
-        if (playerHandsEmpty)
+        if (playerHandsEmpty && !shootScript.playerSummonedWeapon)
         {
             // Start keeping track of the time, t will be used to decide how far along slerp we are.
             float t = 0;
+            shootScript.playerSummonedWeapon = true; // Set the summon flag to true so that we don't summon more than one weapon at a time.
 
             // Remember the original gun's rotation and postition.
             Vector3 originalPos = transform.position;
@@ -187,6 +190,8 @@ public class GunInfo : MonoBehaviour
             transform.position = gunHolder.transform.position;
             transform.rotation = gunHolder.transform.rotation;
         }
+
+        shootScript.playerSummonedWeapon = false; // Set the summon flag to false so we can summon another weapon next time.
         yield return null;
     }
 

@@ -10887,9 +10887,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1741900490}
     - target: {fileID: 6674147988831542759, guid: c6531713d2ee74623befeabcaa59e845, type: 3}
+      propertyPath: freezeEffect
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6674147988831542759, guid: c6531713d2ee74623befeabcaa59e845, type: 3}
       propertyPath: pickupTrigger
       value: 
       objectReference: {fileID: 2105335698}
+    - target: {fileID: 6674147988831542759, guid: c6531713d2ee74623befeabcaa59e845, type: 3}
+      propertyPath: freezeDuration
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 6674147988831542759, guid: c6531713d2ee74623befeabcaa59e845, type: 3}
       propertyPath: gunPickupSpeed
       value: 1
@@ -32287,12 +32295,14 @@ MonoBehaviour:
   fullAuto: 1
   canAim: 0
   hasToBeCocked: 0
+  freezeEffect: 0
   gunSprite: {fileID: 0}
   power: 200
   range: 1000
   fireRate: 0.05
   magCapacity: 100
   damage: 30
+  freezeDuration: 0
   projectileCount: 50
   projectileSpread: 0
   ammoReductionPerShot: 1

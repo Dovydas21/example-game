@@ -29,6 +29,7 @@ public class EnemyController : MonoBehaviour
 
     // Locals
     bool alive = true;
+    bool frozen = false;
     public float currentHealth;
     Transform target;
     Rigidbody rb;
@@ -167,9 +168,27 @@ public class EnemyController : MonoBehaviour
 
     IEnumerator WaitForCurrentAnimation()
     {
-        // print("Waiting for current animation to finish.");
+        print("Waiting for current animation to finish.");
         yield return new WaitForSeconds(characterAnimator.GetCurrentAnimatorStateInfo(0).length);
-        // print("Current animation finished.");
+        print("Current animation finished.");
+    }
+
+    public IEnumerator FreezeEnemy(float duration)
+    {
+        agent.isStopped = true;
+        agent.enabled = false;
+        GetComponent<Animator>().enabled = false;
+        frozen = true;
+        rb.isKinematic = true;
+
+        yield return new WaitForSeconds(duration);
+
+        
+        agent.enabled = true;
+        agent.isStopped = false;
+        GetComponent<Animator>().enabled = true;
+        frozen = false;
+        rb.isKinematic = false;
     }
 
     public IEnumerator Die()
@@ -238,7 +257,7 @@ public class EnemyController : MonoBehaviour
         if (alive) // Enemy must be alive....
         {
             float distance = Vector3.Distance(target.position, transform.position); // Calculate the distance from the enemy to the player.
-            if (distance - 1 <= lookRadius) // If the player is within the look radius (minus 1 because there's sime jitter)...
+            if (distance - 1 <= lookRadius && !frozen) // If the player is within the look radius (minus 1 because there's sime jitter)...
             {
                 FaceTarget();   // Face the player.
                 Chase(true);    // Chase the player

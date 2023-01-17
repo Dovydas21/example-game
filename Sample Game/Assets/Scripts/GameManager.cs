@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
     public Enemy[] enemies;
     public GameObject playerObj;
     int currentWave;
-    float enemyCountForWave = 25;
+    float enemyCountForWave = 2f;
     public int enemiesRemainingThisWave;
     float difficultyFactor = 1.5f;
 
@@ -33,14 +33,16 @@ public class GameManager : MonoBehaviour
 
         // Update the settings so that the next wave is harder.
         enemyCountForWave *= difficultyFactor;
+        enemyCountForWave = Mathf.Floor(enemyCountForWave);
         currentWave++;
         SpawnEnemies();
     }   
 
     void SpawnEnemies()
     {
+        enemiesRemainingThisWave = 0;
         int enemiesSpawnedThisWave = 0;
-        while (enemyCountForWave > enemiesSpawnedThisWave)
+        while (enemyCountForWave != enemiesSpawnedThisWave)
         {
             var enemy = enemies[Random.Range(0, enemies.Length)];
             Vector3 spawnPos = new Vector3(Random.Range(-500f, 500f), 10f, Random.Range(-500f, 500f));
@@ -51,6 +53,7 @@ public class GameManager : MonoBehaviour
                 spawnedEnemy.GetComponent<EnemyController>().currentHealth *= difficultyFactor;
                 spawnedEnemy.GetComponent<EnemyController>().gameManager = this; // Set the gameManager script reference in the new enemy spawned.
                 enemiesSpawnedThisWave++;
+                spawnedEnemy.name = "Enemy " + enemiesSpawnedThisWave;
             }
 
         }
@@ -59,7 +62,7 @@ public class GameManager : MonoBehaviour
 
     public void KillEnemy()
     {
-        print("Enemy killed, total remaining for wave " + currentWave + " = " + enemiesRemainingThisWave);
+        print(gameObject.name + " killed. Total remaining for wave " + currentWave + " = " + enemiesRemainingThisWave);
         enemiesRemainingThisWave--;
 
         if (enemiesRemainingThisWave == 0)
