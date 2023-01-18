@@ -31,6 +31,7 @@ public class GunInfo : MonoBehaviour
     public float projectileSpread;                              // The spread of the projectiles if there is more than one, for example this would be .2f for a shotgun.
     public int ammoReductionPerShot = 1;                        // The amount of ammo used per shot, for example if you have a shotgun this would be 1 but a burst weapon would be 3.
     public int ammoInGun;                                       // The amount of ammo currently inside of the gun.
+    public float reloadTime = 2.5f;                               // Number of seconds that it takes to reload the weapon and play the reload spin.
 
     [Header("Gun positions")]
     public GameObject gunHolder;                                // Gameobject attached to the camera that holds the gun.
@@ -219,13 +220,35 @@ public class GunInfo : MonoBehaviour
         yield return null;
     }
 
-    //public IEnumerator ReloadWeapon() // Function to rotate the weapon when the player presses the reload button.
-    //{
-    //    Vector3 gunObjPos = gameObject.transform.position;
-    //    Quaternion gunObjRot = gameObject.transform.rotation;
-    //
-    //    yield return null;
-    //}
+    public IEnumerator ReloadSpin()// Function to rotate the weapon when the player presses the reload button.
+    {
+        // Start keeping track of the time, t will be used to decide how far along slerp we are.
+        float t = 0;
+
+        // Remember the original gun's rotation and postition.
+        Vector3 originalPos = transform.localPosition;
+        Quaternion originalRot = transform.localRotation;
+
+        float startRotation = transform.localEulerAngles.x;
+        print("startRotation = " + startRotation);
+        float endRotation = startRotation + 360f;
+        print("endRotation = " + endRotation);
+
+        while (t < reloadTime)
+        {
+            t += Time.deltaTime;
+            float xRot = Mathf.Lerp(startRotation, endRotation, t / reloadTime) % 360.0f;
+            print("xRot = " + xRot + ", t = " + t + "Mathf.Lerp(startRotation, endRotation, t / reloadTime) = " + Mathf.Lerp(startRotation, endRotation, t / reloadTime) % 360f);
+            transform.localEulerAngles = new Vector3(xRot, transform.localEulerAngles.y, transform.localEulerAngles.z );
+            yield return new WaitForEndOfFrame(); // Wait for the next frame
+        }
+
+        // Fully set the rot and pos of the gun incase t was <1.
+        transform.position = gunHolder.transform.position;
+        transform.rotation = gunHolder.transform.rotation;
+
+        yield return null;
+    }
 
     public void ResetAmmoCounter()
     {

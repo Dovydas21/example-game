@@ -192,7 +192,7 @@ public class Shoot : MonoBehaviour
 
     public void Reload()
     {
-        //gunInfo.
+        StartCoroutine(gunInfo.ReloadSpin()); // Play the reload spin.
         gunInfo.UpdateAmmoInGun(gunInfo.magCapacity);
     }
 
