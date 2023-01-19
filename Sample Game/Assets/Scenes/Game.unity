@@ -12204,6 +12204,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1415771250}
     - target: {fileID: 232819869799025007, guid: c28a955152a5c46f1afb983a8b827656, type: 3}
+      propertyPath: reloadTime
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 232819869799025007, guid: c28a955152a5c46f1afb983a8b827656, type: 3}
       propertyPath: gunPickupSpeed
       value: 2
       objectReference: {fileID: 0}

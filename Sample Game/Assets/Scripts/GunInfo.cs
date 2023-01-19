@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -224,28 +225,22 @@ public class GunInfo : MonoBehaviour
     {
         // Start keeping track of the time, t will be used to decide how far along slerp we are.
         float t = 0;
-
-        // Remember the original gun's rotation and postition.
-        Vector3 originalPos = transform.localPosition;
-        Quaternion originalRot = transform.localRotation;
-
         float startRotation = transform.localEulerAngles.x;
-        print("startRotation = " + startRotation);
         float endRotation = startRotation + 360f;
-        print("endRotation = " + endRotation);
 
         while (t < reloadTime)
         {
+            float xRot = Mathf.Lerp(startRotation, endRotation, t / reloadTime) % 360f;
+            transform.localEulerAngles = new Vector3(xRot, 0f, 0f);
             t += Time.deltaTime;
-            float xRot = Mathf.Lerp(startRotation, endRotation, t / reloadTime) % 360.0f;
-            print("xRot = " + xRot + ", t = " + t + "Mathf.Lerp(startRotation, endRotation, t / reloadTime) = " + Mathf.Lerp(startRotation, endRotation, t / reloadTime) % 360f);
-            transform.localEulerAngles = new Vector3(xRot, transform.localEulerAngles.y, transform.localEulerAngles.z );
-            yield return new WaitForEndOfFrame(); // Wait for the next frame
+            yield return new WaitForEndOfFrame(); // Wait for the next frame.
         }
 
         // Fully set the rot and pos of the gun incase t was <1.
         transform.position = gunHolder.transform.position;
         transform.rotation = gunHolder.transform.rotation;
+
+        UpdateAmmoInGun(magCapacity); // Reload the gun to full capacity after the gun has spun around.
 
         yield return null;
     }
