@@ -32,7 +32,7 @@ public class GunInfo : MonoBehaviour
     public float projectileSpread;                              // The spread of the projectiles if there is more than one, for example this would be .2f for a shotgun.
     public int ammoReductionPerShot = 1;                        // The amount of ammo used per shot, for example if you have a shotgun this would be 1 but a burst weapon would be 3.
     public int ammoInGun;                                       // The amount of ammo currently inside of the gun.
-    public float reloadTime = 2.5f;                               // Number of seconds that it takes to reload the weapon and play the reload spin.
+    public float reloadTime = 2.5f;                             // Number of seconds that it takes to reload the weapon and play the reload spin.
 
     [Header("Gun positions")]
     public GameObject gunHolder;                                // Gameobject attached to the camera that holds the gun.
@@ -226,14 +226,14 @@ public class GunInfo : MonoBehaviour
         // Start keeping track of the time, t will be used to decide how far along slerp we are.
         float t = 0;
         float startRotation = transform.localEulerAngles.x;
-        float endRotation = startRotation + 360f;
+        float endRotation = startRotation + 360f; // End rotation is 360 degrees more than where it started so that it does a full spin.
 
         while (t < reloadTime)
         {
-            float xRot = Mathf.Lerp(startRotation, endRotation, t / reloadTime) % 360f;
-            transform.localEulerAngles = new Vector3(xRot, 0f, 0f);
-            t += Time.deltaTime;
-            yield return new WaitForEndOfFrame(); // Wait for the next frame.
+            float xRot = Mathf.Lerp(startRotation, endRotation, t / reloadTime) % 360f; // Work out the rotation which should be applied this frame.
+            transform.localEulerAngles = new Vector3(xRot, 0f, 0f); // Update the rotation of the gun.
+            t += Time.deltaTime; 
+            yield return new WaitForEndOfFrame(); // Wait for the next frame before continuing.
         }
 
         // Fully set the rot and pos of the gun incase t was <1.
