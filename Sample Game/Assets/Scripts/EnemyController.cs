@@ -201,18 +201,19 @@ public class EnemyController : MonoBehaviour
             agent.isStopped = true;
             agent.enabled = false;
             
-            StopBleed();
+            StopBleed(); // Despawn all of the particle effects that make the enemy look like he's bleeding.
             characterAnimator.StopPlayback();
-            GetComponent<Animator>().enabled = false;
+            GetComponent<Animator>().enabled = false; // Disable the animator component.
             ToggleRagdoll(true); // enable the ragdoll on death.
             gameManager.KillEnemy(); // Remove 1 from the number of enemies that are spawned in this round.
+            Destroy(gameObject, 30f); // Despawn enemy after some time has elapsed.
             yield return null;
-            Destroy(gameObject, 30f); // Despawn enemy after 2 min.
         }
     }
 
     public void ToggleRagdoll(bool state)
     {
+        //characterAnimator.StopPlayback();
         ToggleEnemyColliders(state);
         ToggleEnemyRigidbodies(state);
         ragdolled = state;

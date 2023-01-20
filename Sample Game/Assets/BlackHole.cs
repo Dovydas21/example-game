@@ -6,12 +6,11 @@ public class BlackHole : MonoBehaviour
 {
     public float pullRadius = 40f; // the radius within which to pull enemies
     public float pullForce = 1000f; // the strength of the pull force
-    //List<Vector3> hitPositions = new List<Vector3>();
 
-    //private void Start()
-    //{
-    //    Destroy(gameObject, 1f);
-    //}
+    private void Start()
+    {
+        Destroy(gameObject, 30f); // Destroy the parent object after 30s to save on performance.
+    }
 
     void FixedUpdate()
     {
@@ -26,6 +25,7 @@ public class BlackHole : MonoBehaviour
             {
                 if (enemy.transform.tag == "Enemy")
                 {
+                    enemy.GetComponent<EnemyController>().StartCoroutine(enemy.GetComponent<EnemyController>().Die());
                     //enemy.GetComponent<EnemyController>().ToggleRagdoll(true);
                 }
 
@@ -34,15 +34,4 @@ public class BlackHole : MonoBehaviour
             }
         }
     }
-
-
-    //private void OnDrawGizmosSelected()
-    //{
-    //    Gizmos.DrawSphere(transform.position, pullRadius);
-
-    //    foreach (var hit in hitPositions)
-    //    {
-    //        Gizmos.DrawSphere(hit, 1f);
-    //    }
-    //}
 }
