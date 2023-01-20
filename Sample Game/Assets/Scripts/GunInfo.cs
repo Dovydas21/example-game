@@ -18,6 +18,7 @@ public class GunInfo : MonoBehaviour
     public bool canAim;                                         // True = Gun can be moved back and forth from the "AimingPosition".
     public bool hasToBeCocked;                                  // True = Gun must be cocked (e.g. Shotgun / Revolver), False = Gun is semi-auto.
     public bool freezeEffect;                                    // Freezes the enemy in place when they are hit.
+    public bool blackHoleEffect;
     public Sprite gunSprite;
     GameObject gunImage;
 

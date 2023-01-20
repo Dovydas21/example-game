@@ -4,17 +4,16 @@ using UnityEngine;
 
 public class BlackHole : MonoBehaviour
 {
-    public float pullRadius; // the radius within which to pull enemies
-    public float pullForce; // the strength of the pull force
-    List<Vector3> hitPositions = new List<Vector3>();
+    public float pullRadius = 40f; // the radius within which to pull enemies
+    public float pullForce = 1000f; // the strength of the pull force
+    //List<Vector3> hitPositions = new List<Vector3>();
 
-    // Start is called before the first frame update
-    void Start()
-    {
+    //private void Start()
+    //{
+    //    Destroy(gameObject, 1f);
+    //}
 
-    }
-
-    void Update()
+    void FixedUpdate()
     {
         // Create a Raycast sphere to find all enemies within the pull radius
         Collider[] enemiesInRadius = Physics.OverlapSphere(transform.position, pullRadius, Physics.AllLayers);
@@ -22,25 +21,28 @@ public class BlackHole : MonoBehaviour
         // apply pull force to each enemy
         foreach (Collider enemy in enemiesInRadius)
         {
-            hitPositions.Add(enemy.transform.position);
-            print("hit.collider.name = " + enemy.transform.name);
             Rigidbody enemyRb = enemy.GetComponent<Rigidbody>();
-            if(enemyRb != null)
+            if (enemyRb != null)
             {
+                if (enemy.transform.tag == "Enemy")
+                {
+                    //enemy.GetComponent<EnemyController>().ToggleRagdoll(true);
+                }
+
                 Vector3 pullDirection = (transform.position - enemy.transform.position).normalized;
                 enemyRb.AddForce(pullDirection * pullForce);
             }
         }
-        //hitPositions.Clear();
     }
 
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.DrawSphere(transform.position, pullRadius);
 
-        foreach (var hit in hitPositions)
-        {
-            Gizmos.DrawSphere(hit, 1f);
-        }
-    }
+    //private void OnDrawGizmosSelected()
+    //{
+    //    Gizmos.DrawSphere(transform.position, pullRadius);
+
+    //    foreach (var hit in hitPositions)
+    //    {
+    //        Gizmos.DrawSphere(hit, 1f);
+    //    }
+    //}
 }

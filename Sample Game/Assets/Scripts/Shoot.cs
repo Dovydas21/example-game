@@ -92,6 +92,10 @@ public class Shoot : MonoBehaviour
                     {
                         // Spawn a bullethole decal.
                         GameObject bulletHole = Instantiate(bulletHoleDecal, HitInfo.point + HitInfo.normal * .001f, Quaternion.identity); // Spawn the bullethole decal.
+                        // \/ VERY LAGGY!! \/
+                        if (gunInfo.blackHoleEffect && i == 0)
+                            bulletHole.AddComponent<BlackHole>();
+                        // /\ VERY LAGGY!! /\
                         bulletHole.transform.localScale = new Vector3(.1f, .1f, .1f); // Set the scale of the decal.
                         bulletHole.transform.parent = objectHit; // Parent the decal to the object that was hit.
                         bulletHole.transform.LookAt(HitInfo.point + HitInfo.normal); // Reposition the decal to be oriented on the surface of the hit object.

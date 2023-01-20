@@ -30,6 +30,7 @@ public class EnemyController : MonoBehaviour
     // Locals
     bool alive = true;
     bool frozen = false;
+    bool ragdolled = false;
     public float currentHealth;
     Transform target;
     Rigidbody rb;
@@ -210,10 +211,11 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    void ToggleRagdoll(bool state)
+    public void ToggleRagdoll(bool state)
     {
         ToggleEnemyColliders(state);
         ToggleEnemyRigidbodies(state);
+        ragdolled = state;
     }
 
     void ToggleEnemyColliders(bool state)
@@ -246,6 +248,7 @@ public class EnemyController : MonoBehaviour
     {
         agent.isStopped = stop;
         agent.enabled = !stop;
+        //characterAnimator.enabled = stop;
 
         if (stop)
             agentDisableLocations.Add(transform.position);
@@ -285,7 +288,7 @@ public class EnemyController : MonoBehaviour
 
     void FaceTarget() // Makes the enemy face towards the player.
     {
-        if (alive)
+        if (alive && !ragdolled)
         {
             Vector3 direction = (target.position - transform.position).normalized;
             Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0f, direction.z));
