@@ -198,12 +198,12 @@ public class EnemyController : MonoBehaviour
         if (characterAnimator != null && alive)
         {
             alive = false;
-            agent.isStopped = true;
-            agent.enabled = false;
+            //agent.isStopped = true;
+            //agent.enabled = false;
             
-            StopBleed(); // Despawn all of the particle effects that make the enemy look like he's bleeding.
-            characterAnimator.StopPlayback();
-            GetComponent<Animator>().enabled = false; // Disable the animator component.
+            //StopBleed(); // Despawn all of the particle effects that make the enemy look like he's bleeding.
+            //characterAnimator.StopPlayback();
+            //GetComponent<Animator>().enabled = false; // Disable the animator component.
             ToggleRagdoll(true); // enable the ragdoll on death.
             gameManager.KillEnemy(); // Remove 1 from the number of enemies that are spawned in this round.
             Destroy(gameObject, 30f); // Despawn enemy after some time has elapsed.
@@ -213,7 +213,13 @@ public class EnemyController : MonoBehaviour
 
     public void ToggleRagdoll(bool state)
     {
-        //characterAnimator.StopPlayback();
+        agent.isStopped = state;
+        agent.enabled = !state;
+
+        StopBleed(); // Despawn all of the particle effects that make the enemy look like he's bleeding.
+        characterAnimator.StopPlayback();
+        GetComponent<Animator>().enabled = !state; // Disable the animator component.
+
         ToggleEnemyColliders(state);
         ToggleEnemyRigidbodies(state);
         ragdolled = state;
@@ -261,7 +267,7 @@ public class EnemyController : MonoBehaviour
         if (alive) // Enemy must be alive....
         {
             float distance = Vector3.Distance(target.position, transform.position); // Calculate the distance from the enemy to the player.
-            if (distance - 1 <= lookRadius && !frozen) // If the player is within the look radius (minus 1 because there's sime jitter)...
+            if (distance - 1 <= lookRadius && !frozen && !ragdolled) // If the player is within the look radius (minus 1 because there's sime jitter)...
             {
                 FaceTarget();   // Face the player.
                 Chase(true);    // Chase the player
