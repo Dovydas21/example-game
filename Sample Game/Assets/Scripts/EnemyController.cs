@@ -30,11 +30,12 @@ public class EnemyController : MonoBehaviour
     // Locals
     bool alive = true;
     bool frozen = false;
-    bool ragdolled = false;
+    public bool ragdolled = false;
     public float currentHealth;
     Transform target;
     Rigidbody rb;
     NavMeshAgent agent;
+    Vector3 originalPos;
     List<ParticleSystem> particles = new List<ParticleSystem>();
 
     // Debugging vars
@@ -46,6 +47,8 @@ public class EnemyController : MonoBehaviour
     {
         if (type == EnemyType.Grower)
             dupeAttributes = new DupeAttributes();
+
+        ToggleRagdoll(ragdolled);
     }
 
     // Start is called before the first frame update
@@ -213,16 +216,30 @@ public class EnemyController : MonoBehaviour
 
     public void ToggleRagdoll(bool state)
     {
-        agent.isStopped = state;
-        agent.enabled = !state;
+        print(gameObject.name + " ragdoll = " + state);
+
+        if (state) originalPos = transform.position; // Remember the position before the object was ragdolled.
+        int childrenCount = transform.childCount; // Remember how many child objects there are so we can loop through them and reset the positions when we disable the ragdoll.
+
+        if (childrenCount > 0 && state) // Reset all of the ememy object's local positions when disabling the ragdoll effect.
+        {
+            for (int i = 0; i < childrenCount; i++)
+            {
+                transform.GetChild(i).transform.localPosition = originalPos; // Set the position of the object to the original position.
+            } 
+        }
+        
+        agent.isStopped = state; // Toggle the enemy movement.
+        agent.ResetPath(); // Un-set the target destination (will re-set in Update() if they are being un-ragdolled)
+        agent.enabled = !state; // Enable / disable the enemy's Nav Mesh Agent.
 
         StopBleed(); // Despawn all of the particle effects that make the enemy look like he's bleeding.
-        characterAnimator.StopPlayback();
-        GetComponent<Animator>().enabled = !state; // Disable the animator component.
+        characterAnimator.StopPlayback(); // Stop the animator.
+        GetComponent<Animator>().enabled = !state; // Toggle the animator component.
 
-        ToggleEnemyColliders(state);
-        ToggleEnemyRigidbodies(state);
-        ragdolled = state;
+        ToggleEnemyColliders(state); // Toggle the colliders.
+        ToggleEnemyRigidbodies(state); // Toggle the rigidbody state.
+        ragdolled = state; // Update the bool flag so we know when the enmy is ragdolled and when it isn't.
     }
 
     void ToggleEnemyColliders(bool state)
@@ -316,22 +333,20 @@ public class EnemyController : MonoBehaviour
             Gizmos.DrawSphere(pos, .05f);
         }
 
-        // foreach (var pos in agentDisableLocations)
-           // Gizmos.DrawSphere(pos, .1f);    
-
         // Green
         Gizmos.color = Color.green;
         Gizmos.DrawSphere(agent.destination, .7f);
         Gizmos.DrawWireSphere(gameObject.transform.position, agent.remainingDistance); // Sphere where the enemy can see and detect the player.
 
-
-        // foreach (var pos in agentEnableLocations)
-            // Gizmos.DrawSphere(pos, .1f);
-
         // Blue
         Gizmos.color = Color.blue;
         Gizmos.DrawSphere(target.position, .7f);
         Gizmos.DrawWireSphere(target.transform.position, agent.stoppingDistance); // Sphere where the enemy can see and detect the player.
+
+        // Black
+        Gizmos.color = Color.black;
+        Gizmos.DrawSphere(originalPos, .7f);
+        Gizmos.DrawSphere(transform.position, .7f);
     }
 }
 

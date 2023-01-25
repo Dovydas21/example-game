@@ -39,6 +39,7 @@ public class BlackHole : MonoBehaviour
     public IEnumerator DestroyBlackHole()
     {
         yield return new WaitForSeconds(lifeTime);
+        print("Destroying black hole...");
 
         Collider[] enemiesInRadius = Physics.OverlapSphere(transform.position, pullRadius, Physics.AllLayers);
         foreach (Collider enemy in enemiesInRadius)

@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
     public Enemy[] enemies;
     public GameObject playerObj;
     int currentWave;
-    float enemyCountForWave = 15f;
+    float enemyCountForWave = 1f;
     public int enemiesRemainingThisWave;
     float difficultyFactor = 1.5f;
 
