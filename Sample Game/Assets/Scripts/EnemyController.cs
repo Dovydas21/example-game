@@ -25,7 +25,7 @@ public class EnemyController : MonoBehaviour
     public Animator characterAnimator;
     public PlayerDamage playerDamage;
     public GameManager gameManager;
-    
+
 
     // Locals
     bool alive = true;
@@ -36,6 +36,7 @@ public class EnemyController : MonoBehaviour
     Rigidbody rb;
     NavMeshAgent agent;
     Vector3 originalPos;
+    Transform[] originalPositions;
     List<ParticleSystem> particles = new List<ParticleSystem>();
 
     // Debugging vars
@@ -54,6 +55,17 @@ public class EnemyController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Original positions.
+        int childrenCount = transform.childCount; // Remember how many child objects there are so we can loop through them and reset the positions when we disable the ragdoll.
+        originalPositions = new Transform[childrenCount];
+        if (childrenCount > 0) // Remember all of the ememy object's local positions when disabling the ragdoll effect.
+        {
+            for (int i = 0; i < childrenCount; i++)
+            {
+                originalPositions[i] = transform.GetChild(i).transform; // Set the position of the object to the original position.
+            }
+        }
+
         // Grab the components
         agent = GetComponent<NavMeshAgent>();
         rb = GetComponent<Rigidbody>();
@@ -161,7 +173,7 @@ public class EnemyController : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
-        print(gameObject.name  + " has taken " + damage + " damage: " + currentHealth);
+        print(gameObject.name + " has taken " + damage + " damage: " + currentHealth);
 
         if (currentHealth <= 0)
             StartCoroutine(Die());
@@ -187,7 +199,7 @@ public class EnemyController : MonoBehaviour
 
         yield return new WaitForSeconds(duration);
 
-        
+
         agent.enabled = true;
         agent.isStopped = false;
         GetComponent<Animator>().enabled = true;
@@ -203,7 +215,7 @@ public class EnemyController : MonoBehaviour
             alive = false;
             //agent.isStopped = true;
             //agent.enabled = false;
-            
+
             //StopBleed(); // Despawn all of the particle effects that make the enemy look like he's bleeding.
             //characterAnimator.StopPlayback();
             //GetComponent<Animator>().enabled = false; // Disable the animator component.
@@ -217,21 +229,36 @@ public class EnemyController : MonoBehaviour
     public void ToggleRagdoll(bool state)
     {
         print(gameObject.name + " ragdoll = " + state);
-
-        if (state) originalPos = transform.position; // Remember the position before the object was ragdolled.
         int childrenCount = transform.childCount; // Remember how many child objects there are so we can loop through them and reset the positions when we disable the ragdoll.
 
-        if (childrenCount > 0 && state) // Reset all of the ememy object's local positions when disabling the ragdoll effect.
+        if (state)
+        {
+            originalPositions = new Transform[childrenCount];
+            if (childrenCount > 0) // Remember all of the ememy object's local positions when disabling the ragdoll effect.
+            {
+                for (int i = 0; i < childrenCount; i++)
+                {
+                    originalPositions[i] = transform.GetChild(i).transform; // Set the position of the object to the original position.
+                }
+            }
+        }
+
+        Vector3 agentPos = agent.transform.position;
+        agent.enabled = !state; // Enable / disable the enemy's Nav Mesh Agent.
+
+        if (childrenCount > 0 && originalPositions != null) // Reset all of the ememy object's local positions when disabling the ragdoll effect.
         {
             for (int i = 0; i < childrenCount; i++)
             {
-                transform.GetChild(i).transform.localPosition = originalPos; // Set the position of the object to the original position.
-            } 
+                //transform.GetChild(i).transform.localPosition = originalPositions[i].localPosition; // Set the position of the object to the original position.
+                //transform.GetChild(i).transform.localRotation = originalPositions[i].localRotation; // Set the position of the object to the original rotation.
+                transform.GetChild(i).transform.localPosition = Vector3.zero;
+                print(transform.name + " position =  " + transform.GetChild(i).transform.localPosition);
+            }
         }
-        
+
         agent.isStopped = state; // Toggle the enemy movement.
         agent.ResetPath(); // Un-set the target destination (will re-set in Update() if they are being un-ragdolled)
-        agent.enabled = !state; // Enable / disable the enemy's Nav Mesh Agent.
 
         StopBleed(); // Despawn all of the particle effects that make the enemy look like he's bleeding.
         characterAnimator.StopPlayback(); // Stop the animator.
@@ -293,7 +320,7 @@ public class EnemyController : MonoBehaviour
 
                 if (agent.remainingDistance + .5f <= agent.stoppingDistance && agent.hasPath) // Check if the distance that the enemy still has to run is less than or equal to the stopping distance and stop them if it is.
                     StopEnemy(true);
-                else if(agent.remainingDistance >= agent.stoppingDistance)
+                else if (agent.remainingDistance >= agent.stoppingDistance)
                     StopEnemy(false);
 
                 if (distance - 2 <= agent.stoppingDistance) // If the enemy is within attacking range then face the target and 
