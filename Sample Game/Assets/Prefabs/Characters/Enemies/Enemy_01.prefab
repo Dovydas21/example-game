@@ -286,7 +286,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -299,7 +299,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 1292105115913714394}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.0031250569
   m_Height: 0.012500227
   m_Direction: 1
@@ -461,7 +461,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -474,7 +474,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 1867315533892416362}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.0029491473
   m_Height: 0.0147457365
   m_Direction: 1
@@ -800,7 +800,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -813,7 +813,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 2546331363304834967}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.0037972545
   m_Height: 0.015189018
   m_Direction: 1
@@ -910,7 +910,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -923,7 +923,7 @@ SphereCollider:
   m_GameObject: {fileID: 2736880289587452076}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.005
   m_Center: {x: 0, y: 0, z: 0}
@@ -1020,7 +1020,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -1033,7 +1033,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 2855829773602084265}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.0037972545
   m_Height: 0.015189018
   m_Direction: 1
@@ -2300,7 +2300,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -2313,7 +2313,7 @@ BoxCollider:
   m_GameObject: {fileID: 5106439006568499030}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 0.008387605, y: 0.0044259084, z: 0.008387605}
   m_Center: {x: -0.0041938024, y: 0.0022129542, z: -0.0002572243}
@@ -2478,7 +2478,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -2491,7 +2491,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 5499355355763864635}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.005761558
   m_Height: 0.019205194
   m_Direction: 1
@@ -2807,7 +2807,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -2820,7 +2820,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 5874565868013566705}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.0031250573
   m_Height: 0.012500229
   m_Direction: 1
@@ -2950,7 +2950,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -2963,7 +2963,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 6111492143721839052}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.005761555
   m_Height: 0.019205183
   m_Direction: 1
@@ -3288,7 +3288,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -3301,7 +3301,7 @@ BoxCollider:
   m_GameObject: {fileID: 7576712693323575715}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 0.008387605, y: 0.0041951127, z: 0.008387605}
   m_Center: {x: 0.0041938024, y: -0.000918471, z: 0.00019325968}
@@ -3430,7 +3430,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -3443,7 +3443,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 7982583280480898736}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.0029491475
   m_Height: 0.014745737
   m_Direction: 1

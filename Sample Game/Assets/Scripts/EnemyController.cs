@@ -16,6 +16,7 @@ public class EnemyController : MonoBehaviour
     public int maxHealth;
     public int enemyDamage;
     public int enemyKnockback;
+    public float enemySpeed = 10f;
     public enum EnemyType { Grower, Duper };
     public EnemyType type;
     public DupeAttributes dupeAttributes;
@@ -35,6 +36,7 @@ public class EnemyController : MonoBehaviour
     Transform target;
     Rigidbody rb;
     NavMeshAgent agent;
+    Vector3 agentPos;
     Vector3 originalPos;
     Transform[] originalPositions;
     List<ParticleSystem> particles = new List<ParticleSystem>();
@@ -63,8 +65,12 @@ public class EnemyController : MonoBehaviour
             for (int i = 0; i < childrenCount; i++)
             {
                 originalPositions[i] = transform.GetChild(i).transform; // Set the position of the object to the original position.
+                print("START: " + transform.GetChild(i).transform.name + " position =  " + transform.GetChild(i).transform.localPosition);
             }
         }
+
+        // Set the speed of the enemy.
+        //gameObject.GetComponent<EnemyController>().agent.speed = enemySpeed;
 
         // Grab the components
         agent = GetComponent<NavMeshAgent>();
@@ -175,7 +181,7 @@ public class EnemyController : MonoBehaviour
         currentHealth -= damage;
         print(gameObject.name + " has taken " + damage + " damage: " + currentHealth);
 
-        if (currentHealth <= 0)
+        if (currentHealth <= 0f)
             StartCoroutine(Die());
         else
             PlayHitAnimation();
@@ -209,16 +215,10 @@ public class EnemyController : MonoBehaviour
 
     public IEnumerator Die()
     {
-        print("Enemy has died");
-        if (characterAnimator != null && alive)
+        if (alive)
         {
+            print("Enemy has died");
             alive = false;
-            //agent.isStopped = true;
-            //agent.enabled = false;
-
-            //StopBleed(); // Despawn all of the particle effects that make the enemy look like he's bleeding.
-            //characterAnimator.StopPlayback();
-            //GetComponent<Animator>().enabled = false; // Disable the animator component.
             ToggleRagdoll(true); // enable the ragdoll on death.
             gameManager.KillEnemy(); // Remove 1 from the number of enemies that are spawned in this round.
             Destroy(gameObject, 30f); // Despawn enemy after some time has elapsed.
@@ -228,34 +228,34 @@ public class EnemyController : MonoBehaviour
 
     public void ToggleRagdoll(bool state)
     {
-        print(gameObject.name + " ragdoll = " + state);
         int childrenCount = transform.childCount; // Remember how many child objects there are so we can loop through them and reset the positions when we disable the ragdoll.
 
-        if (state)
-        {
-            originalPositions = new Transform[childrenCount];
-            if (childrenCount > 0) // Remember all of the ememy object's local positions when disabling the ragdoll effect.
-            {
-                for (int i = 0; i < childrenCount; i++)
-                {
-                    originalPositions[i] = transform.GetChild(i).transform; // Set the position of the object to the original position.
-                }
-            }
-        }
+        //if (state)
+        //{
+        //    if (childrenCount > 0) // Remember all of the ememy object's local positions when disabling the ragdoll effect.
+        //    {
+        //        originalPositions = new Transform[childrenCount]; // Make new array of Transforms to store the child object's pos, rot and scale all in one array.
+        //        for (int i = 0; i < childrenCount; i++)
+        //        {
+        //            originalPositions[i] = transform.GetChild(i);
+        //            print("SETTING: " + transform.GetChild(i).name + " position =  " + transform.GetChild(i).localPosition);
+        //        }
+        //    }
+        //}
 
-        Vector3 agentPos = agent.transform.position;
+        agentPos = agent.transform.position;
         agent.enabled = !state; // Enable / disable the enemy's Nav Mesh Agent.
 
-        if (childrenCount > 0 && originalPositions != null) // Reset all of the ememy object's local positions when disabling the ragdoll effect.
-        {
-            for (int i = 0; i < childrenCount; i++)
-            {
-                //transform.GetChild(i).transform.localPosition = originalPositions[i].localPosition; // Set the position of the object to the original position.
-                //transform.GetChild(i).transform.localRotation = originalPositions[i].localRotation; // Set the position of the object to the original rotation.
-                transform.GetChild(i).transform.localPosition = Vector3.zero;
-                print(transform.name + " position =  " + transform.GetChild(i).transform.localPosition);
-            }
-        }
+        //if (childrenCount > 0 && originalPositions != null && !state) // Reset all of the ememy object's local positions when disabling the ragdoll effect.
+        //{
+        //    for (int i = 0; i < childrenCount; i++)
+        //    {
+        //        transform.GetChild(i).localPosition = originalPositions[i].localPosition; // Set the position of the object to the original position.
+        //        transform.GetChild(i).localRotation = originalPositions[i].localRotation; // Set the position of the object to the original rotation.
+        //        //transform.GetChild(i).transform.position = agentPos;
+        //        print("RESETTING: " + transform.GetChild(i).name + " position =  " + transform.GetChild(i).localPosition);
+        //    }
+        //}
 
         agent.isStopped = state; // Toggle the enemy movement.
         agent.ResetPath(); // Un-set the target destination (will re-set in Update() if they are being un-ragdolled)
@@ -373,7 +373,15 @@ public class EnemyController : MonoBehaviour
         // Black
         Gizmos.color = Color.black;
         Gizmos.DrawSphere(originalPos, .7f);
+        Gizmos.DrawSphere(agentPos, .7f);
         Gizmos.DrawSphere(transform.position, .7f);
+
+        // Grey
+        Gizmos.color = Color.grey;
+        foreach (var pos in originalPositions)
+        {
+            Gizmos.DrawSphere(pos.position, .7f);
+        }
     }
 }
 

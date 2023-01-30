@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
     public Enemy[] enemies;
     public GameObject playerObj;
     int currentWave;
-    float enemyCountForWave = 1f;
+    float enemyCountForWave = 13f;
     public int enemiesRemainingThisWave;
     float difficultyFactor = 1.5f;
 
@@ -51,6 +51,7 @@ public class GameManager : MonoBehaviour
             {
                 GameObject spawnedEnemy = Instantiate(enemy.enemyPrefab, spawnPos, Quaternion.identity);
                 spawnedEnemy.GetComponent<EnemyController>().currentHealth *= difficultyFactor;
+                spawnedEnemy.GetComponent<EnemyController>().enemySpeed *= difficultyFactor;
                 spawnedEnemy.GetComponent<EnemyController>().gameManager = this; // Set the gameManager script reference in the new enemy spawned.
                 enemiesSpawnedThisWave++;
                 spawnedEnemy.name = "Enemy " + enemiesSpawnedThisWave;

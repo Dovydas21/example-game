@@ -67,7 +67,6 @@ public class WeaponSway : MonoBehaviour
 
             if (shoot.playerHoldingGun) // If the player is holding a gun.
             {
-
                 // Input controls for aiming.
                 if (Input.GetKeyDown(aimKey)) // RMB held
                 {
@@ -109,7 +108,7 @@ public class WeaponSway : MonoBehaviour
 
             debugPosition = aimPos.position;
             transform.localRotation = gunHolderRot;
-            cam.transform.localRotation = camRot;
+            //cam.transform.rotation = camRot;
             transform.localPosition = gunHolderPos;
         }
     }

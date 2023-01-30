@@ -107,12 +107,13 @@ public class GunInfo : MonoBehaviour
     {
         if (Vector3.Distance(transform.position, playerObj.transform.position) <= gunPickupDistance && Time.time >= allowedToPickupTime)
         {
-            //UIText.SetText(gameObject.name);
             // Set the image
             pickupPrompt.GetComponent<Image>().sprite = gunSprite;
+
             // Make the image white so we can see it.
             pickupPrompt.GetComponent<Image>().color = Color.gray;
-            if (Input.GetKey(gunPickupKey))
+
+            if (Input.GetKey(gunPickupKey)) // If the player presses the gunPickupKey, run SummonWeapon().
             {
                 StartCoroutine(SummonWeapon());
             }
@@ -133,16 +134,17 @@ public class GunInfo : MonoBehaviour
         bool playerHandsEmpty = gunHolder.transform.childCount == 0;
         if (pickupTrigger.tag == "Player" && playerHandsEmpty && Time.time >= allowedToPickupTime) // Trigger a pick-up if you are the player, you are not already holding something and that you have waited long enough after dropping the gun the last time...
         {
+            // Fully set the rot and pos of the gun
+            transform.position = gunHolder.transform.position;
+            transform.rotation = gunHolder.transform.rotation;
+
+            // Set the aiming position GameObject's position to be correct for this gun.
+            aimingPositionObj.transform.localPosition = aimPosition; 
+
+            // Parent the gun to the GunHolder so that it moves with the player.
             transform.parent = gunHolder.transform;
-            transform.rotation = defaultGunAngles;
-            gunHolder.transform.localPosition = defaultGunPosition;
 
-            aimingPositionObj.transform.localPosition = aimPosition;
-
-            //transform.localRotation = defaultGunAngles;
-            //transform.localPosition = defaultGunPosition;
-
-            playerObj.GetComponent<InputManager>().gunInfo = this;
+            playerObj.GetComponent<InputManager>().gunInfo = this; 
 
             Destroy(gameObject.GetComponent<Rigidbody>());              // Disable the rigidbody on the object.
             gameObject.GetComponent<BoxCollider>().enabled = false;     // Disable the box collider that was used to trigger the pickup.
