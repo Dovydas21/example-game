@@ -111,7 +111,7 @@ public class GunInfo : MonoBehaviour
             pickupPrompt.GetComponent<Image>().sprite = gunSprite;
 
             // Make the image white so we can see it.
-            pickupPrompt.GetComponent<Image>().color = Color.gray;
+            pickupPrompt.GetComponent<Image>().color = Color.white;
 
             if (Input.GetKey(gunPickupKey)) // If the player presses the gunPickupKey, run SummonWeapon().
             {
