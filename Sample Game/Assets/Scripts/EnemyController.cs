@@ -16,6 +16,7 @@ public class EnemyController : MonoBehaviour
     public int maxHealth;
     public int enemyDamage;
     public int enemyKnockback;
+    public int minCoinsToDrop, maxCoinsToDrop;
     public float enemySpeed = 10f;
     public enum EnemyType { Grower, Duper };
     public EnemyType type;
@@ -26,6 +27,8 @@ public class EnemyController : MonoBehaviour
     public Animator characterAnimator;
     public PlayerDamage playerDamage;
     public GameManager gameManager;
+    public GameObject coin;
+
 
 
     // Locals
@@ -220,9 +223,20 @@ public class EnemyController : MonoBehaviour
             print("Enemy has died");
             alive = false;
             ToggleRagdoll(true); // enable the ragdoll on death.
+            DropCoins(); // Drop the enemies loot.
             gameManager.KillEnemy(); // Remove 1 from the number of enemies that are spawned in this round.
             Destroy(gameObject, 30f); // Despawn enemy after some time has elapsed.
             yield return null;
+        }
+    }
+
+    public void DropCoins()
+    {
+        int coinsToDrop = (int)Random.Range(minCoinsToDrop, maxCoinsToDrop);
+        for (int i = 0; i < coinsToDrop; i++)
+        {
+            Vector3 spawnPos = transform.position + new Vector3(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
+            Instantiate(coin, spawnPos, Quaternion.identity);
         }
     }
 

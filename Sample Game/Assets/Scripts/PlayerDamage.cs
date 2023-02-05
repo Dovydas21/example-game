@@ -76,15 +76,9 @@ public class PlayerDamage : MonoBehaviour
         currentHealth -= damage;
         UpdateHealthBar(currentHealth);
         print("Player taken damage, current health = " + currentHealth);
-        //Vector3 directionOfAttack = (enemyPos - gameObject.transform.position).normalized;
-        //rb.AddForceAtPosition(directionOfAttack * enemyController.enemyKnockback, hitPos, ForceMode.Impulse);
-        //Debug.DrawRay(enemyPos, directionOfAttack, Color.red, 20f);
-
-
 
         if (currentHealth <= 0) // Player dead.
         {
-            // Do something to kill the player...
             print("Player is dead");
             deathMenuScript.OpenDeathMenu();
         }

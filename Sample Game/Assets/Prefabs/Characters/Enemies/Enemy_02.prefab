@@ -1629,6 +1629,9 @@ MonoBehaviour:
   maxHealth: 50
   enemyDamage: 10
   enemyKnockback: 100
+  minCoinsToDrop: 1
+  maxCoinsToDrop: 5
+  enemySpeed: 10
   type: 1
   dupeAttributes:
     maxDupes: 3
@@ -1641,6 +1644,7 @@ MonoBehaviour:
   characterAnimator: {fileID: 5854476122207012933}
   playerDamage: {fileID: 0}
   gameManager: {fileID: 0}
+  coin: {fileID: 7619358416105111045, guid: 0e31b34827b5745e8b23aed2d1795719, type: 3}
   ragdolled: 0
   currentHealth: 100
 --- !u!95 &5854476122207012933

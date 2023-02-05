@@ -182,16 +182,20 @@ MonoBehaviour:
   fullAuto: 1
   canAim: 0
   hasToBeCocked: 0
-  gunSprite: {fileID: 21300000, guid: 9fb21558bdbc640aa98e27fe7972e444, type: 3}
+  freezeEffect: 0
+  blackHoleEffect: 0
+  gunSprite: {fileID: 21300000, guid: 8886691a1eb74420094971263baa02a6, type: 3}
   power: 500
   range: 10
   fireRate: 0.01
   magCapacity: 1000
   damage: 10
+  freezeDuration: 0
   projectileCount: 1
   projectileSpread: 0
   ammoReductionPerShot: 1
   ammoInGun: 5
+  reloadTime: 2.5
   gunHolder: {fileID: 0}
   defaultGunPosition: {x: 0, y: 0, z: 0}
   defaultGunAngles: {x: 0, y: 180, z: 0, w: 0}
