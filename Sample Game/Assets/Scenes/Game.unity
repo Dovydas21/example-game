@@ -37006,6 +37006,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 884282627}
     - target: {fileID: 2782098492886252920, guid: 011f050412e8744249b143abdcd41628, type: 3}
+      propertyPath: reloadTime
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2782098492886252920, guid: 011f050412e8744249b143abdcd41628, type: 3}
       propertyPath: muzzleFlash
       value: 
       objectReference: {fileID: 2782098491713372101}

@@ -235,7 +235,7 @@ public class EnemyController : MonoBehaviour
         int coinsToDrop = (int)Random.Range(minCoinsToDrop, maxCoinsToDrop);
         for (int i = 0; i < coinsToDrop; i++)
         {
-            Vector3 spawnPos = transform.position + new Vector3(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
+            Vector3 spawnPos = transform.position + new Vector3(Random.Range(0f, 5f), 1f, Random.Range(0f, 5f));
             Instantiate(coin, spawnPos, Quaternion.identity);
         }
     }
