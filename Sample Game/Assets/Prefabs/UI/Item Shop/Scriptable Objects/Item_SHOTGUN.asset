@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Item_SHOTGUN
   m_EditorClassIdentifier: 
   title: Shotgun
-  description: A semi automatic shotgun loaded with buckshot
+  description: A pump action shotgun
   basePurchasePrice: 1750
   itemImage: {fileID: 21300000, guid: 510927a75ed5a4c4bb08e905ef1ad1fa, type: 3}

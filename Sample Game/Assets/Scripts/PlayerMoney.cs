@@ -5,18 +5,24 @@ using UnityEngine.UI;
 
 public class PlayerMoney : MonoBehaviour
 {
-    public int currentBalance = 0;
+    public int currentBalance;
     public TMPro.TextMeshProUGUI balanceUI;
     public AudioSource pickupSoundSource;
-
 
     // Start is called before the first frame update
     void Start()
     {
-        int savedBalance = PlayerPrefs.GetInt("MONEY_CurrentBalance"); // Get the balance saved and set it.
-        if (savedBalance > 0) // If we have a value for it then use it.
+        int savedBalance = GetSavedBalance();
+        if (savedBalance > 0)
             currentBalance = savedBalance;
+
         UpdateHUD();
+    }
+
+    public int GetSavedBalance()
+    {
+        int savedBalance = PlayerPrefs.GetInt("MONEY_CurrentBalance"); // Get the balance saved and set it.
+        return savedBalance;
     }
 
     private void UpdateHUD()
