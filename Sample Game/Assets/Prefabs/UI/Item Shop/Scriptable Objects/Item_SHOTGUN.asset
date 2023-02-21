@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4526703627f7346da92c68f40d750c47, type: 3}
   m_Name: Item_SHOTGUN
   m_EditorClassIdentifier: 
+  purchasableItem: {fileID: 3079794806247186355, guid: c28a955152a5c46f1afb983a8b827656, type: 3}
   title: Shotgun
   description: A pump action shotgun
   basePurchasePrice: 1750

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4526703627f7346da92c68f40d750c47, type: 3}
   m_Name: Item_HAMMER
   m_EditorClassIdentifier: 
+  purchasableItem: {fileID: 4521471700996469184, guid: ba2616ace11d84b538aefd5d046074f2, type: 3}
   title: Hammer
   description: A tool used to install nails
   basePurchasePrice: 300
