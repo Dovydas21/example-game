@@ -193,9 +193,7 @@ public class EnemyController : MonoBehaviour
 
     IEnumerator WaitForCurrentAnimation()
     {
-        print("Waiting for current animation to finish.");
         yield return new WaitForSeconds(characterAnimator.GetCurrentAnimatorStateInfo(0).length);
-        print("Current animation finished.");
     }
 
     public IEnumerator FreezeEnemy(float duration)

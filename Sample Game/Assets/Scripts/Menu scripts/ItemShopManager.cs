@@ -90,7 +90,7 @@ public class ItemShopManager : MonoBehaviour
         {
             itemPanels[i].descriptionText.text = weaponItems[i].description;
             itemPanels[i].titleText.text = weaponItems[i].title;
-            itemPanels[i].basePurchasePrice.text = weaponItems[i].basePurchasePrice.ToString() + " coins";
+            itemPanels[i].basePurchasePrice.text = weaponItems[i].basePurchasePrice.ToString();
             itemPanels[i].itemImage.sprite = weaponItems[i].itemImage;
             itemPanels[i].itemImage.preserveAspect = true;
         }

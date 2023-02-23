@@ -26,8 +26,8 @@ public class BlackHole : MonoBehaviour
             {
                 if (enemy.transform.tag == "Enemy")
                 {
-                    //enemy.GetComponent<EnemyController>().StartCoroutine(enemy.GetComponent<EnemyController>().Die());
-                    enemy.GetComponent<EnemyController>().ToggleRagdoll(true);
+                    enemy.GetComponent<EnemyController>().StartCoroutine(enemy.GetComponent<EnemyController>().Die());
+                    //enemy.GetComponent<EnemyController>().ToggleRagdoll(true);
                 }
 
                 Vector3 pullDirection = (transform.position - enemy.transform.position).normalized;
