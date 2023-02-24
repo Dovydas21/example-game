@@ -35,6 +35,7 @@ public class MainMenu : MonoBehaviour
         else
         {
             SceneManager.LoadScene(GameSceneName); // Load the "Game" scene.
+            scene = SceneManager.GetActiveScene();
         }
     }
 
@@ -56,6 +57,7 @@ public class MainMenu : MonoBehaviour
 
     public void CloseMainMenu()
     {
+        print("Closing main menu");
         Time.timeScale = 1f;
         Cursor.lockState = CursorLockMode.Locked;
         ViewPanel(false);
@@ -67,6 +69,7 @@ public class MainMenu : MonoBehaviour
 
     public void OpenMainMenu()
     {
+        print("Opening main menu");
         Time.timeScale = 0f;
         Cursor.lockState = CursorLockMode.None;
         ViewPanel(true);

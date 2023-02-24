@@ -111,7 +111,8 @@ public class GunInfo : MonoBehaviour
             pickupPrompt.GetComponent<Image>().sprite = gunSprite;
 
             // Make the image white so we can see it.
-            pickupPrompt.GetComponent<Image>().color = Color.white;
+            pickupPrompt.GetComponent<Image>().color = new Color(235f, 59f, 90f);
+            pickupPrompt.GetComponent<Image>().preserveAspect = true;
 
             if (Input.GetKey(gunPickupKey)) // If the player presses the gunPickupKey, run SummonWeapon().
             {
@@ -129,6 +130,7 @@ public class GunInfo : MonoBehaviour
         pickupPrompt.GetComponent<Image>().color = Color.clear;
     }
 
+    // Pickup gun
     private void OnTriggerEnter(Collider pickupTrigger)
     {
         bool playerHandsEmpty = gunHolder.transform.childCount == 0;
@@ -153,7 +155,8 @@ public class GunInfo : MonoBehaviour
             UpdateAmmoInGun(ammoInGun);
 
             gunImage.GetComponent<Image>().sprite = gunSprite;
-            gunImage.GetComponent<Image>().color = Color.white; // Make the GunSprite UI white, so we can see it.
+            gunImage.GetComponent<Image>().color = new Color(235f, 59f, 90f); // Make the GunSprite UI red, so we can see it.
+            gunImage.GetComponent<Image>().preserveAspect = true;
         }
     }
 
