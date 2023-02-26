@@ -88,8 +88,9 @@ public class ItemShopManager : MonoBehaviour
         // Make each panel contain the correct information.
         for (int i = 0; i < weaponItems.Length; i++)
         {
-            itemPanels[i].descriptionText.text = weaponItems[i].description;
             itemPanels[i].titleText.text = weaponItems[i].title;
+            print("weaponItems[i].title = " + weaponItems[i].title);
+            itemPanels[i].descriptionText.text = weaponItems[i].description;
             itemPanels[i].basePurchasePrice.text = weaponItems[i].basePurchasePrice.ToString();
             itemPanels[i].itemImage.sprite = weaponItems[i].itemImage;
             itemPanels[i].itemImage.preserveAspect = true;
