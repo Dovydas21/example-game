@@ -6,14 +6,22 @@ TagManager:
   tags:
   - GunHolder
   - Gun Magazine
+  - Particles
+  - Enemy
+  - AimingPosition
+  - GunImage
+  - HealthBar
+  - HealthValue
+  - PickupPrompt
+  - AmmoValue
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Shootable
   - Water
   - UI
-  - 
+  - BoundingBox
   - 
   - 
   - 
