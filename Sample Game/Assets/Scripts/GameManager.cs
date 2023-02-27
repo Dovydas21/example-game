@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class GameManager : MonoBehaviour
     float enemyCountForWave = 13f;
     public int enemiesRemainingThisWave;
     float difficultyFactor = 1.5f;
+    TMP_Text roundCounter;
 
     // Start is called before the first frame update
     void Start()
@@ -18,8 +20,9 @@ public class GameManager : MonoBehaviour
         SpawnEnemies();
     }
 
-    public void StartNextWave()
+    IEnumerator StartNextWave(int timer)
     {
+
         // All enemies are dead, start another wave.
         print("All enemies killed, wave " + currentWave + "finished.");
 
@@ -35,7 +38,19 @@ public class GameManager : MonoBehaviour
         enemyCountForWave *= difficultyFactor;
         enemyCountForWave = Mathf.Floor(enemyCountForWave);
         currentWave++;
+
+
+        // Wait until the timer hits zero...
+        while (timer != 0)
+        {
+            timer -= 1;
+            roundCounter.text = "Wave " + currentWave + " starting in: " + timer.ToString();
+            yield return new WaitForSeconds(1f);
+        }
+
+
         SpawnEnemies();
+        yield return null;
     }   
 
     void SpawnEnemies()

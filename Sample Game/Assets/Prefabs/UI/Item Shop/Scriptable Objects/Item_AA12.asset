@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4526703627f7346da92c68f40d750c47, type: 3}
   m_Name: Item_AA12
   m_EditorClassIdentifier: 
-  purchasableItem: {fileID: 6582706543462421506, guid: 8aca7f152c5c7401087bc036925a5d49, type: 3}
+  purchasableItem: {fileID: 1966251336648315654, guid: 8aca7f152c5c7401087bc036925a5d49, type: 3}
   title: AA12
   description: A fully-automatic shotgun
   basePurchasePrice: 3000
