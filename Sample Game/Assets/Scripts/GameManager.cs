@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     float enemyCountForWave = 13f;
     public int enemiesRemainingThisWave;
     float difficultyFactor = 1.5f;
-    TMP_Text roundCounter;
+    public TMP_Text roundCounter;
 
     // Start is called before the first frame update
     void Start()
@@ -83,7 +83,7 @@ public class GameManager : MonoBehaviour
 
         if (enemiesRemainingThisWave == 0)
         {
-            StartNextWave();
+            StartCoroutine(StartNextWave(15));
         }
     }
 

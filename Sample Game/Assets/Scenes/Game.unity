@@ -6447,7 +6447,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Next wave in: '
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 200d7a538ab7043fb9f564125f9bdff6, type: 2}
   m_sharedMaterial: {fileID: -4542846062563743173, guid: 200d7a538ab7043fb9f564125f9bdff6, type: 2}
@@ -6474,7 +6474,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 139.3
+  m_fontSize: 133.46
   m_fontSizeBase: 133.46
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -34098,6 +34098,7 @@ MonoBehaviour:
     enemyPrefab: {fileID: 2058763402}
   playerObj: {fileID: 537051704}
   enemiesRemainingThisWave: 0
+  roundCounter: {fileID: 312489457}
 --- !u!1 &1831291452
 GameObject:
   m_ObjectHideFlags: 0
