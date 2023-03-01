@@ -11,8 +11,10 @@ public class GameManager : MonoBehaviour
     float enemyCountForWave = 13f;
     public int enemiesRemainingThisWave;
     float difficultyFactor = 1.5f;
-    public GameObject UIHeaderBar;
-    public TMP_Text roundCounter;
+    public GameObject roundAnnouncementBackground;
+    public TMP_Text roundCoundownTimer;
+    public TMP_Text roundCouner;
+
 
     // Start is called before the first frame update
     void Start()
@@ -39,17 +41,18 @@ public class GameManager : MonoBehaviour
         enemyCountForWave *= difficultyFactor;
         enemyCountForWave = Mathf.Floor(enemyCountForWave);
         currentWave++;
+        roundCouner.text = "Wave " + currentWave;
 
-        UIHeaderBar.SetActive(true);
+        roundAnnouncementBackground.SetActive(true);
         // Wait until the timer hits zero...
         while (timer != 0)
         {
             timer -= 1;
-            roundCounter.text = "Wave " + currentWave + " starting in: " + timer.ToString();
+            roundCoundownTimer.text = "Wave " + currentWave + " starting in: " + timer.ToString();
             yield return new WaitForSeconds(1f);
         }
-        roundCounter.text = "";
-        UIHeaderBar.SetActive(false);
+        roundCoundownTimer.text = "";
+        roundAnnouncementBackground.SetActive(false);
 
         SpawnEnemies();
         yield return null;
