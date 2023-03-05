@@ -64,11 +64,11 @@ public class GameManager : MonoBehaviour
         int enemiesSpawnedThisWave = 0;
         while (enemyCountForWave != enemiesSpawnedThisWave)
         {
-            var enemy = enemies[Random.Range(0, enemies.Length)];
             Vector3 spawnPos = new Vector3(Random.Range(-500f, 500f), 10f, Random.Range(-500f, 500f));
 
             if (Vector3.Distance(spawnPos, playerObj.transform.position) < 200f)
             {
+                var enemy = enemies[Random.Range(0, enemies.Length)];
                 GameObject spawnedEnemy = Instantiate(enemy.enemyPrefab, spawnPos, Quaternion.identity);
                 spawnedEnemy.GetComponent<EnemyController>().currentHealth *= difficultyFactor;
                 spawnedEnemy.GetComponent<EnemyController>().enemySpeed *= difficultyFactor;

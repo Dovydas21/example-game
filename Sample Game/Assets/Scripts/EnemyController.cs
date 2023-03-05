@@ -255,8 +255,15 @@ public class EnemyController : MonoBehaviour
         //    }
         //}
 
-        agentPos = agent.transform.position;
-        agent.enabled = !state; // Enable / disable the enemy's Nav Mesh Agent.
+        try
+        {
+
+            agentPos = agent.transform.position;
+            agent.enabled = !state; // Enable / disable the enemy's Nav Mesh Agent.
+            agent.isStopped = state; // Toggle the enemy movement.
+            agent.ResetPath(); // Un-set the target destination (will re-set in Update() if they are being un-ragdolled)
+        }
+        catch { };
 
         //if (childrenCount > 0 && originalPositions != null && !state) // Reset all of the ememy object's local positions when disabling the ragdoll effect.
         //{
@@ -269,8 +276,6 @@ public class EnemyController : MonoBehaviour
         //    }
         //}
 
-        agent.isStopped = state; // Toggle the enemy movement.
-        agent.ResetPath(); // Un-set the target destination (will re-set in Update() if they are being un-ragdolled)
 
         StopBleed(); // Despawn all of the particle effects that make the enemy look like he's bleeding.
         characterAnimator.StopPlayback(); // Stop the animator.
