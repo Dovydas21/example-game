@@ -107,6 +107,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4557919515879939526}
+  - component: {fileID: 1278987371007837885}
   m_Layer: 0
   m_Name: Lamp_Tall
   m_TagString: Untagged
@@ -131,6 +132,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1278987371007837885
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3750138436672571260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 081332163741b4311af7d0151dce67fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  turnOffRange: 100
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!1 &4092156723188295138
 GameObject:
   m_ObjectHideFlags: 0
@@ -175,8 +192,8 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 1, g: 0.38385588, b: 0, a: 1}
-  m_Intensity: 7
-  m_Range: 10
+  m_Intensity: 3
+  m_Range: 15
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
