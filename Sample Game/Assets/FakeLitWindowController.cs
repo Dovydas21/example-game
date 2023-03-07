@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 public class FakeLitWindowController : MonoBehaviour
 {
@@ -9,14 +10,29 @@ public class FakeLitWindowController : MonoBehaviour
     public float ToggleRange = 100f;
     public LayerMask PlayerLayer;
 
-    private void FixedUpdate()
+    private void OnTriggerEnter(Collider triggerObj) // Using collider triggers as these are more efficient than using Update() or FixedUpdate()
     {
-        // Create a Raycast sphere to find all enemies within the pull radius
-        Collider[] objectsInRadius = Physics.OverlapSphere(transform.position, ToggleRange, PlayerLayer);
+        Profiler.BeginSample("FakeLitWindowController: OnTriggerEnter()");
+        if (triggerObj.tag == "Player")
+        {
+            ToggleWindows(true); // Enable the real windows when the player moves out of the collider.
+        }
+        Profiler.EndSample();
+    }
 
-        bool playerInRadius = objectsInRadius.Length > 0;
-        WindowPane.SetActive(playerInRadius);
-        FakeWindowPane.SetActive(!playerInRadius);
+    private void OnTriggerExit(Collider triggerObj) // Using collider triggers as these are more efficient than using Update() or FixedUpdate()
+    {
+        Profiler.BeginSample("FakeLitWindowController: OnTriggerExit()");
+        if (triggerObj.tag == "Player")
+        {
+            ToggleWindows(false); // Disable the real windows when the player moves out of the collider.
+        }
+        Profiler.EndSample();
+    }
 
+    void ToggleWindows(bool toggle)
+    {
+        WindowPane.SetActive(toggle);
+        FakeWindowPane.SetActive(!toggle);
     }
 }

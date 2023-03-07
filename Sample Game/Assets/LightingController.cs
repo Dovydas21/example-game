@@ -4,16 +4,21 @@ using UnityEngine;
 
 public class LightingController : MonoBehaviour
 {
-    public float turnOffRange = 1f;
-    public LayerMask playerLayer;
 
-    // Update is called once per frame
-    void FixedUpdate()
+    
+    private void OnTriggerEnter(Collider triggerObj) // Using collider triggers as these are more efficient than using Update() or FixedUpdate()
     {
-        // Create a Raycast sphere to find all enemies within the pull radius
-        Collider[] objectsInRadius = Physics.OverlapSphere(transform.position, turnOffRange, playerLayer);
+        if (triggerObj.tag == "Player")
+        {
+            gameObject.GetComponentInChildren<Light>().enabled = true; // Enable the lights when the player moves into the collider.
+        }
+    }
 
-        gameObject.GetComponentInChildren<Light>().enabled = objectsInRadius.Length > 0;
-
+    private void OnTriggerExit(Collider triggerObj) // Using collider triggers as these are more efficient than using Update() or FixedUpdate()
+    {
+        if (triggerObj.tag == "Player")
+        {
+            gameObject.GetComponentInChildren<Light>().enabled = false; // Disable the lights when the player moves out of the collider.
+        }
     }
 }

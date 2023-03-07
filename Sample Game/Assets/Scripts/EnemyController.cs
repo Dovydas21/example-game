@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Profiling;
 
 [RequireComponent(typeof(Rigidbody))] // Require a Rigidbody.
 [RequireComponent(typeof(NavMeshAgent))] // Require a NavMeshAgent.
@@ -325,6 +326,7 @@ public class EnemyController : MonoBehaviour
 
     private void Update()
     {
+        Profiler.BeginSample("EnemyController: Update()");
         if (alive) // Enemy must be alive....
         {
             float distance = Vector3.Distance(target.position, transform.position); // Calculate the distance from the enemy to the player.
@@ -332,8 +334,6 @@ public class EnemyController : MonoBehaviour
             {
                 FaceTarget();   // Face the player.
                 Chase(true);    // Chase the player
-
-                // print("remaining dist = " + agent.remainingDistance);
 
                 if (agent.remainingDistance + .5f <= agent.stoppingDistance && agent.hasPath) // Check if the distance that the enemy still has to run is less than or equal to the stopping distance and stop them if it is.
                     StopEnemy(true);
@@ -352,6 +352,7 @@ public class EnemyController : MonoBehaviour
             }
             else Chase(false); // Stop the chasing animation.
         }
+        Profiler.EndSample();
     }
 
     void FaceTarget() // Makes the enemy face towards the player.
