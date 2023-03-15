@@ -66,6 +66,7 @@ public class EnemyController : MonoBehaviour
         originalPositions = new Transform[childrenCount];
         if (childrenCount > 0) // Remember all of the ememy object's local positions when disabling the ragdoll effect.
         {
+            
             for (int i = 0; i < childrenCount; i++)
             {
                 originalPositions[i] = transform.GetChild(i).transform; // Set the position of the object to the original position.
