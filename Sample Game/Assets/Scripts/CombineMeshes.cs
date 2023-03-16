@@ -43,8 +43,6 @@ public class CombineMeshes : MonoBehaviour
                 combineInstance.mesh = meshFilter.sharedMesh;
                 (combineInstanceArrays[materialArrayIndex] as ArrayList).Add(combineInstance);
             }
-
-            //Destroy(meshRenderer.gameObject);
         }
 
         // Get / Create mesh filter & renderer
@@ -79,7 +77,6 @@ public class CombineMeshes : MonoBehaviour
         // Combine into one
         meshFilterCombine.sharedMesh = new Mesh();
         meshFilterCombine.sharedMesh.CombineMeshes(combineInstances, false, false);
-
         FixPos();
 
         if (addCollider)
@@ -88,28 +85,17 @@ public class CombineMeshes : MonoBehaviour
             mc.sharedMesh = gameObject.GetComponent<MeshFilter>().sharedMesh;
         }
 
-        // Destroy other meshes
-        foreach (Mesh oldMesh in meshes)
-        {
-            oldMesh.Clear();
-            DestroyImmediate(oldMesh);
-        }
-
-
-        // Destroy the child gameobjects for optimisation.
-        int childCount = transform.childCount;
-        for (int i = 0; i < childCount; i++)
-        {
-            DestroyImmediate(transform.GetChild(i));
-        }
-
         // Assign materials
         Material[] materialsArray = materials.ToArray(typeof(Material)) as Material[];
         meshRendererCombine.materials = materialsArray;
 
-        foreach (MeshFilter meshFilter in meshFilters)
+
+        // Delete the child GameObjects to reduce draw calls and time spent on the render thread.
+        int childCount = transform.childCount;
+        for (int i = 0; i < childCount; i++)
         {
-            DestroyImmediate(meshFilter.gameObject);
+            print("CombineMeshes.cs: About to delete child: " + transform.GetChild(i).name);
+            Destroy(transform.GetChild(i).gameObject);
         }
     }
 

@@ -19,8 +19,8 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        currentWave = 1;
-        SpawnEnemies();
+        currentWave = 0;
+        StartCoroutine(StartNextWave(15));
     }
 
     IEnumerator StartNextWave(int timer)
