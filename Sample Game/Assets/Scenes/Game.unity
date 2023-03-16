@@ -3120,7 +3120,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 11960
+  m_text: 5450
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 200d7a538ab7043fb9f564125f9bdff6, type: 2}
   m_sharedMaterial: {fileID: -4542846062563743173, guid: 200d7a538ab7043fb9f564125f9bdff6, type: 2}
@@ -12989,7 +12989,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1850d4854dc24486d9b01e218c2891ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentBalance: 5000
+  currentBalance: 0
   balanceUI: {fileID: 1949214130}
   pickupSoundSource: {fileID: 537051767}
 --- !u!82 &537051767
