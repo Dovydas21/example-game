@@ -1,65 +1,76 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class GunRecoil : MonoBehaviour
-{ /*
-    Vector3 currentRotation;
-    Vector3 targetRotation;
-    Vector3 targetPosition;
-    Vector3 currentPosition;
-    Vector3 initialGunPosition;
-    Vector3 swayAngle;
+{
+    // Public variables for customizing recoil parameters
+    public float maxRecoilDistance = 0.1f;
+    public float recoverySpeed = 2f;
+    public float shakeIntensity = 0.1f;
+    public float shakeSpeed = 20f;
+    public float maxShakeAngle = 10f;
 
-    public Transform cam;
-    public WeaponSway ws;
-    [Tooltip("Side to side recoil.")]
-    [SerializeField] float recoilX; // Side to side recoil
-    [Tooltip("Up and down recoil.")]
-    [SerializeField] float recoilY; // Up and down recoil
-    [Tooltip("Front and back recoil.")]
-    [SerializeField] float recoilZ; // Front and back recoil
-    [Tooltip("Amount to move the gun backwards with each shot.")]
-    [SerializeField] float kickbackZ; // Amount to move the gun backwards with each shot
+    // Internal variables for tracking recoil state
+    private Vector3 recoilStartPosition;
+    private float recoilDistance;
+    private bool isRecoiling;
 
-    [Tooltip("Speed / power of the recoil")]
-    public float snappiness;
-    [Tooltip("Speed to return the gun to the original position.")]
-    public float returnAmount;
+    // Internal variables for tracking shake state
+    private float shakeIntensityCurrent;
+    private float shakeAngleCurrent;
 
-    // Start is called before the first frame update
     void Start()
     {
-        initialGunPosition = transform.localPosition;
+        // Store the initial position of the camera
+        recoilStartPosition = transform.localPosition;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        // RECOIL
-        // swayAngle = ws.GetSwayAngle();
-        targetRotation = Vector3.Lerp(targetRotation, Vector3.zero, Time.deltaTime * returnAmount);
-        currentRotation = Vector3.Slerp(currentRotation, targetRotation, Time.fixedDeltaTime * snappiness);
-        transform.localRotation = Quaternion.Euler(currentRotation);
-        cam.localRotation = Quaternion.Euler(currentRotation);
-        Kickback();
-    }
+        // Check for input to trigger recoil
+        if (Input.GetButtonDown("Fire1"))
+        {
+            // Start the recoil animation
+            isRecoiling = true;
 
-    public void Recoil()
-    {
-        targetPosition -= new Vector3(0f, 0f, kickbackZ);
-        targetPosition += new Vector3(recoilX, Random.Range(0f, recoilY), Random.Range(-recoilZ, recoilZ));
-    }
+            // Start the shake animation
+            shakeIntensityCurrent = shakeIntensity;
+            shakeAngleCurrent = maxShakeAngle;
+        }
 
-    void Kickback()
-    {
-        targetPosition = Vector3.Lerp(targetPosition, initialGunPosition, Time.deltaTime * returnAmount);
-        currentPosition = Vector3.Lerp(currentPosition, targetPosition, Time.fixedDeltaTime * snappiness);
-        transform.localPosition = currentPosition;
-    }
+        // If we're currently recoiling, move the camera and update the recoil distance
+        if (isRecoiling)
+        {
+            recoilDistance += Time.deltaTime * recoverySpeed;
+            float recoilMovement = Mathf.Sin(recoilDistance * Mathf.PI) * maxRecoilDistance * shakeIntensityCurrent;
 
-    public Vector3 GetRecoilAngle()
-    {
-        return currentRotation;
-    }*/
+            // Move the camera in the opposite direction of the recoil movement
+            transform.localPosition = recoilStartPosition - transform.back * recoilMovement;
+
+            // If we've reached the maximum recoil distance, stop recoiling
+            if (recoilDistance >= 1f)
+            {
+                isRecoiling = false;
+                recoilDistance = 0f;
+
+                // Reset the camera position
+                transform.localPosition = recoilStartPosition;
+            }
+        }
+
+        // If we're currently shaking, apply the shake to the gun rotation
+        if (shakeAngleCurrent > 0f)
+        {
+            float shakeAngle = Mathf.Sin(Time.time * shakeSpeed) * shakeIntensityCurrent * shakeAngleCurrent;
+            transform.localRotation = Quaternion.Euler(shakeAngle, 0f, 0f);
+
+            // Reduce the shake intensity and angle over time
+            shakeIntensityCurrent -= Time.deltaTime * shakeIntensity;
+            shakeAngleCurrent -= Time.deltaTime * maxShakeAngle;
+        }
+        else
+        {
+            // Reset the gun rotation
+            transform.localRotation = Quaternion.identity;
+        }
+    }
 }

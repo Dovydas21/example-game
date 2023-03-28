@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.13513187, g: 0.14836773, b: 0.1614475, a: 1}
+  m_IndirectSpecularColor: {r: 0.13471615, g: 0.14837316, b: 0.16128165, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3120,7 +3120,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 11400
+  m_text: 7910
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 200d7a538ab7043fb9f564125f9bdff6, type: 2}
   m_sharedMaterial: {fileID: -4542846062563743173, guid: 200d7a538ab7043fb9f564125f9bdff6, type: 2}
@@ -21227,11 +21227,16 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 884282627}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 823593c8fa1e44d91aea9fe4d2385f4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxRecoilDistance: 0.1
+  recoverySpeed: 2
+  shakeIntensity: 0.1
+  shakeSpeed: 20
+  maxShakeAngle: 10
 --- !u!1001 &885585436
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -55892,7 +55897,7 @@ PrefabInstance:
     - target: {fileID: 289158461035353013, guid: 5c72a14b138661f41abc505b1bd1c287, type: 3}
       propertyPath: recoil
       value: 
-      objectReference: {fileID: 884282630}
+      objectReference: {fileID: 0}
     - target: {fileID: 289158461035353013, guid: 5c72a14b138661f41abc505b1bd1c287, type: 3}
       propertyPath: cameraHolder
       value: 
@@ -57820,7 +57825,7 @@ PrefabInstance:
     - target: {fileID: 8083447473771900828, guid: c67c88596e0c5478d884f34b8536a95f, type: 3}
       propertyPath: gunRecoilScript
       value: 
-      objectReference: {fileID: 884282630}
+      objectReference: {fileID: 0}
     - target: {fileID: 8083447473771900829, guid: c67c88596e0c5478d884f34b8536a95f, type: 3}
       propertyPath: m_Name
       value: Low Poly Car 01
