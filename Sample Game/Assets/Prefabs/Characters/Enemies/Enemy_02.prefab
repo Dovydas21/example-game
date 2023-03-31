@@ -1640,6 +1640,7 @@ MonoBehaviour:
     scaleFactor: 1
     speedFactor: 1
     healthFactor: 1
+  labelPrefab: {fileID: 4738450565065282480, guid: a424d80b304a24c1688c4253f80a06ef, type: 3}
   bloodEffects: {fileID: 1226761637171649549, guid: fcc2af5d362e7425fb58fe5573c62041, type: 3}
   characterAnimator: {fileID: 5854476122207012933}
   playerDamage: {fileID: 0}

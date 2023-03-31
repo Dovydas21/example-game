@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.13471615, g: 0.14837316, b: 0.16128165, a: 1}
+  m_IndirectSpecularColor: {r: 0.13513187, g: 0.14836773, b: 0.1614475, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3120,7 +3120,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 7910
+  m_text: 12770
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 200d7a538ab7043fb9f564125f9bdff6, type: 2}
   m_sharedMaterial: {fileID: -4542846062563743173, guid: 200d7a538ab7043fb9f564125f9bdff6, type: 2}
@@ -55859,6 +55859,8 @@ MonoBehaviour:
     scaleFactor: 1
     speedFactor: 1
     healthFactor: 1
+  labelPrefab: {fileID: 4738450565065282480, guid: a424d80b304a24c1688c4253f80a06ef, type: 3}
+  labelParent: {fileID: 834706816205073336}
   bloodEffects: {fileID: 1226761637171649549, guid: fcc2af5d362e7425fb58fe5573c62041, type: 3}
   characterAnimator: {fileID: 6356493107607307160}
   playerDamage: {fileID: 537051736}

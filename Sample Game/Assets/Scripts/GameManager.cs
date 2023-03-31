@@ -83,8 +83,7 @@ public class GameManager : MonoBehaviour
 
     public void KillEnemy()
     {
-        print(gameObject.name + " killed. Total remaining for wave " + currentWave + " = " + enemiesRemainingThisWave);
-        enemiesRemainingThisWave--;
+        enemiesRemainingThisWave--; // Reduce the count of enemies.
 
         if (enemiesRemainingThisWave == 0)
         {

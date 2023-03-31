@@ -218,7 +218,7 @@ GameObject:
   - component: {fileID: 3610368358857036467}
   m_Layer: 0
   m_Name: metarig
-  m_TagString: Untagged
+  m_TagString: Rig
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2727,6 +2727,7 @@ MonoBehaviour:
     scaleFactor: 1
     speedFactor: 1
     healthFactor: 1
+  labelPrefab: {fileID: 4738450565065282480, guid: a424d80b304a24c1688c4253f80a06ef, type: 3}
   bloodEffects: {fileID: 1226761637171649549, guid: fcc2af5d362e7425fb58fe5573c62041, type: 3}
   characterAnimator: {fileID: 4838477993787984232}
   playerDamage: {fileID: 0}

@@ -44,7 +44,7 @@ public class GunRecoil : MonoBehaviour
             float recoilMovement = Mathf.Sin(recoilDistance * Mathf.PI) * maxRecoilDistance * shakeIntensityCurrent;
 
             // Move the camera in the opposite direction of the recoil movement
-            transform.localPosition = recoilStartPosition - transform.back * recoilMovement;
+            transform.localPosition = recoilStartPosition - (-transform.forward * recoilMovement);
 
             // If we've reached the maximum recoil distance, stop recoiling
             if (recoilDistance >= 1f)
