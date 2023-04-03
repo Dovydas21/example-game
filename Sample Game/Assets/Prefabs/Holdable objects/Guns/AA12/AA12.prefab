@@ -5163,7 +5163,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1966251336648315654}
-  m_LocalRotation: {x: 0.3355697, y: 0.33556968, z: 0.6224091, w: 0.622409}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 4.54, y: -9.208, z: 77.73}
   m_LocalScale: {x: 0.18, y: 0.18, z: 0.18}
   m_ConstrainProportionsScale: 0
@@ -5185,7 +5185,7 @@ Transform:
   - {fileID: 1922901335664015444}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 56.662, z: 90}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &1695868033452295655
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5322,7 +5322,7 @@ MonoBehaviour:
   bulletOrigin: {fileID: 2529836650450083336}
   bulletTrail: {fileID: 7425004647957812907, guid: 68338a0ac53c743368d0e63ba764486a, type: 3}
   bulletTrailSpeed: 50
-  gunPickupSpeed: 2
+  gunPickupSpeed: 1
   gunPickupDistance: 20
   gunPickupKey: 101
   throwForce: 25
@@ -5331,7 +5331,7 @@ MonoBehaviour:
   pickupTrigger: {fileID: 2927524425374645512}
   shootScript: {fileID: 0}
   gunRecoilScript: {fileID: 0}
-  gunObj: {fileID: 0}
+  gunObj: {fileID: 1966251336648315654}
 --- !u!65 &2927524425374645512
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5543,7 +5543,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2277368146897604284}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.352, z: 4.678}
+  m_LocalPosition: {x: 0, y: 0.352, z: 4.73}
   m_LocalScale: {x: 5.5555553, y: 5.5555553, z: 5.5555553}
   m_ConstrainProportionsScale: 0
   m_Children: []

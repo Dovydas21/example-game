@@ -10,7 +10,7 @@ public class SunController : MonoBehaviour
 
     private void Awake()
     {
-        sun.SetActive(false);
+        //sun.SetActive(false);
     }
 
     // Update is called once per frame

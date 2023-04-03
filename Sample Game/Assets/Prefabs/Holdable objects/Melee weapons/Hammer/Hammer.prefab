@@ -98,6 +98,37 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -6659003102834268097, guid: 725bb688b81024d7a82e4f1617356756, type: 3}
+--- !u!1 &2615796836564421800
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8679941534879717392}
+  m_Layer: 0
+  m_Name: BulletOrigin
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8679941534879717392
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2615796836564421800}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.0039038658, y: 0.266, z: 0.077}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3887923843629607802}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4022674794291052821
 GameObject:
   m_ObjectHideFlags: 0
@@ -164,6 +195,7 @@ Transform:
   m_Children:
   - {fileID: 8309276963306987293}
   - {fileID: 3155306109094370491}
+  - {fileID: 8679941534879717392}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -204,7 +236,7 @@ MonoBehaviour:
   shootingAnimation: {fileID: 0}
   cockingAnimation: {fileID: 0}
   muzzleFlash: {fileID: 0}
-  bulletOrigin: {fileID: 8309276963306987293}
+  bulletOrigin: {fileID: 8679941534879717392}
   bulletTrail: {fileID: 0}
   bulletTrailSpeed: 1000
   gunPickupSpeed: 100
@@ -216,7 +248,7 @@ MonoBehaviour:
   pickupTrigger: {fileID: 1940165886399079715}
   shootScript: {fileID: 0}
   gunRecoilScript: {fileID: 0}
-  gunObj: {fileID: 0}
+  gunObj: {fileID: 4521471700996469184}
 --- !u!54 &3638371248303582520
 Rigidbody:
   m_ObjectHideFlags: 0

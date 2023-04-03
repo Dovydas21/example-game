@@ -14,7 +14,7 @@ TagManager:
   - HealthValue
   - PickupPrompt
   - AmmoValue
-  - Rig
+  - Ground
   layers:
   - Default
   - TransparentFX

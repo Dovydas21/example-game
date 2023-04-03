@@ -5813,8 +5813,8 @@ MonoBehaviour:
   blackHoleEffect: 0
   gunSprite: {fileID: 21300000, guid: 0f7ca4e2e23ab4f2caf4f098384d8427, type: 3}
   power: 3000
-  range: 250
-  fireRate: 0.05
+  range: 1000
+  fireRate: 0.1
   magCapacity: 31
   damage: 25
   freezeDuration: 0
@@ -5822,7 +5822,7 @@ MonoBehaviour:
   projectileSpread: 0
   ammoReductionPerShot: 1
   ammoInGun: 18
-  reloadTime: 2.5
+  reloadTime: 0.8
   gunHolder: {fileID: 0}
   defaultGunPosition: {x: 0, y: -0.27, z: 0}
   defaultGunAngles: {x: 0, y: 1, z: 0, w: -0.00000004371139}
@@ -5843,7 +5843,7 @@ MonoBehaviour:
   pickupTrigger: {fileID: 2782098492886252922}
   shootScript: {fileID: 0}
   gunRecoilScript: {fileID: 0}
-  gunObj: {fileID: 0}
+  gunObj: {fileID: 3051916655021998117}
 --- !u!108 &1704381394958366694
 Light:
   m_ObjectHideFlags: 0
