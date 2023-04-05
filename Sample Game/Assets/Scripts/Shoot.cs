@@ -56,7 +56,6 @@ public class Shoot : MonoBehaviour
     {
         if (playerHoldingGun && Time.time >= nextShotTime && Time.timeScale > 0f)
         {
-
             nextShotTime = Time.time + gunInfo.fireRate;
             firing = true;
             print("Shot fired");
