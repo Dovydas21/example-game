@@ -8097,7 +8097,7 @@ MonoBehaviour:
   recoilZ: 5
   snappiness: 10
   returnSpeed: 70
-  swayMultiplier: 20
+  swayMultiplier: 0.001
   swaySmooth: 1
   AimSpeed: 4
   aimPos: {fileID: 9777854}

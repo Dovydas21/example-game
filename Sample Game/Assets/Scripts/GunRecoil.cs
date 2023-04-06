@@ -18,6 +18,7 @@ public class GunRecoil : MonoBehaviour
     private Vector3 initialGunPosition;
     private bool playerTriggeredAim = false, playerAiming = false;
     private float keyDownTime, keyUpTime, startTime, journeyLength;
+    private Quaternion swayRotation;
 
     private void Start()
     {
@@ -27,7 +28,8 @@ public class GunRecoil : MonoBehaviour
 
     private void Update()
     {
-        
+        CalculateSway();
+
         if (Input.GetKey(KeyCode.Mouse0)) RecoilFire();
 
         targetRotation = Vector3.Lerp(targetRotation, Vector3.zero, returnSpeed * Time.deltaTime);
@@ -36,6 +38,28 @@ public class GunRecoil : MonoBehaviour
         transform.localRotation = Quaternion.Euler(currentRotation);
         transform.localPosition = Aim(AimCheck());
     }
+
+
+    void CalculateSway()
+    {
+        // Get mouse input.
+        float mouseX = Input.GetAxisRaw("Mouse X") * swayMultiplier;
+        float mouseY = Input.GetAxisRaw("Mouse Y") * swayMultiplier;
+
+        // Work out the rotation.
+        Quaternion rotationX = Quaternion.AngleAxis(-mouseY, Vector3.right);
+        Quaternion rotationY = Quaternion.AngleAxis(-mouseX, Vector3.up);
+
+        // Work out where we are ultimately moving the gun to.
+        swayRotation = rotationX * rotationY;
+        Vector3 swayAngle = Vector3.Lerp(transform.localRotation.eulerAngles, swayRotation.eulerAngles, swaySmooth * Time.deltaTime);
+        //Quaternion swayAngle = Quaternion.Lerp(transform.localRotation, swayRotation, swaySmooth * Time.deltaTime);
+
+        print("vswayAngle = " + swayAngle);
+
+        targetRotation = swayAngle;
+    }
+
 
     public void RecoilFire()
     {
