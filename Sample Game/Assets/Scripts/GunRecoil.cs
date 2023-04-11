@@ -28,19 +28,19 @@ public class GunRecoil : MonoBehaviour
 
     private void Update()
     {
-        CalculateSway();
+        Quaternion swayAngle = CalculateSway();
 
         if (Input.GetKey(KeyCode.Mouse0)) RecoilFire();
 
         targetRotation = Vector3.Lerp(targetRotation, Vector3.zero, returnSpeed * Time.deltaTime);
         currentRotation = Vector3.Slerp(currentRotation, targetRotation, snappiness * Time.deltaTime);
 
-        transform.localRotation = Quaternion.Euler(currentRotation);
+        transform.localRotation = Quaternion.Euler(currentRotation) * swayAngle;
         transform.localPosition = Aim(AimCheck());
     }
 
 
-    void CalculateSway()
+    Quaternion CalculateSway()
     {
         // Get mouse input.
         float mouseX = Input.GetAxisRaw("Mouse X") * swayMultiplier;
@@ -52,18 +52,20 @@ public class GunRecoil : MonoBehaviour
 
         // Work out where we are ultimately moving the gun to.
         swayRotation = rotationX * rotationY;
-        Vector3 swayAngle = Vector3.Lerp(transform.localRotation.eulerAngles, swayRotation.eulerAngles, swaySmooth * Time.deltaTime);
-        //Quaternion swayAngle = Quaternion.Lerp(transform.localRotation, swayRotation, swaySmooth * Time.deltaTime);
 
-        print("vswayAngle = " + swayAngle);
+        //Vector3 vSway = swayRotation.eulerAngles; // TEST
+        Quaternion swayAngle = Quaternion.Lerp(transform.localRotation, swayRotation, swaySmooth * Time.deltaTime);
+        //Vector3 VectorSwayAngle = Vector3.Lerp(transform.localRotation.eulerAngles, vSway, swaySmooth * Time.deltaTime); // TEST
 
-        targetRotation = swayAngle;
+        //print("VectorSwayAngle = " + VectorSwayAngle); // TEST
+
+        //targetRotation += VectorSwayAngle; // TEST
+        return swayAngle;
     }
 
 
     public void RecoilFire()
     {
-        //targetRotation += new Vector3(transform.position.x * .3f, transform.position.y * .3f, transform.position.z * .3f);
         targetRotation += new Vector3(-recoilX, Random.Range(-recoilY, recoilY), Random.Range(-recoilZ, recoilZ));
     }
 
