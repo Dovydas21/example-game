@@ -68,7 +68,7 @@ public class Shoot : MonoBehaviour
 
             gunInfo.PlayMuzzleFlash();
             gunInfo.PlayShootSound();
-            gunInfo.PlayCockingAnimation();
+           
 
             // Set the bullet offset to Vector3.Zero for the first shot, this way any guns with 1 projectile will fire straight and the first bullet will always be on target.
             Vector3 nextBulletOffset = Vector3.zero;

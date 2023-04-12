@@ -48,6 +48,7 @@ public class WeaponSway : MonoBehaviour
 
     private void Start()
     {
+        Destroy(this);
         initialGunPosition = transform.localPosition;
         startTime = Time.time;
         journeyLength = Vector3.Distance(transform.position, aimPos.position);
