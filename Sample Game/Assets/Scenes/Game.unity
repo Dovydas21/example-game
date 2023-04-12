@@ -1291,7 +1291,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 31210
+  m_text: 32940
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 200d7a538ab7043fb9f564125f9bdff6, type: 2}
   m_sharedMaterial: {fileID: -4542846062563743173, guid: 200d7a538ab7043fb9f564125f9bdff6, type: 2}
@@ -8092,11 +8092,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   aimKey: 324
   cam: {fileID: 1675823448}
-  recoilX: 0.01
-  recoilY: 5
-  recoilZ: 5
-  snappiness: 10
-  returnSpeed: 70
+  recoilX: 1
+  recoilY: 2
+  recoilZ: 2
+  snappiness: 25
+  returnSpeed: 100
   swayMultiplier: 100
   swaySmooth: 3
   AimSpeed: 4
@@ -11683,7 +11683,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1302158695}
-  - component: {fileID: 1302158696}
+  - component: {fileID: 1302158697}
   m_Layer: 7
   m_Name: CameraHolder
   m_TagString: Untagged
@@ -11707,29 +11707,23 @@ Transform:
   m_Father: {fileID: 537051726}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1302158696
+--- !u!114 &1302158697
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1302158694}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 823593c8fa1e44d91aea9fe4d2385f4b, type: 3}
+  m_Script: {fileID: 11500000, guid: d2492a73c9bb344d8bfed40f4fa18e2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  aimKey: 324
-  cam: {fileID: 0}
   recoilX: 1
   recoilY: 5
   recoilZ: 20
   snappiness: 3
   returnSpeed: 70
-  swayMultiplier: 3
-  swaySmooth: 0
-  AimSpeed: 0
-  aimPos: {fileID: 0}
 --- !u!1 &1317912490
 GameObject:
   m_ObjectHideFlags: 0
@@ -18114,7 +18108,7 @@ MonoBehaviour:
   - name: The horned man
     enemyPrefab: {fileID: 6772902369864381736, guid: bc89e81a3885b46959bddff915805208, type: 3}
   playerObj: {fileID: 537051704}
-  enemiesRemainingThisWave: 0
+  enemiesRemainingThisWave: 5
   enemySpawnRadius: 100
   roundAnnouncementBackground: {fileID: 1632038387}
   roundCoundownTimer: {fileID: 312489457}
@@ -23628,16 +23622,20 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 5050970248480947443, guid: de2d92285bcba4bff84f8f9cd9badafe, type: 3}
     - target: {fileID: 7606261990496520990, guid: 5c72a14b138661f41abc505b1bd1c287, type: 3}
+      propertyPath: camRecoilScript
+      value: 
+      objectReference: {fileID: 1302158697}
+    - target: {fileID: 7606261990496520990, guid: 5c72a14b138661f41abc505b1bd1c287, type: 3}
       propertyPath: gunRecoilScript
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 884282630}
     - target: {fileID: 8291628736543941989, guid: 5c72a14b138661f41abc505b1bd1c287, type: 3}
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8291628736543941989, guid: 5c72a14b138661f41abc505b1bd1c287, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.5090008
+      value: -1.14
       objectReference: {fileID: 0}
     - target: {fileID: 8291628736543941989, guid: 5c72a14b138661f41abc505b1bd1c287, type: 3}
       propertyPath: m_LocalPosition.y
@@ -23645,7 +23643,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8291628736543941989, guid: 5c72a14b138661f41abc505b1bd1c287, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.5090009
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 8291628736543941989, guid: 5c72a14b138661f41abc505b1bd1c287, type: 3}
       propertyPath: m_LocalRotation.w

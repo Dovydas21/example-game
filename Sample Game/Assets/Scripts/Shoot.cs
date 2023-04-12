@@ -14,6 +14,8 @@ public class Shoot : MonoBehaviour
 
     Transform gunHolder;
     Transform gun;
+    [SerializeField] private GunRecoil gunRecoilScript;
+    [SerializeField] private CameraRecoil camRecoilScript;
     public Transform ADSPosition;               // Trasnform of the GameObject called "Aiming Position" so we can slerp to it to ADS.
     public GameObject bulletHoleDecal;
     WaitForSeconds rapidFireWait;
@@ -60,7 +62,9 @@ public class Shoot : MonoBehaviour
             firing = true;
             print("Shot fired");
             RaycastHit HitInfo;
-            gunHolder.GetComponent<WeaponSway>().Recoil(); // Call the recoil function.
+
+            gunRecoilScript.RecoilFire();
+            camRecoilScript.RecoilFire();
 
             gunInfo.PlayMuzzleFlash();
             gunInfo.PlayShootSound();

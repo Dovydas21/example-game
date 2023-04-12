@@ -28,14 +28,20 @@ public class GunRecoil : MonoBehaviour
 
     private void Update()
     {
-        Quaternion swayAngle = CalculateSway();
+        //Quaternion swayAngle = CalculateSway();
 
-        if (Input.GetKey(KeyCode.Mouse0)) RecoilFire();
+        //if (Input.GetKey(KeyCode.Mouse0)) RecoilFire();
 
         targetRotation = Vector3.Lerp(targetRotation, Vector3.zero, returnSpeed * Time.deltaTime);
         currentRotation = Vector3.Slerp(currentRotation, targetRotation, snappiness * Time.deltaTime);
 
-        transform.localRotation = Quaternion.Euler(currentRotation) * swayAngle;
+        Quaternion recoilRotation = Quaternion.Euler(currentRotation);
+        Quaternion swayAngle = CalculateSway();
+
+        Quaternion combinedRotation = recoilRotation * swayAngle;
+
+        transform.localRotation = combinedRotation;
+        //transform.localRotation = Quaternion.Euler(currentRotation) * swayAngle;
         transform.localPosition = Aim(AimCheck());
     }
 
@@ -53,13 +59,7 @@ public class GunRecoil : MonoBehaviour
         // Work out where we are ultimately moving the gun to.
         swayRotation = rotationX * rotationY;
 
-        //Vector3 vSway = swayRotation.eulerAngles; // TEST
-        Quaternion swayAngle = Quaternion.Lerp(transform.localRotation, swayRotation, swaySmooth * Time.deltaTime);
-        //Vector3 VectorSwayAngle = Vector3.Lerp(transform.localRotation.eulerAngles, vSway, swaySmooth * Time.deltaTime); // TEST
-
-        //print("VectorSwayAngle = " + VectorSwayAngle); // TEST
-
-        //targetRotation += VectorSwayAngle; // TEST
+        Quaternion swayAngle = Quaternion.Slerp(transform.localRotation, swayRotation, swaySmooth * Time.deltaTime);
         return swayAngle;
     }
 
@@ -67,6 +67,7 @@ public class GunRecoil : MonoBehaviour
     public void RecoilFire()
     {
         targetRotation += new Vector3(-recoilX, Random.Range(-recoilY, recoilY), Random.Range(-recoilZ, recoilZ));
+
     }
 
     bool AimCheck()
