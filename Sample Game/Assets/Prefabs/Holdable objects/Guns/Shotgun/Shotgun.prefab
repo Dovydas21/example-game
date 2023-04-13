@@ -772,7 +772,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fullAuto: 0
   canAim: 1
-  hasToBeCocked: 1
   freezeEffect: 0
   blackHoleEffect: 1
   gunSprite: {fileID: 21300000, guid: 510927a75ed5a4c4bb08e905ef1ad1fa, type: 3}
@@ -787,27 +786,28 @@ MonoBehaviour:
   ammoReductionPerShot: 1
   ammoInGun: 0
   reloadTime: 0.3
-  gunHolder: {fileID: 0}
+  recoilX: 10
+  recoilY: 10
+  recoilZ: 10
+  kickBack: 1
+  snappiness: 10
+  returnSpeed: 50
+  notShootingReturnMultiplier: 2
+  swayMultiplier: 100
+  swaySmooth: 4
+  AimSpeed: 3
   defaultGunPosition: {x: 0, y: 0, z: 0}
   defaultGunAngles: {x: 0, y: 0, z: 0, w: 1}
   aimPosition: {x: 0, y: -0.43, z: 0.25}
   aimFieldOfView: 30
-  shootingAnimation: {fileID: 0}
-  cockingAnimation: {fileID: 0}
   muzzleFlash: {fileID: 7874173963188817716}
   bulletOrigin: {fileID: 8894581501360699922}
   bulletTrail: {fileID: 7425004647957812907, guid: 68338a0ac53c743368d0e63ba764486a, type: 3}
   bulletTrailSpeed: 50
   gunPickupSpeed: 1
   gunPickupDistance: 100
-  gunPickupKey: 101
   throwForce: 25
   shotSoundEffect: {fileID: 6898579186964174035}
-  cockingSoundEffect: {fileID: 0}
-  pickupTrigger: {fileID: 6908194697903190024}
-  shootScript: {fileID: 0}
-  gunRecoilScript: {fileID: 0}
-  gunObj: {fileID: 3079794806247186355}
 --- !u!82 &6898579186964174035
 AudioSource:
   m_ObjectHideFlags: 0

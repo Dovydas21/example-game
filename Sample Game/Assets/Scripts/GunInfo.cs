@@ -174,20 +174,23 @@ public class GunInfo : MonoBehaviour
             gunImage.GetComponent<Image>().sprite = gunSprite;
             gunImage.GetComponent<Image>().color = new Color(235f, 59f, 90f); // Make the GunSprite UI red, so we can see it.
             gunImage.GetComponent<Image>().preserveAspect = true;
-
-
-            // Set the recoil values of this script to be the values defined for the gun we are holding.
-            gunRecoilScript.recoilX = recoilX;
-            gunRecoilScript.recoilY = recoilY;
-            gunRecoilScript.recoilZ = recoilZ;
-            gunRecoilScript.kickBack = kickBack;
-            gunRecoilScript.snappiness = snappiness;
-            gunRecoilScript.returnSpeed = returnSpeed;
-            gunRecoilScript.notShootingReturnMultiplier = notShootingReturnMultiplier;
-            gunRecoilScript.swayMultiplier = swayMultiplier;
-            gunRecoilScript.swaySmooth = swaySmooth;
-            gunRecoilScript.AimSpeed = AimSpeed;
+            SetRecoilValues(); // Sets the values of "GunRecoil.cs" to be the values defined above.
         }
+    }
+
+    private void SetRecoilValues()
+    {
+        // Set the recoil values of this script to be the values defined for the gun we are holding.
+        gunRecoilScript.recoilX = recoilX;
+        gunRecoilScript.recoilY = recoilY;
+        gunRecoilScript.recoilZ = recoilZ;
+        gunRecoilScript.kickBack = kickBack;
+        gunRecoilScript.snappiness = snappiness;
+        gunRecoilScript.returnSpeed = returnSpeed;
+        gunRecoilScript.notShootingReturnMultiplier = notShootingReturnMultiplier;
+        gunRecoilScript.swayMultiplier = swayMultiplier;
+        gunRecoilScript.swaySmooth = swaySmooth;
+        gunRecoilScript.AimSpeed = AimSpeed;
     }
 
     private IEnumerator SummonWeapon() // Called when the player presses the "gunPickupKey" when looking at the weapon.
