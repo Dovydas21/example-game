@@ -23,7 +23,7 @@ public class Shoot : MonoBehaviour
     public bool playerHoldingGun = false;
     public bool playerSummonedWeapon = false;
     float nextShotTime;                         // The time that the next shot is allowed to be fired at or after.
-    GunInfo gunInfo;
+    private GunInfo gunInfo;
     List<Vector3> hitPositions = new List<Vector3>();
 
     public void Start()
@@ -63,8 +63,8 @@ public class Shoot : MonoBehaviour
             print("Shot fired");
             RaycastHit HitInfo;
 
-            gunRecoilScript.RecoilFire();
-            camRecoilScript.RecoilFire();
+            gunRecoilScript.RecoilFire(); // Recoil effect on the gun
+            camRecoilScript.RecoilFire(); // Recoil effect on the camera
 
             gunInfo.PlayMuzzleFlash();
             gunInfo.PlayShootSound();

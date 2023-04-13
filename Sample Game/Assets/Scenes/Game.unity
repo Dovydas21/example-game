@@ -1291,7 +1291,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 46510
+  m_text: 47180
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 200d7a538ab7043fb9f564125f9bdff6, type: 2}
   m_sharedMaterial: {fileID: -4542846062563743173, guid: 200d7a538ab7043fb9f564125f9bdff6, type: 2}
@@ -4967,6 +4967,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 75
       objectReference: {fileID: 0}
+    - target: {fileID: 1695868033452295654, guid: 8aca7f152c5c7401087bc036925a5d49, type: 3}
+      propertyPath: recoilX
+      value: 0.3
+      objectReference: {fileID: 0}
     - target: {fileID: 1966251336648315654, guid: 8aca7f152c5c7401087bc036925a5d49, type: 3}
       propertyPath: m_Name
       value: AA12
@@ -6061,6 +6065,50 @@ PrefabInstance:
     - target: {fileID: 2382763381063883423, guid: 011f050412e8744249b143abdcd41628, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 2782098492886252920, guid: 011f050412e8744249b143abdcd41628, type: 3}
+      propertyPath: recoilX
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2782098492886252920, guid: 011f050412e8744249b143abdcd41628, type: 3}
+      propertyPath: recoilY
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2782098492886252920, guid: 011f050412e8744249b143abdcd41628, type: 3}
+      propertyPath: recoilZ
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2782098492886252920, guid: 011f050412e8744249b143abdcd41628, type: 3}
+      propertyPath: AimSpeed
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2782098492886252920, guid: 011f050412e8744249b143abdcd41628, type: 3}
+      propertyPath: kickBack
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2782098492886252920, guid: 011f050412e8744249b143abdcd41628, type: 3}
+      propertyPath: snappiness
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2782098492886252920, guid: 011f050412e8744249b143abdcd41628, type: 3}
+      propertyPath: swaySmooth
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2782098492886252920, guid: 011f050412e8744249b143abdcd41628, type: 3}
+      propertyPath: returnSpeed
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 2782098492886252920, guid: 011f050412e8744249b143abdcd41628, type: 3}
+      propertyPath: swayMultiplier
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 2782098492886252920, guid: 011f050412e8744249b143abdcd41628, type: 3}
+      propertyPath: gunRecoilScript
+      value: 
+      objectReference: {fileID: 884282630}
+    - target: {fileID: 2782098492886252920, guid: 011f050412e8744249b143abdcd41628, type: 3}
+      propertyPath: notShootingReturnMultiplier
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3051916655021998117, guid: 011f050412e8744249b143abdcd41628, type: 3}
       propertyPath: m_Name
@@ -8092,14 +8140,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   aimKey: 324
   cam: {fileID: 1675823448}
-  recoilX: 1
-  recoilY: 2
-  recoilZ: 2
-  snappiness: 25
-  returnSpeed: 100
+  recoilX: 0.3
+  recoilY: 0.3
+  recoilZ: 0.3
+  kickBack: 0.1
+  snappiness: 1
+  returnSpeed: 30
+  notShootingReturnMultiplier: 3
   swayMultiplier: 100
   swaySmooth: 3
   AimSpeed: 4
+  shootScript: {fileID: 537051755}
   aimPos: {fileID: 9777854}
 --- !u!1001 &897030085
 PrefabInstance:
@@ -18249,7 +18300,7 @@ MonoBehaviour:
   - name: The horned man
     enemyPrefab: {fileID: 6772902369864381736, guid: bc89e81a3885b46959bddff915805208, type: 3}
   playerObj: {fileID: 537051704}
-  enemiesRemainingThisWave: 5
+  enemiesRemainingThisWave: 1
   enemySpawnRadius: 100
   roundAnnouncementBackground: {fileID: 1632038387}
   roundCoundownTimer: {fileID: 312489457}

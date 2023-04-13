@@ -6,12 +6,16 @@ public class GunRecoil : MonoBehaviour
 {
     private Vector3 currentRotation;
     private Vector3 targetRotation;
+    private Vector3 targetPosition;
+    private Vector3 currentPosition;
+
     [SerializeField] private KeyCode aimKey = KeyCode.Mouse1;
     [SerializeField] private Camera cam;
 
 
-    [SerializeField] private float recoilX, recoilY, recoilZ;
-    [SerializeField] private float snappiness, returnSpeed, swayMultiplier, swaySmooth, AimSpeed;
+    [SerializeField] public float recoilX, recoilY, recoilZ, kickBack;
+    [SerializeField] public float snappiness, returnSpeed, notShootingReturnMultiplier, swayMultiplier, swaySmooth, AimSpeed;
+    [SerializeField] public Shoot shootScript;
 
     // Variables used to control aiming.
     [SerializeField] private Transform aimPos;
@@ -19,6 +23,7 @@ public class GunRecoil : MonoBehaviour
     private bool playerTriggeredAim = false, playerAiming = false;
     private float keyDownTime, keyUpTime, startTime, journeyLength;
     private Quaternion swayRotation;
+
 
     private void Start()
     {
@@ -28,21 +33,31 @@ public class GunRecoil : MonoBehaviour
 
     private void Update()
     {
-        //Quaternion swayAngle = CalculateSway();
+        float realReturnSpeed = returnSpeed;
 
-        //if (Input.GetKey(KeyCode.Mouse0)) RecoilFire();
+        if (!shootScript.firing)
+        {
+            realReturnSpeed *= notShootingReturnMultiplier;
+        }
 
+        // Recoil rotations
         targetRotation = Vector3.Lerp(targetRotation, Vector3.zero, returnSpeed * Time.deltaTime);
         currentRotation = Vector3.Slerp(currentRotation, targetRotation, snappiness * Time.deltaTime);
 
         Quaternion recoilRotation = Quaternion.Euler(currentRotation);
         Quaternion swayAngle = CalculateSway();
-
         Quaternion combinedRotation = recoilRotation * swayAngle;
 
+
+        // Recoil positions
+        Vector3 kickbackPosition = Kickback();
+        Vector3 aimingPosition = Aim(AimCheck());
+        Vector3 finalPosition = kickbackPosition - (targetPosition - aimingPosition);
+
+        // Applying the rotation and position.
         transform.localRotation = combinedRotation;
-        //transform.localRotation = Quaternion.Euler(currentRotation) * swayAngle;
-        transform.localPosition = Aim(AimCheck());
+        transform.localPosition = finalPosition;
+
     }
 
 
@@ -64,10 +79,20 @@ public class GunRecoil : MonoBehaviour
     }
 
 
+    Vector3 Kickback()
+    {
+        targetPosition = Vector3.Lerp(targetPosition, initialGunPosition, Time.deltaTime * returnSpeed); // Moves from the gun's last target position back to the initial gun position.
+        currentPosition = Vector3.Lerp(currentPosition, targetPosition, Time.fixedDeltaTime * snappiness); // Moves the gun from the current position to the target position.
+        return currentPosition; // Unless aiming or firing, 'currentPosition' will be equal to the initialGunPosition.
+    }
+
+
     public void RecoilFire()
     {
         targetRotation += new Vector3(-recoilX, Random.Range(-recoilY, recoilY), Random.Range(-recoilZ, recoilZ));
 
+        Vector3 kickBackPosition = new Vector3(0f, 0f, kickBack);
+        targetPosition -= kickBackPosition;
     }
 
     bool AimCheck()
@@ -117,12 +142,12 @@ public class GunRecoil : MonoBehaviour
         if (aim)
         {
             result = Vector3.Slerp(initialGunPosition, aimPos.localPosition, fractionOfJourney);
-            cam.fieldOfView = Mathf.LerpAngle(90f, 30f, fractionOfJourney);
+            cam.fieldOfView = Mathf.LerpAngle(90f, 45f, fractionOfJourney);
         }
         else
         {
             result = Vector3.Slerp(aimPos.localPosition, initialGunPosition, fractionOfJourney);
-            cam.fieldOfView = Mathf.LerpAngle(30f, 90f, fractionOfJourney);
+            cam.fieldOfView = Mathf.LerpAngle(45f, 90f, fractionOfJourney);
         }
 
         return result;

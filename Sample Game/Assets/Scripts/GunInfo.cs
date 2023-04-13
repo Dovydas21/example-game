@@ -20,11 +20,12 @@ public class GunInfo : MonoBehaviour
     public bool fullAuto;                                                         // True = Gun can be fired continuously while mouse is held down. False = semi-auto.
     public bool canAim;                                                           // True = Gun can be moved back and forth from the "AimingPosition".
     public bool freezeEffect;                                                     // Freezes the enemy in place when they are hit.
-    public bool blackHoleEffect;                                                  
-    [SerializeField] private Sprite gunSprite;                                    
-    private GameObject gunImage;                                                          
-                                                                                  
-    [Header("Gun stats")]                                                         
+    public bool blackHoleEffect;
+    [SerializeField] private Sprite gunSprite;
+    private GameObject gunImage;
+
+
+    [Header("Gun stats")]
     public float power;                                                           // The force multiplier applied when the gun lands a hit on a RigidBody.
     public float range;                                                           // The range of the raycast shot when the gun is fired.
     public float fireRate;                                                        // The fire rate of the gun. .1 is fast 10 is slow.
@@ -37,6 +38,21 @@ public class GunInfo : MonoBehaviour
     public int ammoInGun;                                                         // The amount of ammo currently inside of the gun.
     public float reloadTime = 2.5f;                                               // Number of seconds that it takes to reload the weapon and play the reload spin.
 
+
+    [Header("Gun recoil")]                                                        // Values to be read by "GunRecoil.cs" to control the recoil of the gun that the player picked up.
+    public float recoilX;
+    public float recoilY;
+    public float recoilZ;
+    public float kickBack;
+    public float snappiness;
+    public float returnSpeed;
+    public float notShootingReturnMultiplier;
+    public float swayMultiplier;
+    public float swaySmooth;
+    public float AimSpeed;
+    private GunRecoil gunRecoilScript;
+
+
     [Header("Gun positions")]
     private GameObject gunHolder;                                                 // Gameobject attached to the camera that holds the gun.
     public Vector3 defaultGunPosition;                                            // The local position of the gun inside of gunHolder when NOT aimed in.
@@ -44,8 +60,9 @@ public class GunInfo : MonoBehaviour
     public Vector3 aimPosition;                                                   // The local position of the "AimingPosition" GameObject for this weapon when we are aiming down sights.
     public float aimFieldOfView = 30f;                                            // The Field Of View that the camera will change to when player aims in.
     bool playerAimedDownSights = false;                                           // Keeps track of whether the player is currently aiming down their sights.
-                                                                                  
-    [Header("Gun animations")]                                                    
+
+
+    [Header("Gun animations")]
     public ParticleSystem muzzleFlash;                                            // The particle effect that should serve as the muzzle flash when the gun is fired.
     public Transform bulletOrigin;                                                // Where the bullet originates. i.e. The end of the barrel.
     public TrailRenderer bulletTrail;                                             // The TrailRenderer asset that immitates the travel of a tracer round, when the gun is fired.
@@ -67,7 +84,7 @@ public class GunInfo : MonoBehaviour
     private GameObject gunObj;
     private GameObject playerObj;                                                 // The "Player" GameObject
     private GameObject aimingPositionObj;                                         // The "AimingPosition" GameObject
-    private float allowedToPickupTime;                                            
+    private float allowedToPickupTime;
 
 
     // Rigidbody variables.
@@ -89,6 +106,7 @@ public class GunInfo : MonoBehaviour
         pickupPrompt = GameObject.FindGameObjectWithTag("PickupPrompt");
         ammoInGun = magCapacity; // Set the current ammo count to be the mag capacity (i.e. fully loaded).
         gunHolder = GameObject.FindGameObjectWithTag("GunHolder");
+        gunRecoilScript = gunHolder.GetComponent<GunRecoil>();
         aimingPositionObj = GameObject.FindGameObjectWithTag("AimingPosition");
         playerObj = GameObject.FindGameObjectWithTag("Player");
         shootScript = playerObj.GetComponent<Shoot>();
@@ -140,7 +158,7 @@ public class GunInfo : MonoBehaviour
             transform.rotation = gunHolder.transform.rotation;
 
             // Set the aiming position GameObject's position to be correct for this gun.
-            aimingPositionObj.transform.localPosition = aimPosition; 
+            aimingPositionObj.transform.localPosition = aimPosition;
 
             // Parent the gun to the GunHolder so that it moves with the player.
             transform.parent = gunHolder.transform;
@@ -156,6 +174,19 @@ public class GunInfo : MonoBehaviour
             gunImage.GetComponent<Image>().sprite = gunSprite;
             gunImage.GetComponent<Image>().color = new Color(235f, 59f, 90f); // Make the GunSprite UI red, so we can see it.
             gunImage.GetComponent<Image>().preserveAspect = true;
+
+
+            // Set the recoil values of this script to be the values defined for the gun we are holding.
+            gunRecoilScript.recoilX = recoilX;
+            gunRecoilScript.recoilY = recoilY;
+            gunRecoilScript.recoilZ = recoilZ;
+            gunRecoilScript.kickBack = kickBack;
+            gunRecoilScript.snappiness = snappiness;
+            gunRecoilScript.returnSpeed = returnSpeed;
+            gunRecoilScript.notShootingReturnMultiplier = notShootingReturnMultiplier;
+            gunRecoilScript.swayMultiplier = swayMultiplier;
+            gunRecoilScript.swaySmooth = swaySmooth;
+            gunRecoilScript.AimSpeed = AimSpeed;
         }
     }
 
@@ -237,7 +268,7 @@ public class GunInfo : MonoBehaviour
         {
             float xRot = Mathf.Lerp(startRotation, endRotation, t / reloadTime) % 360f; // Work out the rotation which should be applied this frame.
             transform.localEulerAngles = new Vector3(xRot, 0f, 0f); // Update the rotation of the gun.
-            t += Time.deltaTime; 
+            t += Time.deltaTime;
             yield return new WaitForEndOfFrame(); // Wait for the next frame before continuing.
         }
 

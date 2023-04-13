@@ -5540,14 +5540,24 @@ MonoBehaviour:
   power: 1000
   range: 250
   fireRate: 0.05
-  magCapacity: 18
+  magCapacity: 25
   damage: 13
   freezeDuration: 5
   projectileCount: 1
   projectileSpread: 0
   ammoReductionPerShot: 1
   ammoInGun: 18
-  reloadTime: 2.5
+  reloadTime: 1
+  recoilX: 0.3
+  recoilY: 0.3
+  recoilZ: 0.3
+  kickBack: 0.3
+  snappiness: 2
+  returnSpeed: 30
+  notShootingReturnMultiplier: 2
+  swayMultiplier: 100
+  swaySmooth: 3
+  AimSpeed: 4
   defaultGunPosition: {x: 0, y: 0, z: 0}
   defaultGunAngles: {x: 0, y: 0, z: 0, w: 0}
   aimPosition: {x: 0, y: -0.21, z: 0.404}
@@ -5560,10 +5570,6 @@ MonoBehaviour:
   gunPickupDistance: 30
   throwForce: 25
   shotSoundEffect: {fileID: 6674147988831542758}
-  pickupTrigger: {fileID: 6674147988831542745}
-  shootScript: {fileID: 0}
-  gunRecoilScript: {fileID: 0}
-  gunObj: {fileID: 5791136461260435980}
 --- !u!108 &3086416536254799007
 Light:
   m_ObjectHideFlags: 0
