@@ -41,7 +41,7 @@ public class GunRecoil : MonoBehaviour
         }
 
         // Recoil rotations
-        targetRotation = Vector3.Lerp(targetRotation, Vector3.zero, returnSpeed * Time.deltaTime);
+        targetRotation = Vector3.Slerp(targetRotation, Vector3.zero, returnSpeed * Time.deltaTime);
         currentRotation = Vector3.Slerp(currentRotation, targetRotation, snappiness * Time.deltaTime);
 
         Quaternion recoilRotation = Quaternion.Euler(currentRotation);
@@ -81,8 +81,8 @@ public class GunRecoil : MonoBehaviour
 
     Vector3 Kickback()
     {
-        targetPosition = Vector3.Lerp(targetPosition, initialGunPosition, Time.deltaTime * returnSpeed); // Moves from the gun's last target position back to the initial gun position.
-        currentPosition = Vector3.Lerp(currentPosition, targetPosition, Time.fixedDeltaTime * snappiness); // Moves the gun from the current position to the target position.
+        targetPosition = Vector3.Slerp(targetPosition, initialGunPosition, Time.deltaTime * returnSpeed); // Moves from the gun's last target position back to the initial gun position.
+        currentPosition = Vector3.Slerp(currentPosition, targetPosition, Time.fixedDeltaTime * snappiness); // Moves the gun from the current position to the target position.
         return currentPosition; // Unless aiming or firing, 'currentPosition' will be equal to the initialGunPosition.
     }
 

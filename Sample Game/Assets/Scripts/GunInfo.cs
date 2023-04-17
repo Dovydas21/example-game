@@ -122,7 +122,7 @@ public class GunInfo : MonoBehaviour
 
     private void OnMouseOver()
     {
-        if (Vector3.Distance(transform.position, playerObj.transform.position) <= gunPickupDistance && Time.time >= allowedToPickupTime)
+        if (Vector3.Distance(transform.position, playerObj.transform.position) <= gunPickupDistance && Time.time >= allowedToPickupTime && gunHolder.transform.childCount == 0)
         {
             // Set the image
             pickupPrompt.GetComponent<Image>().sprite = gunSprite;

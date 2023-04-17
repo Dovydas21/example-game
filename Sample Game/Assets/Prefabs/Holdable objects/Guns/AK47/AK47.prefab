@@ -690,7 +690,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2936540866122348315}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.364, z: 1.838}
+  m_LocalPosition: {x: 0, y: 0.364, z: 1.86}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5832,19 +5832,18 @@ MonoBehaviour:
   swayMultiplier: 100
   swaySmooth: 3
   AimSpeed: 4
-  gunRecoilScript: {fileID: 0}
   defaultGunPosition: {x: 0, y: -0.27, z: 0}
   defaultGunAngles: {x: 0, y: 1, z: 0, w: -0.00000004371139}
   aimPosition: {x: 0, y: -0.223, z: 0}
   aimFieldOfView: 20
-  muzzleFlash: {fileID: 0}
-  bulletOrigin: {fileID: 0}
+  muzzleFlash: {fileID: 877112102652806526}
+  bulletOrigin: {fileID: 1840831730324545236}
   bulletTrail: {fileID: 7425004647957812907, guid: 68338a0ac53c743368d0e63ba764486a, type: 3}
   bulletTrailSpeed: 50
   gunPickupSpeed: 2
   gunPickupDistance: 75
   throwForce: 25
-  shotSoundEffect: {fileID: 0}
+  shotSoundEffect: {fileID: 2782098492886252927}
 --- !u!108 &1704381394958366694
 Light:
   m_ObjectHideFlags: 0
