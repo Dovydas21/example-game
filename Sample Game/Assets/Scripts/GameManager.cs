@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using UnityEditor.PackageManager;
+//using UnityEditor.PackageManager;
 
 public class GameManager : MonoBehaviour
 {
     public Enemy[] enemies;
     public GameObject playerObj;
     int currentWave;
-    float enemyCountForWave = 13f;
+    float enemyCountForWave = 2f;
     public int enemiesRemainingThisWave;
     public float enemySpawnRadius = 100f;
     float difficultyFactor = 1.5f;
@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         currentWave = 0;
-        //StartCoroutine(StartNextWave(5));
+        StartCoroutine(StartNextWave(5));
     }
 
     IEnumerator StartNextWave(int timer)

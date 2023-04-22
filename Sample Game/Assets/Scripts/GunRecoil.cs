@@ -1,5 +1,5 @@
 ﻿using TMPro;
-using UnityEditor.PackageManager;
+//using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class GunRecoil : MonoBehaviour
