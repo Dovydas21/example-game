@@ -7,7 +7,7 @@ public class WeaponSway : MonoBehaviour
     // Variables for gun sway:
     [Header("Sway variables:")]
     public float swayMultiplier;
-    public float smooth;
+    public float swaySmooth;
     Quaternion targetRotation;
 
     // Variables for gun recoil:
@@ -37,7 +37,8 @@ public class WeaponSway : MonoBehaviour
     float journeyLength;                // A value used to smoothly calculate the movement of aiming into the sights of the gun.
     bool playerTriggeredAim = false;
     float keyDownTime, keyUpTime;
-    float initialSmooth;
+    public float aimSmooth;
+    float initialAimSmooth;
 
     // References
     GunInfo gunInfo;
@@ -47,11 +48,12 @@ public class WeaponSway : MonoBehaviour
 
     private void Start()
     {
+        Destroy(this);
         initialGunPosition = transform.localPosition;
         startTime = Time.time;
         journeyLength = Vector3.Distance(transform.position, aimPos.position);
         initialFOV = cam.fieldOfView;
-        initialSmooth = smooth;
+        initialAimSmooth = swaySmooth;
     }
 
     // Update is called once per frame
@@ -79,11 +81,11 @@ public class WeaponSway : MonoBehaviour
                 }
 
                 float keyUpDownDifference = keyUpTime - keyDownTime; // work out the difference between pressing and releasing the aimKey.
-                if (keyUpDownDifference > 0 && keyUpDownDifference > .1f) // If the player has been holding the key down and they've just let go.
+                if (keyUpDownDifference > 0 && keyUpDownDifference > .2f) // If the player has been holding the key down and they've just let go.
                 {
                     playerTriggeredAim = false;
                 }
-                else if (keyUpDownDifference < 0 && keyUpDownDifference > .1f) // If the player has just pressed the down key quickly then set aiming to true.
+                else if (keyUpDownDifference < 0 && keyUpDownDifference > .2f) // If the player has just pressed the down key quickly then set aiming to true.
                 {
                     playerTriggeredAim = true;
                 }
@@ -108,7 +110,7 @@ public class WeaponSway : MonoBehaviour
 
             debugPosition = aimPos.position;
             transform.localRotation = gunHolderRot;
-            //cam.transform.rotation = camRot;
+            cam.transform.rotation = camRot;
             transform.localPosition = gunHolderPos;
         }
     }
@@ -123,13 +125,13 @@ public class WeaponSway : MonoBehaviour
         {
             result = Vector3.Slerp(initialGunPosition, aimPos.localPosition, fractionOfJourney);
             cam.fieldOfView = Mathf.LerpAngle(initialFOV, gunInfo.aimFieldOfView, fractionOfJourney);
-            smooth = initialSmooth / 3f;
+            aimSmooth = initialAimSmooth / 3f;
         }
         else
         {
             result = Vector3.Slerp(aimPos.localPosition, initialGunPosition, fractionOfJourney);
             cam.fieldOfView = Mathf.LerpAngle(gunInfo.aimFieldOfView, initialFOV, fractionOfJourney);
-            smooth = initialSmooth;
+            aimSmooth = initialAimSmooth;
         }
         return result;
     }
@@ -146,15 +148,16 @@ public class WeaponSway : MonoBehaviour
 
         // Work out where we are ultimately moving the gun to.
         targetRotation = rotationX * rotationY;
-        Quaternion swayAngle = Quaternion.Lerp(transform.localRotation, targetRotation, smooth * Time.deltaTime);
-        
+        Quaternion swayAngle = Quaternion.Lerp(transform.localRotation, targetRotation, swaySmooth * Time.deltaTime);
+
         return swayAngle;
     }
 
     Quaternion RecoilRotation()
     {
         recoilRotation = Vector3.Lerp(recoilRotation, Vector3.zero, Time.deltaTime * returnAmount);
-        currentRotation = Vector3.Slerp(currentRotation, recoilRotation, Time.fixedDeltaTime * snappiness);
+        currentRotation = Vector3.Slerp(currentRotation, recoilRotation, snappiness * Time.deltaTime);
+        print("currentRotation = " + currentRotation + ", recoilRotation = " + recoilRotation);
         return Quaternion.Euler(currentRotation);
     }
 
@@ -164,6 +167,8 @@ public class WeaponSway : MonoBehaviour
         Vector3 recoil = new Vector3(recoilX, Random.Range(0f, recoilY), Random.Range(-recoilZ, recoilZ));
         kickBack *= -1f;
         recoil *= -1f;
+
+        recoilRotation += new Vector3(recoilX * 10f, recoilY * 10f, recoilZ * 10f);
 
         // Add these to the target position of the GunHolder object.
         targetPosition -= kickBack;

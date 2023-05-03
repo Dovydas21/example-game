@@ -108,7 +108,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2517318704003808167}
   - component: {fileID: 3798199264529990908}
-  - component: {fileID: 6637517889232116180}
   - component: {fileID: 4344408848775128308}
   m_Layer: 0
   m_Name: Shotgun applied
@@ -160,102 +159,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!82 &6637517889232116180
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2517318704003808166}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!114 &4344408848775128308
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -831,6 +734,7 @@ GameObject:
   - component: {fileID: 6908194697903190024}
   - component: {fileID: 7452285644120692516}
   - component: {fileID: -4667132368792399817}
+  - component: {fileID: 6080978688176842736}
   m_Layer: 0
   m_Name: Shotgun
   m_TagString: Untagged
@@ -868,42 +772,42 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fullAuto: 0
   canAim: 1
-  hasToBeCocked: 1
   freezeEffect: 0
-  blackHoleEffect: 0
+  blackHoleEffect: 1
   gunSprite: {fileID: 21300000, guid: 510927a75ed5a4c4bb08e905ef1ad1fa, type: 3}
-  power: 10000
+  power: 1000
   range: 500
   fireRate: 0.2
   magCapacity: 8
-  damage: 24
+  damage: 10
   freezeDuration: 0
   projectileCount: 12
-  projectileSpread: 0.2
+  projectileSpread: 0.01
   ammoReductionPerShot: 1
   ammoInGun: 0
-  reloadTime: 2.5
-  gunHolder: {fileID: 0}
+  reloadTime: 0.3
+  recoilX: 10
+  recoilY: 10
+  recoilZ: 10
+  kickBack: 1
+  snappiness: 10
+  returnSpeed: 50
+  notShootingReturnMultiplier: 2
+  swayMultiplier: 100
+  swaySmooth: 4
+  AimSpeed: 3
   defaultGunPosition: {x: 0, y: 0, z: 0}
-  defaultGunAngles: {x: 0, y: 180, z: 0, w: 0}
+  defaultGunAngles: {x: 0, y: 0, z: 0, w: 1}
   aimPosition: {x: 0, y: -0.43, z: 0.25}
   aimFieldOfView: 30
-  shootingAnimation: {fileID: 3798199264529990908}
-  cockingAnimation: {fileID: 7775369616313454394}
   muzzleFlash: {fileID: 7874173963188817716}
   bulletOrigin: {fileID: 8894581501360699922}
   bulletTrail: {fileID: 7425004647957812907, guid: 68338a0ac53c743368d0e63ba764486a, type: 3}
   bulletTrailSpeed: 50
-  gunPickupSpeed: 100
-  gunPickupDistance: 20
-  gunPickupKey: 101
+  gunPickupSpeed: 1
+  gunPickupDistance: 100
   throwForce: 25
   shotSoundEffect: {fileID: 6898579186964174035}
-  cockingSoundEffect: {fileID: -4667132368792399817}
-  pickupTrigger: {fileID: 6908194697903190024}
-  shootScript: {fileID: 0}
-  gunRecoilScript: {fileID: 0}
-  gunObj: {fileID: 0}
 --- !u!82 &6898579186964174035
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1011,7 +915,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 10, y: 10, z: 10}
+  m_Size: {x: 5, y: 5, z: 5}
   m_Center: {x: -0.01028645, y: 0.94646037, z: -0.04719925}
 --- !u!54 &7452285644120692516
 Rigidbody:
@@ -1125,6 +1029,68 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!108 &6080978688176842736
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3079794806247186355}
+  m_Enabled: 0
+  serializedVersion: 10
+  m_Type: 2
+  m_Shape: 0
+  m_Color: {r: 1, g: 0.62448317, b: 0, a: 1}
+  m_Intensity: 1
+  m_Range: 10
+  m_SpotAngle: 30
+  m_InnerSpotAngle: 21.80208
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 1
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 0.426
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+    m_CullingMatrixOverride:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    m_UseCullingMatrixOverride: 0
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingLayerMask: 1
+  m_Lightmapping: 4
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 1
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_BoundingSphereOverride: {x: 0, y: 3.6e-44, z: 1.6419e-41, w: 7.8e-44}
+  m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
 --- !u!1 &6293949924026531378
 GameObject:
   m_ObjectHideFlags: 0
@@ -4995,18 +4961,18 @@ ParticleSystem:
       properties: 0
       emitProbability: 1
   LightsModule:
-    enabled: 0
-    ratio: 0
-    light: {fileID: 0}
+    enabled: 1
+    ratio: 1
+    light: {fileID: 6080978688176842736}
     randomDistribution: 1
     color: 1
     range: 1
     intensity: 1
     rangeCurve:
       serializedVersion: 2
-      minMaxState: 0
-      scalar: 1
-      minScalar: 1
+      minMaxState: 3
+      scalar: 8
+      minScalar: 4
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -5057,8 +5023,8 @@ ParticleSystem:
         m_RotationOrder: 4
     intensityCurve:
       serializedVersion: 2
-      minMaxState: 0
-      scalar: 1
+      minMaxState: 3
+      scalar: 4
       minScalar: 1
       maxCurve:
         serializedVersion: 2

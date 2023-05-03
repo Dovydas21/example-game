@@ -453,8 +453,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   value: 10
-  pickupRange: 10
-  pickupSpeed: 3
+  pickupRange: 400
+  pickupSpeed: 1
 --- !u!1 &7619358416295940581
 GameObject:
   m_ObjectHideFlags: 0

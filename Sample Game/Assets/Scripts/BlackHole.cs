@@ -40,16 +40,6 @@ public class BlackHole : MonoBehaviour
     {
         yield return new WaitForSeconds(lifeTime);
         print("Destroying black hole...");
-
-        Collider[] enemiesInRadius = Physics.OverlapSphere(transform.position, pullRadius, Physics.AllLayers);
-        foreach (Collider enemy in enemiesInRadius)
-        {
-            if (enemy.transform.tag == "Enemy")
-            {
-                //enemy.GetComponent<EnemyController>().StartCoroutine(enemy.GetComponent<EnemyController>().Die());
-                enemy.GetComponent<EnemyController>().ToggleRagdoll(false);
-            }
-        }
         Destroy(gameObject); // Destroy the parent object.
     }
 }

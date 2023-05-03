@@ -690,7 +690,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2936540866122348315}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.364, z: 1.838}
+  m_LocalPosition: {x: 0, y: 0.364, z: 1.86}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4534,18 +4534,18 @@ ParticleSystem:
       properties: 0
       emitProbability: 1
   LightsModule:
-    enabled: 0
-    ratio: 0
-    light: {fileID: 0}
+    enabled: 1
+    ratio: 1
+    light: {fileID: 1704381394958366694}
     randomDistribution: 1
     color: 1
     range: 1
     intensity: 1
     rangeCurve:
       serializedVersion: 2
-      minMaxState: 0
-      scalar: 1
-      minScalar: 1
+      minMaxState: 3
+      scalar: 8
+      minScalar: 4
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -4596,9 +4596,9 @@ ParticleSystem:
         m_RotationOrder: 4
     intensityCurve:
       serializedVersion: 2
-      minMaxState: 0
-      scalar: 1
-      minScalar: 1
+      minMaxState: 3
+      scalar: 4
+      minScalar: 2
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -5630,6 +5630,7 @@ GameObject:
   - component: {fileID: 2782098492886252922}
   - component: {fileID: 2782098492886252927}
   - component: {fileID: 2782098492886252920}
+  - component: {fileID: 1704381394958366694}
   m_Layer: 0
   m_Name: AK47
   m_TagString: Untagged
@@ -5807,13 +5808,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fullAuto: 1
   canAim: 1
-  hasToBeCocked: 0
   freezeEffect: 0
   blackHoleEffect: 0
   gunSprite: {fileID: 21300000, guid: 0f7ca4e2e23ab4f2caf4f098384d8427, type: 3}
   power: 3000
-  range: 250
-  fireRate: 0.05
+  range: 1000
+  fireRate: 0.1
   magCapacity: 31
   damage: 25
   freezeDuration: 0
@@ -5821,28 +5821,91 @@ MonoBehaviour:
   projectileSpread: 0
   ammoReductionPerShot: 1
   ammoInGun: 18
-  reloadTime: 2.5
-  gunHolder: {fileID: 0}
+  reloadTime: 0.8
+  recoilX: 0.3
+  recoilY: 0.3
+  recoilZ: 0.3
+  kickBack: 0.2
+  snappiness: 1
+  returnSpeed: 30
+  notShootingReturnMultiplier: 2
+  swayMultiplier: 100
+  swaySmooth: 3
+  AimSpeed: 4
   defaultGunPosition: {x: 0, y: -0.27, z: 0}
   defaultGunAngles: {x: 0, y: 1, z: 0, w: -0.00000004371139}
   aimPosition: {x: 0, y: -0.223, z: 0}
   aimFieldOfView: 20
-  shootingAnimation: {fileID: 0}
-  cockingAnimation: {fileID: 0}
   muzzleFlash: {fileID: 877112102652806526}
   bulletOrigin: {fileID: 1840831730324545236}
   bulletTrail: {fileID: 7425004647957812907, guid: 68338a0ac53c743368d0e63ba764486a, type: 3}
   bulletTrailSpeed: 50
   gunPickupSpeed: 2
   gunPickupDistance: 75
-  gunPickupKey: 101
   throwForce: 25
   shotSoundEffect: {fileID: 2782098492886252927}
-  cockingSoundEffect: {fileID: 0}
-  pickupTrigger: {fileID: 2782098492886252922}
-  shootScript: {fileID: 0}
-  gunRecoilScript: {fileID: 0}
-  gunObj: {fileID: 0}
+--- !u!108 &1704381394958366694
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3051916655021998117}
+  m_Enabled: 0
+  serializedVersion: 10
+  m_Type: 2
+  m_Shape: 0
+  m_Color: {r: 1, g: 0.62448317, b: 0, a: 1}
+  m_Intensity: 1
+  m_Range: 10
+  m_SpotAngle: 30
+  m_InnerSpotAngle: 21.80208
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 1
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 0.407
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+    m_CullingMatrixOverride:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    m_UseCullingMatrixOverride: 0
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingLayerMask: 1
+  m_Lightmapping: 4
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 1
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_BoundingSphereOverride: {x: 0, y: 1.3e-44, z: 1.9418e-41, w: 7.8e-44}
+  m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
 --- !u!1 &3170887271304210436
 GameObject:
   m_ObjectHideFlags: 0

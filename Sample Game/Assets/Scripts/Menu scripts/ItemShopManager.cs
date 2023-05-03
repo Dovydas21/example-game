@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using static UnityEditor.Progress;
+//using static UnityEditor.Progress;
 
 public class ItemShopManager : MonoBehaviour
 {
@@ -15,7 +15,7 @@ public class ItemShopManager : MonoBehaviour
     public ShopItem_SO[] weaponItems;               // The scriptable objects that contain the information about the items we are showing in the shop.
     public ShopItemTemplate[] itemPanels;           // The panels where we will display the items in the shop.
     public Button[] purchaseButtons;                // A list of all of the "Purchase / Buy" button that exists on each panel.
-    
+
     private void Start()
     {
         ViewItemShop(false);
@@ -56,8 +56,8 @@ public class ItemShopManager : MonoBehaviour
         {
             // Remove the money from the player's balance, update the UI and disable buttons for items we cannot afford.
             playerMoney.AddToBalance(-(int)item.basePurchasePrice);
-            UpdateBalance(); 
-            CheckPurchasable(); 
+            UpdateBalance();
+            CheckPurchasable();
 
             // Spawning the item is done using a coroutine so that we can add a delay. Otherwise when we spawn the gun some of the UI elements aren't available to the GunInfo.cs script.
             StartCoroutine(SpawnItem(item));
@@ -74,7 +74,14 @@ public class ItemShopManager : MonoBehaviour
     void UpdateBalance()
     {
         int balance = playerMoney.GetSavedBalance();
-        playerBalance.text = balance.ToString();
+        try
+        {
+            playerBalance.text = balance.ToString();
+        }
+        catch
+        {
+            // Prevent error
+        }
     }
 
     void LoadWeaponPanels()

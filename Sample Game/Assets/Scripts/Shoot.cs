@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
-using UnityEditor.PackageManager;
+//using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -14,6 +14,8 @@ public class Shoot : MonoBehaviour
 
     Transform gunHolder;
     Transform gun;
+    [SerializeField] private GunRecoil gunRecoilScript;
+    [SerializeField] private CameraRecoil camRecoilScript;
     public Transform ADSPosition;               // Trasnform of the GameObject called "Aiming Position" so we can slerp to it to ADS.
     public GameObject bulletHoleDecal;
     WaitForSeconds rapidFireWait;
@@ -21,7 +23,7 @@ public class Shoot : MonoBehaviour
     public bool playerHoldingGun = false;
     public bool playerSummonedWeapon = false;
     float nextShotTime;                         // The time that the next shot is allowed to be fired at or after.
-    GunInfo gunInfo;
+    private GunInfo gunInfo;
     List<Vector3> hitPositions = new List<Vector3>();
 
     public void Start()
@@ -56,16 +58,17 @@ public class Shoot : MonoBehaviour
     {
         if (playerHoldingGun && Time.time >= nextShotTime && Time.timeScale > 0f)
         {
-
             nextShotTime = Time.time + gunInfo.fireRate;
             firing = true;
             print("Shot fired");
             RaycastHit HitInfo;
-            gunHolder.GetComponent<WeaponSway>().Recoil(); // Call the recoil function.
+
+            gunRecoilScript.RecoilFire(); // Recoil effect on the gun
+            camRecoilScript.RecoilFire(); // Recoil effect on the camera
 
             gunInfo.PlayMuzzleFlash();
             gunInfo.PlayShootSound();
-            gunInfo.PlayCockingAnimation();
+           
 
             // Set the bullet offset to Vector3.Zero for the first shot, this way any guns with 1 projectile will fire straight and the first bullet will always be on target.
             Vector3 nextBulletOffset = Vector3.zero;
