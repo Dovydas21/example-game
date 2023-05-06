@@ -83,7 +83,7 @@ public class Shoot : MonoBehaviour
                     nextBulletOffset += new Vector3(Random.Range(-gunInfo.projectileSpread, gunInfo.projectileSpread), Random.Range(-gunInfo.projectileSpread, gunInfo.projectileSpread), Random.Range(-gunInfo.projectileSpread, gunInfo.projectileSpread));
                 }
 
-                if (gunInfo.hitScan)
+                if (gunInfo.hitScan) // USE HITSCAN AND FAKE PROJECTILES.
                 {
                     bool shotHit = Physics.Raycast(gunInfo.bulletOrigin.position, gunInfo.bulletOrigin.forward + nextBulletOffset, out HitInfo, gunInfo.range);
 
@@ -140,14 +140,14 @@ public class Shoot : MonoBehaviour
                         Destroy(trail, 1f);
                     }
                 }
-                else
+                else // USE PHYSICAL PROJECTILES WITH FORCE APPLIED.
                 {
-                    GameObject bulletFired = Instantiate(gunInfo.projectileObject, gunInfo.bulletOrigin.position, Quaternion.identity);
-                    Rigidbody bulletRB = bulletFired.AddComponent<Rigidbody>();
-                    bulletRB.useGravity = true;
-                    bulletRB.mass = 1f;
-                    bulletRB.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-                    bulletRB.AddForce((gunInfo.bulletOrigin.forward + nextBulletOffset) * gunInfo.power, ForceMode.Impulse);
+                    GameObject bulletFired = Instantiate(gunInfo.projectileObject, gunInfo.bulletOrigin.position, Quaternion.identity); // Spawn the bullet object at the end of the barrel.
+                    Rigidbody bulletRB = bulletFired.AddComponent<Rigidbody>(); // Add a rigidbody so physics can be applied.
+                    bulletRB.useGravity = true; // Turn on gravity to enable bullet drop.
+                    bulletRB.mass = 1f; // The mass of the bullet.
+                    bulletRB.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic; // Set the collision detection to be ContinuousDynamic so it collides when it is moving fast.
+                    bulletRB.AddForce((gunInfo.bulletOrigin.forward + nextBulletOffset) * gunInfo.power, ForceMode.Impulse); // Add force to the bullet object to fire it.
                 }
             }
 
