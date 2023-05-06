@@ -925,6 +925,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1342278745892256995}
+  - component: {fileID: 8233671780857691980}
   m_Layer: 0
   m_Name: Apartments_RIGHT_SKINNY_SHORT
   m_TagString: Untagged
@@ -979,6 +980,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &8233671780857691980
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4636912897148407253}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.4483063, y: 3.8179276, z: 2.046049}
+  m_Center: {x: 0.010674089, y: 1.8786181, z: 6.9487495}
 --- !u!1 &5246527202163918830
 GameObject:
   m_ObjectHideFlags: 0

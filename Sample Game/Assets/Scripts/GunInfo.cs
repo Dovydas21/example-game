@@ -21,6 +21,8 @@ public class GunInfo : MonoBehaviour
     public bool canAim;                                                           // True = Gun can be moved back and forth from the "AimingPosition".
     public bool freezeEffect;                                                     // Freezes the enemy in place when they are hit.
     public bool blackHoleEffect;
+    public bool hitScan;                                                          // True = Raycast used to detect hits. False = Physical projectiles.
+    public GameObject projectileObject;                                           //        The projectile fired from the weapon.
     [SerializeField] private Sprite gunSprite;
     private GameObject gunImage;
 

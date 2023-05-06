@@ -9,6 +9,7 @@ public class CombineMeshes : MonoBehaviour
 {
     private MeshFilter targetMeshFilter;
     public bool addCollider;
+    public bool isStatic = true;
 
     public void Awake()
     {
@@ -84,6 +85,9 @@ public class CombineMeshes : MonoBehaviour
             MeshCollider mc = gameObject.AddComponent<MeshCollider>();
             mc.sharedMesh = gameObject.GetComponent<MeshFilter>().sharedMesh;
         }
+
+        if (isStatic)
+            gameObject.isStatic = isStatic;
 
         // Assign materials
         Material[] materialsArray = materials.ToArray(typeof(Material)) as Material[];

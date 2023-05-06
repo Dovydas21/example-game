@@ -5298,6 +5298,8 @@ MonoBehaviour:
   canAim: 1
   freezeEffect: 0
   blackHoleEffect: 0
+  hitScan: 0
+  projectileObject: {fileID: 8063839878637264367, guid: 4b633857834fe44f895206af699e68f1, type: 3}
   gunSprite: {fileID: 21300000, guid: c8732ad20d87141628027a69d8ece8b7, type: 3}
   power: 200
   range: 500

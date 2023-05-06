@@ -62,8 +62,7 @@ public class PerspectiveScale : MonoBehaviour
         objectTransform.position = rayPoint;
     }
 
-    /*
-     * void MoveObject()
+    /*void MoveObject()
     {
         ray = mainCamera.ScreenPointToRay(Input.mousePosition);
         Vector3 rayDirection = ray.direction.normalized;
@@ -73,9 +72,8 @@ public class PerspectiveScale : MonoBehaviour
         objectTransform.localScale = new Vector3(objectScale * scaleMultiplier, objectScale * scaleMultiplier, objectScale * scaleMultiplier);
         Vector3 rayPoint = ray.GetPoint(objectDistance / dotProduct);
         objectTransform.position = rayPoint + objectOffset;
-    }
-     * 
-     * void MoveObject()
+    }*/
+    /* void MoveObject()
     {
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
         Vector3 rayPoint = ray.GetPoint(objectDistance);
