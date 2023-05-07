@@ -1,3 +1,97 @@
+//using System.Collections;
+//using System.Collections.Generic;
+//using UnityEngine;
+
+//public class PerspectiveScale : MonoBehaviour
+//{
+//    private Camera mainCamera;
+//    private bool isPickedUp = false;
+//    private Transform objectTransform;
+//    private Vector3 initialScale;
+//    private Vector3 initialPosition;
+//    private float maxDistance = 10f;
+//    private float collisionCheckRadius = 1f;
+//    private LayerMask collisionLayerMask;
+//    private float groundOffset = 0f;
+
+//    private void Start()
+//    {
+//        mainCamera = Camera.main;
+//        collisionLayerMask = LayerMask.GetMask("Ground"); // Adjust the layer name if needed
+//    }
+
+//    private void Update()
+//    {
+//        if (Input.GetKeyDown(KeyCode.T))
+//        {
+//            if (isPickedUp)
+//            {
+//                DropObject();
+//            }
+//            else
+//            {
+//                PickUpObject();
+//            }
+//        }
+
+//        if (isPickedUp)
+//        {
+//            ResizeObject();
+//        }
+//    }
+
+//    private void PickUpObject()
+//    {
+//        RaycastHit hit;
+//        if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out hit))
+//        {
+//            float distance = Vector3.Distance(mainCamera.transform.position, hit.point);
+//            if (distance <= maxDistance)
+//            {
+//                isPickedUp = true;
+//                objectTransform = hit.transform;
+//                initialScale = objectTransform.localScale;
+//                initialPosition = objectTransform.position;
+//            }
+//        }
+//    }
+
+//    private void ResizeObject()
+//    {
+//        Ray ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)); // Cast ray from the center of the screen
+//        RaycastHit hit;
+//        if (Physics.Raycast(ray, out hit))
+//        {
+//            float distance = Vector3.Distance(mainCamera.transform.position, hit.point);
+//            float clampedDistance = Mathf.Clamp(distance, 0f, maxDistance);
+//            float scaleMultiplier = clampedDistance / initialScale.magnitude;
+//            objectTransform.localScale = initialScale * scaleMultiplier;
+
+//            Vector3 direction = hit.point - mainCamera.transform.position;
+//            Vector3 newPosition = mainCamera.transform.position + direction.normalized * clampedDistance;
+//            newPosition = GetAdjustedPosition(newPosition);
+//            objectTransform.position = newPosition;
+//        }
+//    }
+
+//    private Vector3 GetAdjustedPosition(Vector3 position)
+//    {
+//        RaycastHit hit;
+//        if (Physics.Raycast(position, Vector3.down, out hit, Mathf.Infinity, collisionLayerMask))
+//        {
+//            position.y = hit.point.y + groundOffset;
+//        }
+//        return position;
+//    }
+
+//    private void DropObject()
+//    {
+//        isPickedUp = false;
+//        objectTransform = null;
+//    }
+//}
+
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,18 +100,21 @@ public class PerspectiveScale : MonoBehaviour
 {
     private Camera mainCamera;
     private bool isPickedUp = false;
-    private Vector3 objectOffset;
     private Transform objectTransform;
-    private float objectDistance;
-    private float objectScale;
-    private Vector3 rayPoint;
+    private Vector3 initialScale;
+    private Vector3 initialPosition;
+    private float maxDistance = 10f;
+    private float collisionCheckRadius = 2f;
+    private LayerMask collisionLayerMask;
+    private float groundOffset = 1f;
 
-    void Start()
+    private void Start()
     {
         mainCamera = Camera.main;
+        collisionLayerMask = LayerMask.GetMask("Ground"); // Adjust the layer name if needed
     }
 
-    void Update()
+    private void Update()
     {
         if (Input.GetKeyDown(KeyCode.T))
         {
@@ -30,66 +127,523 @@ public class PerspectiveScale : MonoBehaviour
                 PickUpObject();
             }
         }
+
         if (isPickedUp)
         {
-            MoveObject();
+            ResizeObject();
         }
     }
 
-    void PickUpObject()
+    private void PickUpObject()
     {
         RaycastHit hit;
         if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out hit))
         {
-            isPickedUp = true;
-            objectTransform = hit.transform;
-            objectOffset = transform.position - hit.point;
-            objectDistance = hit.distance;
-            objectScale = transform.localScale.x;
+            float distance = Vector3.Distance(mainCamera.transform.position, hit.point);
+            if (distance <= maxDistance)
+            {
+                isPickedUp = true;
+                objectTransform = hit.transform;
+                initialScale = objectTransform.localScale;
+                initialPosition = objectTransform.position;
+            }
         }
     }
 
-    void MoveObject()
+    private void ResizeObject()
     {
-        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-        /*Vector3 rayDirection = ray.direction.normalized;
-        Vector3 objectDirection = (objectTransform.position - mainCamera.transform.position).normalized;
-        float dotProduct = Vector3.Dot(rayDirection, objectDirection);
-        float scaleMultiplier = Mathf.Max(0.5f, dotProduct);*/
-        float scaleMultiplier = objectDistance;
-        objectTransform.localScale = new Vector3(objectScale * scaleMultiplier, objectScale * scaleMultiplier, objectScale * scaleMultiplier);
-        Vector3 rayPoint = ray.GetPoint(objectDistance);
-        objectTransform.position = rayPoint;
+        //Ray ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)); // Cast ray from the center of the screen
+        //RaycastHit hit;
+        //if (Physics.Raycast(ray, out hit))
+        //{
+        float distance = Vector3.Distance(mainCamera.transform.position, objectTransform.position);
+        float clampedDistance = Mathf.Clamp(distance, 0f, maxDistance);
+        float scaleMultiplier = clampedDistance / initialScale.magnitude;
+        objectTransform.localScale = initialScale * scaleMultiplier;
+
+        Vector3 direction = mainCamera.transform.forward;
+        Vector3 newPosition = mainCamera.transform.position + direction.normalized * clampedDistance;
+        newPosition = GetAdjustedPosition(newPosition);
+        objectTransform.position = newPosition;
+        //}
     }
 
-    /*void MoveObject()
+    private Vector3 GetAdjustedPosition(Vector3 position)
     {
-        ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-        Vector3 rayDirection = ray.direction.normalized;
-        Vector3 objectDirection = (objectTransform.position - mainCamera.transform.position).normalized;
-        float dotProduct = Vector3.Dot(rayDirection, objectDirection);
-        float scaleMultiplier = Mathf.Max(0.5f, dotProduct);
-        objectTransform.localScale = new Vector3(objectScale * scaleMultiplier, objectScale * scaleMultiplier, objectScale * scaleMultiplier);
-        Vector3 rayPoint = ray.GetPoint(objectDistance / dotProduct);
-        objectTransform.position = rayPoint + objectOffset;
-    }*/
-    /* void MoveObject()
-    {
-        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-        Vector3 rayPoint = ray.GetPoint(objectDistance);
-        objectTransform.position = rayPoint;
-        float scaleMultiplier = mainCamera.transform.position.z / objectDistance;
-        objectTransform.localScale = new Vector3(objectScale * scaleMultiplier, objectScale * scaleMultiplier, objectScale * scaleMultiplier);
-    }*/
-
-    private void OnDrawGizmos()
-    {
-       Gizmos.DrawCube(rayPoint, new Vector3(.1f, .1f, .1f));
+        RaycastHit hit;
+        if (Physics.Raycast(position, Vector3.down, out hit, Mathf.Infinity, collisionLayerMask))
+        {
+            position.y = hit.point.y + groundOffset;
+        }
+        return position;
     }
 
-    void DropObject()
+    private void DropObject()
     {
-        objectTransform = null;
         isPickedUp = false;
+        objectTransform = null;
     }
 }
+
+
+
+
+//using System.Collections;
+//using System.Collections.Generic;
+//using UnityEngine;
+
+//public class PerspectiveScale : MonoBehaviour
+//{
+//    private Camera mainCamera;
+//    private bool isPickedUp = false;
+//    private Transform objectTransform;
+//    private Vector3 initialScale;
+//    private Vector3 initialPosition;
+//    private float maxDistance = 10f;
+//    private float collisionCheckRadius = 2f;
+//    private LayerMask collisionLayerMask;
+//    private float groundOffset = 0.1f;
+
+//    private void Start()
+//    {
+//        mainCamera = Camera.main;
+//        collisionLayerMask = LayerMask.GetMask("Ground"); // Adjust the layer name if needed
+//    }
+
+//    private void Update()
+//    {
+//        if (Input.GetKeyDown(KeyCode.T))
+//        {
+//            if (isPickedUp)
+//            {
+//                DropObject();
+//            }
+//            else
+//            {
+//                PickUpObject();
+//            }
+//        }
+
+//        if (isPickedUp)
+//        {
+//            ResizeObject();
+//        }
+//    }
+
+//    private void PickUpObject()
+//    {
+//        RaycastHit hit;
+//        if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out hit))
+//        {
+//            float distance = Vector3.Distance(mainCamera.transform.position, hit.point);
+//            if (distance <= maxDistance)
+//            {
+//                isPickedUp = true;
+//                objectTransform = hit.transform;
+//                initialScale = objectTransform.localScale;
+//                initialPosition = objectTransform.position;
+//            }
+//        }
+//    }
+
+//    private void ResizeObject()
+//    {
+//        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+//        RaycastHit hit;
+//        if (Physics.Raycast(ray, out hit))
+//        {
+//            float distance = Vector3.Distance(mainCamera.transform.position, hit.point);
+//            float clampedDistance = Mathf.Clamp(distance, 0f, maxDistance);
+//            float scaleMultiplier = clampedDistance / initialScale.magnitude;
+//            objectTransform.localScale = initialScale * scaleMultiplier;
+
+//            Vector3 direction = hit.point - mainCamera.transform.position;
+//            Vector3 newPosition = mainCamera.transform.position + direction.normalized * clampedDistance;
+//            newPosition = GetAdjustedPosition(newPosition);
+//            objectTransform.position = newPosition;
+//        }
+//    }
+
+//    private Vector3 GetAdjustedPosition(Vector3 position)
+//    {
+//        RaycastHit hit;
+//        if (Physics.Raycast(position, Vector3.down, out hit, Mathf.Infinity, collisionLayerMask))
+//        {
+//            position.y = hit.point.y + groundOffset;
+//        }
+//        return position;
+//    }
+
+//    private void DropObject()
+//    {
+//        isPickedUp = false;
+//        objectTransform = null;
+//    }
+//}
+
+
+
+////using System.Collections;
+////using System.Collections.Generic;
+////using UnityEngine;
+
+////public class PerspectiveScale : MonoBehaviour
+////{
+////    private Camera mainCamera;
+////    private bool isPickedUp = false;
+////    private Transform objectTransform;
+////    private Vector3 initialScale;
+////    private Vector3 initialPosition;
+////    private float maxDistance = 5f;
+////    private float collisionCheckRadius = 1f;
+////    private LayerMask collisionLayerMask;
+
+////    private void Start()
+////    {
+////        mainCamera = Camera.main;
+////        collisionLayerMask = LayerMask.GetMask("Default"); // Adjust the layer name if needed
+////    }
+
+////    private void Update()
+////    {
+////        if (Input.GetKeyDown(KeyCode.T))
+////        {
+////            if (isPickedUp)
+////            {
+////                DropObject();
+////            }
+////            else
+////            {
+////                PickUpObject();
+////            }
+////        }
+
+////        if (isPickedUp)
+////        {
+////            ResizeObject();
+////        }
+////    }
+
+////    private void PickUpObject()
+////    {
+////        RaycastHit hit;
+////        if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out hit))
+////        {
+////            float distance = Vector3.Distance(mainCamera.transform.position, hit.point);
+////            if (distance <= maxDistance)
+////            {
+////                isPickedUp = true;
+////                objectTransform = hit.transform;
+////                initialScale = objectTransform.localScale;
+////                initialPosition = objectTransform.position;
+////            }
+////        }
+////    }
+
+////    private void ResizeObject()
+////    {
+////        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+////        RaycastHit hit;
+////        if (Physics.Raycast(ray, out hit))
+////        {
+////            float distance = Vector3.Distance(mainCamera.transform.position, hit.point);
+////            float clampedDistance = Mathf.Clamp(distance, 0f, maxDistance);
+////            float scaleMultiplier = clampedDistance / initialScale.magnitude;
+////            objectTransform.localScale = initialScale * scaleMultiplier;
+
+////            Vector3 direction = hit.point - mainCamera.transform.position;
+////            Vector3 newPosition = initialPosition + direction.normalized * clampedDistance;
+////            CheckCollision(ref newPosition);
+////            objectTransform.position = newPosition;
+////        }
+////    }
+
+////    private void CheckCollision(ref Vector3 position)
+////    {
+////        Collider[] colliders = Physics.OverlapSphere(position, collisionCheckRadius, collisionLayerMask);
+////        foreach (var collider in colliders)
+////        {
+////            if (collider != objectTransform.GetComponent<Collider>())
+////            {
+////                Vector3 direction = position - collider.transform.position;
+////                float distance = direction.magnitude;
+////                Vector3 collisionPoint = collider.ClosestPoint(position);
+////                if (distance < collisionCheckRadius)
+////                {
+////                    position = collisionPoint + direction.normalized * collisionCheckRadius;
+////                }
+////            }
+////        }
+////    }
+
+////    private void DropObject()
+////    {
+////        isPickedUp = false;
+////        objectTransform = null;
+////    }
+////}
+
+
+//////using System.Collections;
+//////using System.Collections.Generic;
+//////using UnityEngine;
+
+//////public class PerspectiveScale : MonoBehaviour
+//////{
+//////    private Camera mainCamera;
+//////    private bool isPickedUp = false;
+//////    private Transform objectTransform;
+//////    private Vector3 initialScale;
+//////    private Vector3 initialPosition;
+//////    private float maxDistance = 10f;
+//////    private float collisionCheckRadius = 1f;
+//////    private LayerMask collisionLayerMask;
+
+//////    private void Start()
+//////    {
+//////        mainCamera = Camera.main;
+//////        collisionLayerMask = LayerMask.GetMask("Default"); // Adjust the layer name if needed
+//////    }
+
+//////    private void Update()
+//////    {
+//////        if (Input.GetKeyDown(KeyCode.T))
+//////        {
+//////            if (isPickedUp)
+//////            {
+//////                DropObject();
+//////            }
+//////            else
+//////            {
+//////                PickUpObject();
+//////            }
+//////        }
+
+//////        if (isPickedUp)
+//////        {
+//////            ResizeObject();
+//////        }
+//////    }
+
+//////    private void PickUpObject()
+//////    {
+//////        RaycastHit hit;
+//////        if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out hit))
+//////        {
+//////            float distance = Vector3.Distance(mainCamera.transform.position, hit.point);
+//////            if (distance <= maxDistance)
+//////            {
+//////                isPickedUp = true;
+//////                objectTransform = hit.transform;
+//////                initialScale = objectTransform.localScale;
+//////                initialPosition = objectTransform.position;
+//////            }
+//////        }
+//////    }
+
+//////    private void ResizeObject()
+//////    {
+//////        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+//////        RaycastHit hit;
+//////        if (Physics.Raycast(ray, out hit))
+//////        {
+//////            float distance = Vector3.Distance(mainCamera.transform.position, hit.point);
+//////            if (distance > maxDistance)
+//////            {
+//////                distance = maxDistance;
+//////            }
+//////            float scaleMultiplier = distance / initialScale.magnitude;
+//////            objectTransform.localScale = initialScale * scaleMultiplier;
+
+//////            Vector3 direction = hit.point - mainCamera.transform.position;
+//////            Vector3 newPosition = initialPosition + direction;
+//////            CheckCollision(ref newPosition);
+//////            objectTransform.position = newPosition;
+//////        }
+//////    }
+
+//////    private void CheckCollision(ref Vector3 position)
+//////    {
+//////        Collider[] colliders = Physics.OverlapSphere(position, collisionCheckRadius, collisionLayerMask);
+//////        foreach (var collider in colliders)
+//////        {
+//////            if (collider != objectTransform.GetComponent<Collider>())
+//////            {
+//////                Vector3 direction = position - collider.transform.position;
+//////                float distance = direction.magnitude;
+//////                Vector3 collisionPoint = collider.ClosestPoint(position);
+//////                if (distance < collisionCheckRadius)
+//////                {
+//////                    position = collisionPoint + direction.normalized * collisionCheckRadius;
+//////                }
+//////            }
+//////        }
+//////    }
+
+//////    private void DropObject()
+//////    {
+//////        isPickedUp = false;
+//////        objectTransform = null;
+//////    }
+//////}
+
+
+////////using System.Collections;
+////////using System.Collections.Generic;
+////////using UnityEngine;
+
+////////public class PerspectiveScale : MonoBehaviour
+////////{
+////////    private Camera mainCamera;
+////////    private bool isPickedUp = false;
+////////    private Transform objectTransform;
+////////    private Vector3 initialScale;
+////////    private Vector3 initialPosition;
+
+////////    private void Start()
+////////    {
+////////        mainCamera = Camera.main;
+////////    }
+
+////////    private void Update()
+////////    {
+////////        if (Input.GetKeyDown(KeyCode.T))
+////////        {
+////////            if (isPickedUp)
+////////            {
+////////                DropObject();
+////////            }
+////////            else
+////////            {
+////////                PickUpObject();
+////////            }
+////////        }
+
+////////        if (isPickedUp)
+////////        {
+////////            ResizeObject();
+////////        }
+////////    }
+
+////////    private void PickUpObject()
+////////    {
+////////        RaycastHit hit;
+////////        if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out hit))
+////////        {
+////////            isPickedUp = true;
+////////            objectTransform = hit.transform;
+////////            initialScale = objectTransform.localScale;
+////////            initialPosition = objectTransform.position;
+////////        }
+////////    }
+
+////////    private void ResizeObject()
+////////    {
+////////        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+////////        RaycastHit hit;
+////////        if (Physics.Raycast(ray, out hit))
+////////        {
+////////            Vector3 objectToCamera = mainCamera.transform.position - objectTransform.position;
+////////            float distance = Vector3.Dot(objectToCamera, objectTransform.forward);
+////////            float scaleMultiplier = distance / initialScale.magnitude;
+////////            objectTransform.localScale = initialScale * scaleMultiplier;
+
+////////            Vector3 direction = hit.point - mainCamera.transform.position;
+////////            objectTransform.position = initialPosition + direction;
+////////        }
+////////    }
+
+////////    private void DropObject()
+////////    {
+////////        isPickedUp = false;
+////////        objectTransform = null;
+////////    }
+////////}
+
+
+
+
+
+
+//////////using System.Collections;
+//////////using System.Collections.Generic;
+//////////using UnityEngine;
+
+//////////public class PerspectiveScale : MonoBehaviour
+//////////{
+//////////    private Camera mainCamera;
+//////////    private bool isPickedUp = false;
+//////////    private Transform objectTransform;
+//////////    private float objectDistance;
+//////////    private float initialScale;
+//////////    private Vector3 initialPosition;
+
+//////////    private void Start()
+//////////    {
+//////////        mainCamera = Camera.main;
+//////////    }
+
+//////////    private void Update()
+//////////    {
+//////////        if (Input.GetKeyDown(KeyCode.T))
+//////////        {
+//////////            if (isPickedUp)
+//////////            {
+//////////                DropObject();
+//////////            }
+//////////            else
+//////////            {
+//////////                PickUpObject();
+//////////            }
+//////////        }
+
+//////////        if (isPickedUp)
+//////////        {
+//////////            ResizeObject();
+//////////        }
+//////////    }
+
+//////////    private void PickUpObject()
+//////////    {
+//////////        RaycastHit hit;
+//////////        if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out hit))
+//////////        {
+//////////            isPickedUp = true;
+//////////            objectTransform = hit.transform;
+//////////            objectDistance = Vector3.Distance(mainCamera.transform.position, objectTransform.position);
+//////////            initialScale = objectTransform.localScale.x;
+//////////            initialPosition = objectTransform.position;
+//////////        }
+//////////    }
+
+//////////    private void ResizeObject()
+//////////    {
+//////////        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+//////////        RaycastHit hit;
+//////////        if (Physics.Raycast(ray, out hit))
+//////////        {
+//////////            float distance = Vector3.Distance(mainCamera.transform.position, hit.point);
+//////////            float scaleMultiplier = objectDistance / distance;
+//////////            objectTransform.localScale = new Vector3(initialScale * scaleMultiplier, initialScale * scaleMultiplier, initialScale * scaleMultiplier);
+
+//////////            Vector3 direction = hit.point - mainCamera.transform.position;
+//////////            Vector3 newPosition = initialPosition + direction.normalized * objectDistance;
+
+//////////            // Check if the new position is below the ground
+//////////            RaycastHit groundHit;
+//////////            if (Physics.Raycast(newPosition, -Vector3.up, out groundHit))
+//////////            {
+//////////                newPosition = groundHit.point + Vector3.up * (objectTransform.localScale.y * 0.5f);
+//////////            }
+
+//////////            objectTransform.position = newPosition;
+//////////        }
+//////////    }
+
+//////////    private void DropObject()
+//////////    {
+//////////        isPickedUp = false;
+//////////        objectTransform = null;
+//////////    }
+//////////}
+

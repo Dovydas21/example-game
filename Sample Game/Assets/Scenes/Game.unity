@@ -3119,6 +3119,8 @@ GameObject:
   - component: {fileID: 139184137}
   - component: {fileID: 139184136}
   - component: {fileID: 139184135}
+  - component: {fileID: 139184140}
+  - component: {fileID: 139184141}
   m_Layer: 0
   m_Name: Scale tester
   m_TagString: Untagged
@@ -3204,6 +3206,34 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 26
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &139184140
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 139184134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c6d19e9156486d47b8546d5838369b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!54 &139184141
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 139184134}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1001 &139415073
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5752,7 +5782,7 @@ GameObject:
   - component: {fileID: 280234893}
   - component: {fileID: 280234892}
   - component: {fileID: 280234891}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Ground (1)
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -26501,7 +26531,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1302158695}
   - component: {fileID: 1302158697}
-  - component: {fileID: 1302158698}
   m_Layer: 7
   m_Name: CameraHolder
   m_TagString: Untagged
@@ -26542,18 +26571,6 @@ MonoBehaviour:
   recoilZ: 200
   snappiness: 3
   returnSpeed: 70
---- !u!114 &1302158698
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1302158694}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c6d19e9156486d47b8546d5838369b8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1307801942
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -35298,7 +35315,7 @@ GameObject:
   - component: {fileID: 1721755837}
   - component: {fileID: 1721755840}
   - component: {fileID: 1721755841}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Ground
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -47356,7 +47373,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: BulletPlaceholder
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 4b633857834fe44f895206af699e68f1, type: 3}
 --- !u!33 &3866826585954255305
 MeshFilter:

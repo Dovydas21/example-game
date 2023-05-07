@@ -97,7 +97,8 @@ public class Shoot : MonoBehaviour
                         {
                             // Spawn a bullethole decal.
                             GameObject bulletHole = Instantiate(bulletHoleDecal, HitInfo.point + HitInfo.normal * .001f, Quaternion.identity); // Spawn the bullethole decal.
-                                                                                                                                               // \/ VERY LAGGY!! \/
+
+                             // \/ VERY LAGGY!! \/
                             if (gunInfo.blackHoleEffect && i == 0)
                                 bulletHole.AddComponent<BlackHole>();
                             // /\ VERY LAGGY!! /\
@@ -143,11 +144,15 @@ public class Shoot : MonoBehaviour
                 else // USE PHYSICAL PROJECTILES WITH FORCE APPLIED.
                 {
                     GameObject bulletFired = Instantiate(gunInfo.projectileObject, gunInfo.bulletOrigin.position, Quaternion.identity); // Spawn the bullet object at the end of the barrel.
+
                     Rigidbody bulletRB = bulletFired.AddComponent<Rigidbody>(); // Add a rigidbody so physics can be applied.
                     bulletRB.useGravity = true; // Turn on gravity to enable bullet drop.
                     bulletRB.mass = 1f; // The mass of the bullet.
                     bulletRB.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic; // Set the collision detection to be ContinuousDynamic so it collides when it is moving fast.
                     bulletRB.AddForce((gunInfo.bulletOrigin.forward + nextBulletOffset) * gunInfo.power, ForceMode.Impulse); // Add force to the bullet object to fire it.
+
+                    PhysicalProjectile projectileFired = bulletFired.AddComponent<PhysicalProjectile>();
+                    projectileFired.bulletHoleDecal = bulletHoleDecal;
                 }
             }
 
