@@ -103,10 +103,13 @@ public class PerspectiveScale : MonoBehaviour
     private Transform objectTransform;
     private Vector3 initialScale;
     private Vector3 initialPosition;
-    private float maxDistance = 10f;
-    private float collisionCheckRadius = 2f;
+    private float maxDistance = 20f;
+    private float collisionCheckRadius = 1f;
     private LayerMask collisionLayerMask;
-    private float groundOffset = 1f;
+    private float groundOffset = .1f;
+    float floorHeight = 1.57f;
+
+
 
     private void Start()
     {
@@ -146,34 +149,40 @@ public class PerspectiveScale : MonoBehaviour
                 objectTransform = hit.transform;
                 initialScale = objectTransform.localScale;
                 initialPosition = objectTransform.position;
+                GetComponent<Rigidbody>().freezeRotation = true;
             }
         }
     }
 
     private void ResizeObject()
     {
-        //Ray ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)); // Cast ray from the center of the screen
-        //RaycastHit hit;
-        //if (Physics.Raycast(ray, out hit))
-        //{
-        float distance = Vector3.Distance(mainCamera.transform.position, objectTransform.position);
-        float clampedDistance = Mathf.Clamp(distance, 0f, maxDistance);
-        float scaleMultiplier = clampedDistance / initialScale.magnitude;
-        objectTransform.localScale = initialScale * scaleMultiplier;
+        Ray ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)); // Cast ray from the center of the screen
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit))
+        {
+            float distance = Vector3.Distance(mainCamera.transform.position, hit.point);
+            float clampedDistance = Mathf.Clamp(distance + 1f, 0f, maxDistance);
+            float scaleMultiplier = clampedDistance / initialScale.magnitude;
+            print("scaleMultiplier = " + scaleMultiplier);
+            objectTransform.localScale = initialScale * scaleMultiplier;
 
-        Vector3 direction = mainCamera.transform.forward;
-        Vector3 newPosition = mainCamera.transform.position + direction.normalized * clampedDistance;
-        newPosition = GetAdjustedPosition(newPosition);
-        objectTransform.position = newPosition;
-        //}
+
+            Vector3 direction = mainCamera.transform.forward;
+            Vector3 newPosition = mainCamera.transform.position + direction.normalized * (clampedDistance + scaleMultiplier);
+            //Vector3 newPosition = mainCamera.transform.position + direction.normalized;
+
+            //newPosition = new Vector3(newPosition.x + clampedDistance, newPosition.y + clampedDistance, newPosition.z + clampedDistance);
+            //newPosition *= scaleMultiplier;
+            newPosition = GetAdjustedPosition(newPosition);
+            objectTransform.position = newPosition;
+        }
     }
 
     private Vector3 GetAdjustedPosition(Vector3 position)
     {
-        RaycastHit hit;
-        if (Physics.Raycast(position, Vector3.down, out hit, Mathf.Infinity, collisionLayerMask))
+        if (position.y <= floorHeight)
         {
-            position.y = hit.point.y + groundOffset;
+            position.y = floorHeight + groundOffset;
         }
         return position;
     }
@@ -182,6 +191,7 @@ public class PerspectiveScale : MonoBehaviour
     {
         isPickedUp = false;
         objectTransform = null;
+        GetComponent<Rigidbody>().freezeRotation = false;
     }
 }
 
