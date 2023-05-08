@@ -106,7 +106,7 @@ public class PerspectiveScale : MonoBehaviour
     private float initialDistance;
     private float maxDistance = 15f;
     private LayerMask collisionLayerMask;
-    private float groundOffset = 0f;
+    private float groundOffset = .5f;
     private float floorHeight = 1f;
     private Vector3 cursorPos;
 
@@ -188,12 +188,27 @@ public class PerspectiveScale : MonoBehaviour
 
     private Vector3 GetAdjustedPosition(Vector3 position)
     {
+        groundOffset = transform.localScale.x / 2f;
         if (position.y <= floorHeight)
         {
             position.y = floorHeight + groundOffset;
         }
         return position;
     }
+
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (other != objectTransform.GetComponent<Collider>())
+    //    {
+    //        Vector3 direction = objectTransform.position - other.transform.position;
+    //        float distance = direction.magnitude;
+    //        Vector3 collisionPoint = other.ClosestPoint(other.transform.position);
+    //        if (distance < 3f)
+    //        {
+    //            other.transform.position = collisionPoint + direction.normalized * 3f;
+    //        }
+    //    }
+    //}
 
     private void OnDrawGizmos()
     {
