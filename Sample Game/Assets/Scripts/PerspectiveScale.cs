@@ -49,16 +49,6 @@ public class PerspectiveScale : MonoBehaviour
         }
     }
 
-
-
-    //private void FixedUpdate()
-    //{
-    //    if (isPickedUp)
-    //    {
-    //        ResizeObject();
-    //    }
-    //}
-
     private void PickUpObject()
     {
         RaycastHit hit;
@@ -72,9 +62,10 @@ public class PerspectiveScale : MonoBehaviour
                 initialScale = objectTransform.localScale;
                 initialPosition = objectTransform.position;
                 initialDistance = distance;
-                GetComponent<Rigidbody>().isKinematic = true;
-                ToggleObjectColliders(false); // Disable the colliders.
                 ChangeCollisionLayer(LayerMask.GetMask("Ignore Raycast"));
+                objectTransform.GetComponent<Rigidbody>().isKinematic = true;
+                //ToggleObjectColliders(false); // Disable the colliders.
+                
             }
         }
     }
@@ -88,7 +79,7 @@ public class PerspectiveScale : MonoBehaviour
             col.enabled = state;
         }
 
-        Collider[] childColliders = objectTransform.GetComponentsInChildren<Collider>();
+        Collider[] childColliders = objectTransform.GetComponentsInChildren<Collider>(true);
 
         foreach (Collider col in childColliders)
         {
@@ -98,28 +89,37 @@ public class PerspectiveScale : MonoBehaviour
 
     void ChangeCollisionLayer(LayerMask layer)
     {
-        GameObject[] children = objectTransform.GetComponentsInChildren<GameObject>();
-
-        foreach (GameObject child in children)
-        {
-            child.layer = layer;
-        }
 
         objectTransform.gameObject.layer = layer;
+
+        try
+        {
+
+            GameObject[] children = objectTransform.GetComponentsInChildren<GameObject>(true);
+
+            if (children != null)
+            {
+                foreach (GameObject child in children)
+                {
+                    child.layer = layer;
+                }
+            }
+        }
+        catch { }
+
     }
 
     private void ResizeObject()
     {
         float distance = Vector3.Distance(mainCamera.transform.position, objectTransform.position);
-        float clampedDistance = Mathf.Clamp(initialDistance, 0f, maxDistance);
-        //float clampedDistance = Mathf.Clamp(distance, 0f, maxDistance);
+        float clampedDistance = Mathf.Clamp(distance, 0f, maxDistance);
         float scaleMultiplier = clampedDistance / initialScale.magnitude;
-        //objectTransform.localScale = initialScale * scaleMultiplier;
 
 
         Vector3 direction = mainCamera.transform.forward;
         //Vector3 newPosition = mainCamera.transform.position + direction.normalized * (clampedDistance + scaleMultiplier);
 
+        objectTransform.localScale = initialScale * scaleMultiplier;
 
         Ray ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)); // Cast ray from the center of the screen
         RaycastHit hit;
@@ -132,9 +132,9 @@ public class PerspectiveScale : MonoBehaviour
             cursorPos = ray.GetPoint(clampedDistance);
         }
 
-        newPosition = cursorPos;// * (clampedDistance + scaleMultiplier);
+        newPosition = cursorPos;
 
-        newPosition = GetAdjustedPosition(newPosition);
+        //newPosition = GetAdjustedPosition(newPosition);
 
 
 
@@ -143,26 +143,26 @@ public class PerspectiveScale : MonoBehaviour
 
     private Vector3 GetAdjustedPosition(Vector3 position)
     {
-        //Vector3 currentPosition = objectTransform.position;
+        Vector3 currentPosition = objectTransform.position;
 
-        //Vector3 lowestVertexPosition = FindLowestVertex(objectTransform);
+        Vector3 lowestVertexPosition = FindLowestVertex(objectTransform);
 
-        //if (currentPosition.y < lowestVertexPosition.y + floorHeight)
-        //{
-        //    float offset = floorHeight - (lowestVertexPosition.y + floorHeight);
-        //    currentPosition.y += offset;
-        //    objectTransform.position = currentPosition;
-        //}
-
-        //return position;
-
-        float positionDiff = position.y;
-        if (FindLowestVertex(objectTransform).y <= floorHeight.transform.position.y)
+        if (currentPosition.y < lowestVertexPosition.y + floorHeight.transform.position.y)
         {
-            positionDiff = Mathf.Abs(position.y - FindLowestVertex(objectTransform).y);
+            float offset = floorHeight.transform.position.y - (lowestVertexPosition.y + floorHeight.transform.position.y);
+            currentPosition.y += offset;
+            objectTransform.position = currentPosition;
         }
 
-        return new Vector3(position.x, positionDiff, position.z);
+        return position;
+
+        //float positionDiff = newPosition.y;
+        //if (FindLowestVertex(objectTransform).y <= floorHeight.transform.position.y)
+        //{
+        //    positionDiff = Mathf.Abs(newPosition.y - FindLowestVertex(objectTransform).y);
+        //}
+
+        //return new Vector3(position.x, positionDiff, position.z);
     }
 
 
@@ -195,16 +195,16 @@ public class PerspectiveScale : MonoBehaviour
 
     //private void OnCollisionEnter(Collision other)
     //{
-    //    //collisionPoints.Clear();
-
-
-    //    Vector3 direction = objectTransform.position - other.transform.position;
-    //    float distance = direction.magnitude;
-    //    Vector3 collisionPoint = other.collider.ClosestPoint(other.transform.position);
-    //    collisionPoints.Add(collisionPoint);
-    //    if (distance < 3f)
+    //    if(other.transform.tag != "Player")
     //    {
-    //        other.transform.position = collisionPoint + direction.normalized * 3f;
+    //        Vector3 direction = objectTransform.position - other.transform.position;
+    //        float distance = direction.magnitude;
+    //        Vector3 collisionPoint = other.collider.ClosestPoint(other.transform.position);
+    //        collisionPoints.Add(collisionPoint);
+    //        if (distance < 3f)
+    //        {
+    //            newPosition -= direction.normalized;
+    //        }
     //    }
     //}
 
@@ -227,14 +227,10 @@ public class PerspectiveScale : MonoBehaviour
             positionDiff = Mathf.Abs(newPosition.y - FindLowestVertex(objectTransform).y);
         }
 
-        Gizmos.DrawSphere(new Vector3(newPosition.x, positionDiff, newPosition.z), .2f);
-
-        Gizmos.color = Color.yellow;
-        foreach(Vector3 pos in collisionPoints)
+        foreach(Vector3 point in collisionPoints)
         {
-            Gizmos.DrawSphere(pos, .1f);
+            Gizmos.DrawCube(point, new Vector3(.1f, .1f, .1f));
         }
-
     }
 
     private void DropObject()
