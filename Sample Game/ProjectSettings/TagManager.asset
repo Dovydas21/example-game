@@ -15,6 +15,7 @@ TagManager:
   - PickupPrompt
   - AmmoValue
   - Ground
+  - Rig
   layers:
   - Default
   - TransparentFX
@@ -24,8 +25,8 @@ TagManager:
   - UI
   - BoundingBox
   - PlayerLayer
-  - 
-  - 
+  - Ground
+  - PickedUp
   - 
   - 
   - 
