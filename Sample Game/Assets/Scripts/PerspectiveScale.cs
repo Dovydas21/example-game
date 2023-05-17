@@ -17,6 +17,7 @@ public class PerspectiveScale : MonoBehaviour
     [SerializeField]
     private GameObject floorHeight;
     private Vector3 cursorPos;
+    private Vector3 highestVertPos;
     private Vector3 newPosition;
     private Vector3 lowestBounds;
     private List<Vector3> collisionPoints = new List<Vector3>();
@@ -26,7 +27,7 @@ public class PerspectiveScale : MonoBehaviour
     private void Start()
     {
         mainCamera = Camera.main;
-        collisionLayerMask = LayerMask.GetMask("Ground"); // Adjust the layer name if needed
+        collisionLayerMask = LayerMask.GetMask("Default"); // Adjust the layer name if needed
     }
 
     private void Update()
@@ -46,6 +47,7 @@ public class PerspectiveScale : MonoBehaviour
         if (isPickedUp)
         {
             ResizeObject();
+            AdjustPos();
         }
     }
 
@@ -64,10 +66,116 @@ public class PerspectiveScale : MonoBehaviour
                 initialDistance = distance;
                 ChangeCollisionLayer(LayerMask.GetMask("Ignore Raycast"));
                 objectTransform.GetComponent<Rigidbody>().isKinematic = true;
-                //ToggleObjectColliders(false); // Disable the colliders.
-                
+                ToggleObjectColliders(false); // Disable the colliders.
             }
         }
+    }
+
+
+    private void DropObject()
+    {
+        ToggleObjectColliders(true); // Enable the colliders.
+        isPickedUp = false;
+        objectTransform.GetComponent<Rigidbody>().isKinematic = false;
+        ChangeCollisionLayer(LayerMask.GetMask("Default"));
+        objectTransform = null;
+    }
+
+
+    private void ResizeObject()
+    {
+        float distance = Vector3.Distance(mainCamera.transform.position, objectTransform.position);
+        float clampedDistance = Mathf.Clamp(distance, 1f, maxDistance);
+        float scaleMultiplier = clampedDistance / initialScale.magnitude;
+
+
+        Vector3 direction = mainCamera.transform.forward;
+        //Vector3 newPosition = mainCamera.transform.position + direction.normalized * (clampedDistance + scaleMultiplier);
+
+        objectTransform.localScale = initialScale * scaleMultiplier;
+
+        Ray ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)); // Cast ray from the center of the screen
+
+        cursorPos = ray.GetPoint(clampedDistance); 
+        newPosition = cursorPos; // Set newPosition to the location that the player's cursor is at.
+
+        objectTransform.position = newPosition; // Set the position of the picked up object.
+    }
+
+    private void AdjustPos() // Adjusts the position of the picked up object so that it is always above the floor plane.
+    {
+        Vector3 lowestVertPos = FindLowestVertex(objectTransform);
+
+        if (lowestVertPos.y > floorHeight.transform.position.y)
+        {
+            return; // If the lowest Y position (up & down) of the object is above the floor plane then exit this function.
+        }
+        else
+        {
+            RaycastHit hitInfo;
+            bool rayHit = Physics.Raycast(lowestVertPos, Vector3.up, out hitInfo, Mathf.Infinity);
+            if (rayHit)
+            {
+                Vector3 highestVertPos = FindHighestVertex(hitInfo.transform);
+                //float posDiff = Mathf.Abs(hitInfo.point.y - highestVertPos.y);
+                print("hitInfo.magnitude = " + hitInfo.transform.localScale.magnitude);
+                float posDiff = Vector3.Distance(hitInfo.point, lowestVertPos);
+                objectTransform.position += new Vector3(0f, posDiff, 0f);
+                print(posDiff);
+            }
+        }
+    }
+
+    private Vector3 FindHighestVertex(Transform targetTransform)
+    {
+        Vector3 highestVertex;
+        try
+        {
+            Mesh mesh = targetTransform.GetComponent<MeshFilter>().sharedMesh;
+            Vector3[] vertices = mesh.vertices;
+            highestVertex = targetTransform.TransformPoint(vertices[0]);
+
+            for (int i = 1; i < vertices.Length; i++)
+            {
+                Vector3 worldPosition = targetTransform.TransformPoint(vertices[i]);
+                if (worldPosition.y > highestVertex.y)
+                {
+                    highestVertex = worldPosition;
+                }
+            }
+        }
+        catch
+        {
+            highestVertex = default;
+        }
+
+        return highestVertex;
+    }
+
+    private Vector3 FindLowestVertex(Transform targetTransform)
+    {
+        Vector3 lowestVertex;
+        try
+        {
+            Mesh mesh = targetTransform.GetComponent<MeshFilter>().sharedMesh;
+            Vector3[] vertices = mesh.vertices;
+            lowestVertex = targetTransform.TransformPoint(vertices[0]);
+
+            for (int i = 1; i < vertices.Length; i++)
+            {
+                Vector3 worldPosition = targetTransform.TransformPoint(vertices[i]);
+                if (worldPosition.y < lowestVertex.y)
+                {
+                    lowestVertex = worldPosition;
+                }
+            }
+        }
+        catch
+        {
+            lowestVertex = default;
+        }
+
+        return lowestVertex;
     }
 
     void ToggleObjectColliders(bool state)
@@ -109,105 +217,6 @@ public class PerspectiveScale : MonoBehaviour
 
     }
 
-    private void ResizeObject()
-    {
-        float distance = Vector3.Distance(mainCamera.transform.position, objectTransform.position);
-        float clampedDistance = Mathf.Clamp(distance, 0f, maxDistance);
-        float scaleMultiplier = clampedDistance / initialScale.magnitude;
-
-
-        Vector3 direction = mainCamera.transform.forward;
-        //Vector3 newPosition = mainCamera.transform.position + direction.normalized * (clampedDistance + scaleMultiplier);
-
-        objectTransform.localScale = initialScale * scaleMultiplier;
-
-        Ray ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)); // Cast ray from the center of the screen
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, maxDistance, LayerMask.GetMask("Default")))
-        {
-            cursorPos = hit.point;
-        }
-        else
-        {
-            cursorPos = ray.GetPoint(clampedDistance);
-        }
-
-        newPosition = cursorPos;
-
-        //newPosition = GetAdjustedPosition(newPosition);
-
-
-
-        objectTransform.position = newPosition;
-    }
-
-    private Vector3 GetAdjustedPosition(Vector3 position)
-    {
-        Vector3 currentPosition = objectTransform.position;
-
-        Vector3 lowestVertexPosition = FindLowestVertex(objectTransform);
-
-        if (currentPosition.y < lowestVertexPosition.y + floorHeight.transform.position.y)
-        {
-            float offset = floorHeight.transform.position.y - (lowestVertexPosition.y + floorHeight.transform.position.y);
-            currentPosition.y += offset;
-            objectTransform.position = currentPosition;
-        }
-
-        return position;
-
-        //float positionDiff = newPosition.y;
-        //if (FindLowestVertex(objectTransform).y <= floorHeight.transform.position.y)
-        //{
-        //    positionDiff = Mathf.Abs(newPosition.y - FindLowestVertex(objectTransform).y);
-        //}
-
-        //return new Vector3(position.x, positionDiff, position.z);
-    }
-
-
-    private Vector3 FindLowestVertex(Transform targetTransform)
-    {
-        Vector3 lowestVertex;
-        try
-        {
-            Mesh mesh = targetTransform.GetComponent<MeshFilter>().sharedMesh;
-            Vector3[] vertices = mesh.vertices;
-            lowestVertex = targetTransform.TransformPoint(vertices[0]);
-
-            for (int i = 1; i < vertices.Length; i++)
-            {
-                Vector3 worldPosition = targetTransform.TransformPoint(vertices[i]);
-                if (worldPosition.y < lowestVertex.y)
-                {
-                    lowestVertex = worldPosition;
-                }
-            }
-        }
-        catch
-        {
-            lowestVertex = default;
-        }
-
-        return lowestVertex;
-    }
-
-
-    //private void OnCollisionEnter(Collision other)
-    //{
-    //    if(other.transform.tag != "Player")
-    //    {
-    //        Vector3 direction = objectTransform.position - other.transform.position;
-    //        float distance = direction.magnitude;
-    //        Vector3 collisionPoint = other.collider.ClosestPoint(other.transform.position);
-    //        collisionPoints.Add(collisionPoint);
-    //        if (distance < 3f)
-    //        {
-    //            newPosition -= direction.normalized;
-    //        }
-    //    }
-    //}
-
 
     private void OnDrawGizmos()
     {
@@ -219,7 +228,8 @@ public class PerspectiveScale : MonoBehaviour
 
         Gizmos.color = Color.blue;
         Gizmos.DrawSphere(FindLowestVertex(objectTransform), .1f);
-
+        Gizmos.DrawSphere(highestVertPos, .1f);
+            
         Gizmos.color = Color.green;
         float positionDiff = newPosition.y;
         if (FindLowestVertex(objectTransform).y <= floorHeight.transform.position.y)
@@ -227,114 +237,10 @@ public class PerspectiveScale : MonoBehaviour
             positionDiff = Mathf.Abs(newPosition.y - FindLowestVertex(objectTransform).y);
         }
 
-        foreach(Vector3 point in collisionPoints)
+        foreach (Vector3 point in collisionPoints)
         {
             Gizmos.DrawCube(point, new Vector3(.1f, .1f, .1f));
         }
     }
 
-    private void DropObject()
-    {
-
-        ToggleObjectColliders(true); // Enable the colliders.
-        isPickedUp = false;
-        objectTransform.GetComponent<Rigidbody>().isKinematic = false;
-        ChangeCollisionLayer(LayerMask.GetMask("Default"));
-        objectTransform = null;
-    }
 }
-
-
-
-//using System.Collections;
-//using System.Collections.Generic;
-//using UnityEngine;
-
-//public class PerspectiveScale : MonoBehaviour
-//{
-//    private Camera mainCamera;
-//    private bool isPickedUp = false;
-//    private Transform objectTransform;
-//    private Vector3 initialScale;
-//    private Vector3 initialPosition;
-//    private float maxDistance = 10f;
-//    private float collisionCheckRadius = 1f;
-//    private LayerMask collisionLayerMask;
-//    private float groundOffset = 0f;
-
-//    private void Start()
-//    {
-//        mainCamera = Camera.main;
-//        collisionLayerMask = LayerMask.GetMask("Ground"); // Adjust the layer name if needed
-//    }
-
-//    private void Update()
-//    {
-//        if (Input.GetKeyDown(KeyCode.T))
-//        {
-//            if (isPickedUp)
-//            {
-//                DropObject();
-//            }
-//            else
-//            {
-//                PickUpObject();
-//            }
-//        }
-
-//        if (isPickedUp)
-//        {
-//            ResizeObject();
-//        }
-//    }
-
-//    private void PickUpObject()
-//    {
-//        RaycastHit hit;
-//        if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out hit))
-//        {
-//            float distance = Vector3.Distance(mainCamera.transform.position, hit.point);
-//            if (distance <= maxDistance)
-//            {
-//                isPickedUp = true;
-//                objectTransform = hit.transform;
-//                initialScale = objectTransform.localScale;
-//                initialPosition = objectTransform.position;
-//            }
-//        }
-//    }
-
-//    private void ResizeObject()
-//    {
-//        Ray ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)); // Cast ray from the center of the screen
-//        RaycastHit hit;
-//        if (Physics.Raycast(ray, out hit))
-//        {
-//            float distance = Vector3.Distance(mainCamera.transform.position, hit.point);
-//            float clampedDistance = Mathf.Clamp(distance, 0f, maxDistance);
-//            float scaleMultiplier = clampedDistance / initialScale.magnitude;
-//            objectTransform.localScale = initialScale * scaleMultiplier;
-
-//            Vector3 direction = hit.point - mainCamera.transform.position;
-//            Vector3 newPosition = mainCamera.transform.position + direction.normalized * clampedDistance;
-//            newPosition = GetAdjustedPosition(newPosition);
-//            objectTransform.position = newPosition;
-//        }
-//    }
-
-//    private Vector3 GetAdjustedPosition(Vector3 position)
-//    {
-//        RaycastHit hit;
-//        if (Physics.Raycast(position, Vector3.down, out hit, Mathf.Infinity, collisionLayerMask))
-//        {
-//            position.y = hit.point.y + groundOffset;
-//        }
-//        return position;
-//    }
-
-//    private void DropObject()
-//    {
-//        isPickedUp = false;
-//        objectTransform = null;
-//    }
-//}
