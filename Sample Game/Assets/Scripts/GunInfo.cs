@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-//using UnityEditor.PackageManager;
+using AttachmentTypes;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,6 +23,7 @@ public class GunInfo : MonoBehaviour
     public bool blackHoleEffect;
     public bool hitScan;                                                          // True = Raycast used to detect hits. False = Physical projectiles.
     public GameObject projectileObject;                                           //        The projectile fired from the weapon.
+    public int maxProjectileBounces = 1;                                          //        The number of times the physical projectile object will bounce before it despawns.
     [SerializeField] private Sprite gunSprite;
     private GameObject gunImage;
 
@@ -64,6 +65,13 @@ public class GunInfo : MonoBehaviour
     bool playerAimedDownSights = false;                                           // Keeps track of whether the player is currently aiming down their sights.
 
 
+    [Header("Attachments")]
+    public WeaponAttachment_SO[] availableAttachments;                            // The attachments that can be equipped to this type of weapon
+    public WeaponAttachment_SO[] equippedAttachments;                             // The attachments that are currently equipped to this weapon.
+
+    public Transform sightPosition;                                               // The position of the scope / sight that is attached to the gun.
+
+
     [Header("Gun animations")]
     public ParticleSystem muzzleFlash;                                            // The particle effect that should serve as the muzzle flash when the gun is fired.
     public Transform bulletOrigin;                                                // Where the bullet originates. i.e. The end of the barrel.
@@ -100,6 +108,8 @@ public class GunInfo : MonoBehaviour
         {
             shootScript.Refresh(); // Refresh the shoot script to give it updatedn information about the gun modified in the Unity editor.
         }
+
+        EquipAttachments();
     }
 
     private void Start()
@@ -120,6 +130,21 @@ public class GunInfo : MonoBehaviour
         gunMass = rb.mass;
         gunDrag = rb.drag;
         gunGravity = rb.useGravity;
+
+        EquipAttachments();
+    }
+
+    private void EquipAttachments()
+    {
+        foreach (WeaponAttachment_SO attachment in equippedAttachments)
+        {
+            if (attachment.attachmentType == attachmentTypes.Sight) {
+                // Check if we already have a sight equipped.
+                if (sightPosition.childCount != 0) Destroy(sightPosition.GetChild(0)); // Return if we already have one equipped.
+
+                GameObject sight = Instantiate(attachment.attachmentPrefab, sightPosition.position, sightPosition.rotation, sightPosition);
+            }
+        }
     }
 
     private void OnMouseOver()
@@ -193,6 +218,7 @@ public class GunInfo : MonoBehaviour
         gunRecoilScript.swayMultiplier = swayMultiplier;
         gunRecoilScript.swaySmooth = swaySmooth;
         gunRecoilScript.AimSpeed = AimSpeed;
+        gunRecoilScript.AimFOV = aimFieldOfView;
     }
 
     private IEnumerator SummonWeapon() // Called when the player presses the "gunPickupKey" when looking at the weapon.

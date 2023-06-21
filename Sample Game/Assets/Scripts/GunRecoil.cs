@@ -14,7 +14,7 @@ public class GunRecoil : MonoBehaviour
 
 
     [SerializeField] public float recoilX, recoilY, recoilZ, kickBack;
-    [SerializeField] public float snappiness, returnSpeed, notShootingReturnMultiplier, swayMultiplier, swaySmooth, AimSpeed;
+    [SerializeField] public float snappiness, returnSpeed, notShootingReturnMultiplier, swayMultiplier, swaySmooth, AimSpeed, AimFOV;
     [SerializeField] public Shoot shootScript;
 
     // Variables used to control aiming.
@@ -142,12 +142,12 @@ public class GunRecoil : MonoBehaviour
         if (aim)
         {
             result = Vector3.Slerp(initialGunPosition, aimPos.localPosition, fractionOfJourney);
-            cam.fieldOfView = Mathf.LerpAngle(90f, 45f, fractionOfJourney);
+            cam.fieldOfView = Mathf.LerpAngle(90f, AimFOV, fractionOfJourney);
         }
         else
         {
             result = Vector3.Slerp(aimPos.localPosition, initialGunPosition, fractionOfJourney);
-            cam.fieldOfView = Mathf.LerpAngle(45f, 90f, fractionOfJourney);
+            cam.fieldOfView = Mathf.LerpAngle(AimFOV, 90f, fractionOfJourney);
         }
 
         return result;

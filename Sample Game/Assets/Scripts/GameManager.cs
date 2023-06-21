@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         currentWave = 0;
-        //StartCoroutine(StartNextWave(5));
+        StartCoroutine(StartNextWave(5));
     }
 
     IEnumerator StartNextWave(int timer)

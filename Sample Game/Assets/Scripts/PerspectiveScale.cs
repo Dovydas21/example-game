@@ -21,6 +21,8 @@ public class PerspectiveScale : MonoBehaviour
     private Vector3 newPosition;
     private Vector3 lowestBounds;
     private List<Vector3> collisionPoints = new List<Vector3>();
+    Rigidbody rb;
+    private float initialMass;
 
 
 
@@ -57,10 +59,14 @@ public class PerspectiveScale : MonoBehaviour
         if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out hit))
         {
             float distance = Vector3.Distance(mainCamera.transform.position, hit.point);
-            if (distance <= maxDistance)
+            if (distance <= maxDistance && !hit.transform.CompareTag("Ground")) // If the object is within the distance and it is not the floor.
             {
                 isPickedUp = true;
                 objectTransform = hit.transform;
+
+                rb = objectTransform.GetComponent<Rigidbody>();
+                initialMass = rb.mass;
+
                 initialScale = objectTransform.localScale;
                 initialPosition = objectTransform.position;
                 initialDistance = distance;
@@ -76,7 +82,9 @@ public class PerspectiveScale : MonoBehaviour
     {
         ToggleObjectColliders(true); // Enable the colliders.
         isPickedUp = false;
-        objectTransform.GetComponent<Rigidbody>().isKinematic = false;
+
+        rb.isKinematic = false;
+
         ChangeCollisionLayer(LayerMask.GetMask("Default"));
         objectTransform = null;
     }
@@ -86,13 +94,15 @@ public class PerspectiveScale : MonoBehaviour
     {
         float distance = Vector3.Distance(mainCamera.transform.position, objectTransform.position);
         float clampedDistance = Mathf.Clamp(distance, 1f, maxDistance);
-        float scaleMultiplier = clampedDistance / initialScale.magnitude;
+        float scaleMultiplier = clampedDistance / initialScale.magnitude; // Working 2023-05-19
+        //objectTransform.localScale = initialScale + (Vector3.one * (Vector3.Distance(transform.position, initialPosition) - initialDistance));
 
 
         Vector3 direction = mainCamera.transform.forward;
-        //Vector3 newPosition = mainCamera.transform.position + direction.normalized * (clampedDistance + scaleMultiplier);
 
         objectTransform.localScale = initialScale * scaleMultiplier;
+
+        rb.mass = initialMass * objectTransform.localScale.x;
 
         Ray ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)); // Cast ray from the center of the screen
 
@@ -101,6 +111,7 @@ public class PerspectiveScale : MonoBehaviour
 
         objectTransform.position = newPosition; // Set the position of the picked up object.
     }
+
 
     private void AdjustPos() // Adjusts the position of the picked up object so that it is always above the floor plane.
     {
@@ -124,7 +135,28 @@ public class PerspectiveScale : MonoBehaviour
                 print(posDiff);
             }
         }
+        Ray ray = new Ray();
+        bool objectColliding = Physics.SphereCast(ray, objectTransform.localScale.x, out RaycastHit colliderInfo , 10f);
+
+        if (objectColliding)
+        {
+            print("colliderInfo.point = " + colliderInfo.point);
+        }
+
+
+        //Collider[] clippingColliders = Physics.OverlapBox(objectTransform.position, objectTransform.localScale);
+        //foreach(Collider col in clippingColliders)
+        //{
+        //    Collider objectCollider = objectTransform.GetComponent<Collider>();
+
+        //    collisionPoints.Add(objectCollider.bounds.ClosestPoint(col.ClosestPointOnBounds(objectTransform.position)));
+
+        //    Debug.DrawRay(col.ClosestPointOnBounds(objectTransform.position), objectTransform.position - col.ClosestPointOnBounds(objectTransform.position));
+
+        //    objectTransform.position += objectTransform.position - col.ClosestPointOnBounds(objectTransform.position);
+        //}
     }
+
 
     private Vector3 FindHighestVertex(Transform targetTransform)
     {
@@ -152,6 +184,7 @@ public class PerspectiveScale : MonoBehaviour
         return highestVertex;
     }
 
+
     private Vector3 FindLowestVertex(Transform targetTransform)
     {
         Vector3 lowestVertex;
@@ -177,6 +210,7 @@ public class PerspectiveScale : MonoBehaviour
 
         return lowestVertex;
     }
+
 
     void ToggleObjectColliders(bool state)
     {

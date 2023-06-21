@@ -152,7 +152,10 @@ public class Shoot : MonoBehaviour
                     bulletRB.AddForce((gunInfo.bulletOrigin.forward + nextBulletOffset) * gunInfo.power, ForceMode.Impulse); // Add force to the bullet object to fire it.
 
                     PhysicalProjectile projectileFired = bulletFired.AddComponent<PhysicalProjectile>();
+                    
                     projectileFired.bulletHoleDecal = bulletHoleDecal;
+                    projectileFired.gunInfo = gunInfo;
+                    //projectileFired.EnableColliders();
                 }
             }
 
