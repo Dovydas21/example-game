@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using AttachmentTypes;
 using UnityEngine;
 using UnityEngine.UI;
+using static Unity.VisualScripting.Metadata;
 
 [System.Serializable]
 [RequireComponent(typeof(AudioSource))]
@@ -70,6 +71,7 @@ public class GunInfo : MonoBehaviour
     public WeaponAttachment_SO[] equippedAttachments;                             // The attachments that are currently equipped to this weapon.
 
     public Transform sightPosition;                                               // The position of the scope / sight that is attached to the gun.
+    public Transform gripPosition;                                                // The position of the grip that is attached to the gun.
 
 
     [Header("Gun animations")]
@@ -138,12 +140,42 @@ public class GunInfo : MonoBehaviour
     {
         foreach (WeaponAttachment_SO attachment in equippedAttachments)
         {
-            if (attachment.attachmentType == attachmentTypes.Sight) {
-                // Check if we already have a sight equipped.
-                if (sightPosition.childCount != 0) Destroy(sightPosition.GetChild(0)); // Return if we already have one equipped.
+            if (attachment.attachmentType == attachmentTypes.Sight)
+            {
+                //aimPosition = attachment.aimPosition;
 
+                // Spawn in the sight
                 GameObject sight = Instantiate(attachment.attachmentPrefab, sightPosition.position, sightPosition.rotation, sightPosition);
+                Transform reticle = sight.transform;
+
+                for (int i = 0; i < sight.transform.childCount; i++)
+                {
+                    var child = sight.transform.GetChild(i);
+                    if (child.name == attachment.reticleObjectName) reticle = child;
+                }
+
+                aimPosition = reticle.localPosition + new Vector3(0f, 0f, -.3f);
+                print("Set aim pos");
+                //// Check if we already have a sight equipped.
+                //if (sightPosition.childCount != 0)
+                //{
+                //    return;
+                //    //int childrenCount = sightPosition.childCount;
+                //    //for (int i = 0; i < childrenCount; i++)
+                //    //{
+                //    //    Destroy(sightPosition.GetChild(i)); // Return if we already have one equipped.}
+                //    //}
+                //}
+
             }
+
+            if (attachment.attachmentType == attachmentTypes.Grip)
+            {
+                if (gripPosition.childCount != 0) return;
+                // Spawn in the grip
+                GameObject grip = Instantiate(attachment.attachmentPrefab, gripPosition.position, gripPosition.rotation, gripPosition);
+            }
+
         }
     }
 

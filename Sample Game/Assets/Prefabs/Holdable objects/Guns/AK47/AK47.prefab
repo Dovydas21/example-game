@@ -581,6 +581,37 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &2228969487641385420
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3438131840067322668}
+  m_Layer: 0
+  m_Name: GripPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3438131840067322668
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2228969487641385420}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.11915684, y: 0.193, z: 0.52}
+  m_LocalScale: {x: 2.5, y: 2.5000002, z: 2.5000002}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2382763381063883423}
+  m_RootOrder: 17
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2625902225926282780
 GameObject:
   m_ObjectHideFlags: 0
@@ -5667,6 +5698,7 @@ Transform:
   - {fileID: 2324616002099460635}
   - {fileID: 1840831730324545236}
   - {fileID: 5103369952862762783}
+  - {fileID: 3438131840067322668}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5842,7 +5874,8 @@ MonoBehaviour:
   aimFieldOfView: 60
   availableAttachments: []
   equippedAttachments: []
-  sightPosition: {fileID: 0}
+  sightPosition: {fileID: 5103369952862762783}
+  gripPosition: {fileID: 3438131840067322668}
   muzzleFlash: {fileID: 877112102652806526}
   bulletOrigin: {fileID: 1840831730324545236}
   bulletTrail: {fileID: 7425004647957812907, guid: 68338a0ac53c743368d0e63ba764486a, type: 3}
