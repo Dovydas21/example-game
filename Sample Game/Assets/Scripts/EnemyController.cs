@@ -62,7 +62,6 @@ public class EnemyController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
         enemyLabel = Instantiate(labelPrefab, transform.position + Vector3.up * 5f, Quaternion.identity, transform);
         labelTMP = enemyLabel.GetComponent<TMPro.TextMeshPro>();
         labelTMP.text = gameObject.name;
@@ -311,6 +310,11 @@ public class EnemyController : MonoBehaviour
         if (alive) // Enemy must be alive....
         {
             float distance = Vector3.Distance(target.position, transform.position); // Calculate the distance from the enemy to the player.
+            RaycastHit hitInfo;
+            bool hit = Physics.BoxCast(transform.position, new Vector3(.3f, .3f, .3f), transform.position - target.position, out hitInfo);
+
+            print(hitInfo.point);
+
             if (distance - 1 <= lookRadius && !frozen && !ragdolled) // If the player is within the look radius (minus 1 because there's sime jitter)...
             {
                 FaceTarget();   // Face the player.

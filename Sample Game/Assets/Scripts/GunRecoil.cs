@@ -33,13 +33,6 @@ public class GunRecoil : MonoBehaviour
 
     private void Update()
     {
-        float realReturnSpeed = returnSpeed;
-
-        if (!shootScript.firing)
-        {
-            realReturnSpeed *= notShootingReturnMultiplier;
-        }
-
         // Recoil rotations
         targetRotation = Vector3.Slerp(targetRotation, Vector3.zero, returnSpeed * Time.deltaTime);
         currentRotation = Vector3.Slerp(currentRotation, targetRotation, snappiness * Time.deltaTime);
