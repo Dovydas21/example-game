@@ -10,7 +10,7 @@ public class PhysicalProjectile : MonoBehaviour
 {
     public GameObject bulletHoleDecal;
     public GunInfo gunInfo;
-    private int bounceCount = 0;
+    private int bounceCount = 1;
     private Collider col;
 
     // Start is called before the first frame update

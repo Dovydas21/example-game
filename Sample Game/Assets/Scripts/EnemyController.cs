@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Profiling;
@@ -26,13 +27,25 @@ public class EnemyController : MonoBehaviour
     GameObject enemyLabel;
     TMPro.TextMeshPro labelTMP;
 
+
+    [Header("Weapon info")]
+    public bool enemyHasGun = false;
+    public Transform gunBulletOrigin;
+    public float gunPower = 100f;
+    public GameObject gunProjectilePrefab;
+    public float gunRateOfFire = .2f;
+    public int gunMagCapacity = 30;
+    int gunAmmoLeft;
+    public float gunReloadTime = 1f;
+    float nextShotTime;
+
+
     [Header("References")]
     public ParticleSystem bloodEffects;
     public Animator characterAnimator;
     public PlayerDamage playerDamage;
     public GameManager gameManager;
     public GameObject coin;
-
 
 
     // Locals
@@ -62,6 +75,10 @@ public class EnemyController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gunAmmoLeft = gunMagCapacity;
+        nextShotTime = Time.time;
+
+
         enemyLabel = Instantiate(labelPrefab, transform.position + Vector3.up * 5f, Quaternion.identity, transform);
         labelTMP = enemyLabel.GetComponent<TMPro.TextMeshPro>();
         labelTMP.text = gameObject.name;
@@ -171,6 +188,34 @@ public class EnemyController : MonoBehaviour
         {
             characterAnimator.SetBool("Attacking", YN);
             StartCoroutine(WaitForCurrentAnimation());
+
+            if (enemyHasGun && characterAnimator.GetBool("Running") == false)
+            {
+                if (nextShotTime <= Time.time && gunAmmoLeft >= 0)
+                {
+                    gunAmmoLeft--;
+
+                    if (gunAmmoLeft > 0)
+                    {
+                        nextShotTime += gunRateOfFire;
+                    }
+                    else
+                    {
+                        nextShotTime += gunReloadTime;
+                        gunAmmoLeft = gunMagCapacity;
+                    }
+                    GameObject bulletFired = Instantiate(gunProjectilePrefab, gunBulletOrigin.position, Quaternion.identity); // Spawn the bullet object at the end of the barrel.
+
+                    Rigidbody bulletRB = bulletFired.AddComponent<Rigidbody>(); // Add a rigidbody so physics can be applied.
+                    bulletRB.useGravity = true; // Turn on gravity to enable bullet drop.
+                    bulletRB.mass = 1f; // The mass of the bullet.
+                    bulletRB.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic; // Set the collision detection to be ContinuousDynamic so it collides when it is moving fast.
+                    bulletRB.AddForce((gunBulletOrigin.forward) * gunPower, ForceMode.Impulse); // Add force to the bullet object to fire it.
+
+                    PhysicalProjectile projectileFired = bulletFired.AddComponent<PhysicalProjectile>();
+                }
+            }
+
         }
     }
 
