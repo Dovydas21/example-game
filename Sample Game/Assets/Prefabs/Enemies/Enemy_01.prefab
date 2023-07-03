@@ -2636,7 +2636,7 @@ Transform:
   m_GameObject: {fileID: 5756959081735271454}
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8903115845880729826}
@@ -2728,6 +2728,15 @@ MonoBehaviour:
     speedFactor: 1
     healthFactor: 1
   labelPrefab: {fileID: 4738450565065282480, guid: a424d80b304a24c1688c4253f80a06ef, type: 3}
+  enemyHasGun: 0
+  gunBulletOrigin: {fileID: 0}
+  gunPower: 100
+  gunProjectilePrefab: {fileID: 0}
+  gunInfo: {fileID: 0}
+  gunImpactDecalPrefab: {fileID: 0}
+  gunRateOfFire: 0.2
+  gunMagCapacity: 30
+  gunReloadTime: 1
   bloodEffects: {fileID: 1226761637171649549, guid: fcc2af5d362e7425fb58fe5573c62041, type: 3}
   characterAnimator: {fileID: 4838477993787984232}
   playerDamage: {fileID: 0}

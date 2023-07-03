@@ -28,16 +28,18 @@ public class EnemyController : MonoBehaviour
     TMPro.TextMeshPro labelTMP;
 
 
-    [Header("Weapon info")]
-    public bool enemyHasGun = false;
-    public Transform gunBulletOrigin;
-    public float gunPower = 100f;
-    public GameObject gunProjectilePrefab;
-    public float gunRateOfFire = .2f;
-    public int gunMagCapacity = 30;
-    int gunAmmoLeft;
-    public float gunReloadTime = 1f;
-    float nextShotTime;
+    [Header("Weapon info")]             // ENEMY WEAPON INFORMATION
+    public bool enemyHasGun = false;            // True if the enemy is holding a weapon such as an AK47
+    public Transform gunBulletOrigin;           // The location where bullets should spawn when the enemy fires the weapon.
+    public float gunPower = 100f;               // The power of the weapon.
+    public GameObject gunProjectilePrefab;      // The projectile fired from the weapon.
+    public GunInfo gunInfo;                     // A reference to the guninfo script for the weapon.
+    public GameObject gunImpactDecalPrefab;     // The decal to spawn when the bullets hit an object.
+    public float gunRateOfFire = .3f;           // The rate of fire of the weapon.
+    public int gunMagCapacity = 30;             // The capacity of the weapon's magazine.
+    int gunAmmoLeft;                            // The ammo currently remaining inside the magazine
+    public float gunReloadTime = 2f;            // How long it takes to reload the weapon.
+    float nextShotTime;                         // The time that the enemy is next allowed to shoot.
 
 
     [Header("References")]
@@ -78,6 +80,10 @@ public class EnemyController : MonoBehaviour
         gunAmmoLeft = gunMagCapacity;
         nextShotTime = Time.time;
 
+        //if (enemyHasGun)
+        //{
+        //    gunInfo.enabled = false; // Disable the guninfo script, we just need it stored in a var.
+        //}
 
         enemyLabel = Instantiate(labelPrefab, transform.position + Vector3.up * 5f, Quaternion.identity, transform);
         labelTMP = enemyLabel.GetComponent<TMPro.TextMeshPro>();
@@ -88,7 +94,6 @@ public class EnemyController : MonoBehaviour
         originalPositions = new Transform[childrenCount];
         if (childrenCount > 0) // Remember all of the ememy object's local positions when disabling the ragdoll effect.
         {
-
             for (int i = 0; i < childrenCount; i++)
             {
                 originalPositions[i] = transform.GetChild(i).transform; // Set the position of the object to the original position.
@@ -204,15 +209,22 @@ public class EnemyController : MonoBehaviour
                         nextShotTime += gunReloadTime;
                         gunAmmoLeft = gunMagCapacity;
                     }
+
+
+                    Vector3 directionOfBullet = (target.position - gunBulletOrigin.position).normalized;
                     GameObject bulletFired = Instantiate(gunProjectilePrefab, gunBulletOrigin.position, Quaternion.identity); // Spawn the bullet object at the end of the barrel.
 
                     Rigidbody bulletRB = bulletFired.AddComponent<Rigidbody>(); // Add a rigidbody so physics can be applied.
                     bulletRB.useGravity = true; // Turn on gravity to enable bullet drop.
                     bulletRB.mass = 1f; // The mass of the bullet.
                     bulletRB.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic; // Set the collision detection to be ContinuousDynamic so it collides when it is moving fast.
-                    bulletRB.AddForce((gunBulletOrigin.forward) * gunPower, ForceMode.Impulse); // Add force to the bullet object to fire it.
+                    bulletRB.AddForce((directionOfBullet) * gunPower, ForceMode.Impulse); // Add force to the bullet object to fire it.
 
                     PhysicalProjectile projectileFired = bulletFired.AddComponent<PhysicalProjectile>();
+                    projectileFired.playerDamage = playerDamage;
+                    projectileFired.bulletHoleDecal = gunImpactDecalPrefab;
+                    projectileFired.gunInfo = gunInfo;
+
                 }
             }
 

@@ -10,6 +10,7 @@ public class PhysicalProjectile : MonoBehaviour
 {
     public GameObject bulletHoleDecal;
     public GunInfo gunInfo;
+    public PlayerDamage playerDamage;
     private int bounceCount = 1;
     private Collider col;
 
@@ -20,11 +21,6 @@ public class PhysicalProjectile : MonoBehaviour
         col = GetComponent<Collider>();
     }
 
-    //public void EnableColliders()
-    //{
-    //    col.enabled = true;
-    //}
-
     void OnCollisionEnter(Collision objectHit)
     {
         col.enabled = true;
@@ -33,7 +29,7 @@ public class PhysicalProjectile : MonoBehaviour
         foreach (ContactPoint contact in objectHit.contacts)
         {
             bounceCount++;
-            Debug.DrawLine(contact.point, contact.point + contact.normal, Color.green, 2f, false);
+
             GameObject bulletHole = Instantiate(bulletHoleDecal, contact.point + contact.normal * .001f, Quaternion.identity); // Spawn the bullethole decal.
 
             bulletHole.transform.localScale = new Vector3(.1f, .1f, .1f);
@@ -57,6 +53,11 @@ public class PhysicalProjectile : MonoBehaviour
                 }
                 Destroy(gameObject);
                 return;
+            }
+
+            if (objectTransform.CompareTag("Player"))
+            {
+                playerDamage.TakeDamage(10);
             }
 
             Destroy(bulletHole, 5f);
